@@ -1,0 +1,19 @@
+#######################
+# Signing credentials #
+#######################
+# The GPG key pair ID (last 8 digits of its fingerprint)
+signing.keyId=<key>
+# The passphrase of the key pair
+signing.password=<pass>
+# Private key you exported earlier
+signing.secretKeyRingFile=<path/to/secring.gpg>
+# Your credentials for the Jira account
+ossrhUsername=<user>
+ossrhPassword=<pass>
+
+#################################################################
+# Debug credentials for Sipfront API (for development purposes) #
+#################################################################
+sipfrontApiUsername=<user>
+sipfrontApiPassword=<pass>
+sipfrontApiServer=<server>
