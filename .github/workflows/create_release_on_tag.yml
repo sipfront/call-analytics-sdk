@@ -1,0 +1,29 @@
+name: Zip and Attach XCFramework to Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - name: Get commit message
+        id: get_commit_message
+        run: echo ::set-output name=MESSAGE::$(git log --format=%B -n 1 ${{ github.event.after }})
+      - name: Zip XCFramework
+        run: |
+          zip -r CallAnalyticsSdk.xcframework.zip CallAnalyticsSdk.xcframework
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.get_commit_message.outputs.MESSAGE }}
+          files: |
+            LICENSE
+            CallAnalyticsSdk.xcframework.zip
