@@ -29,6 +29,9 @@ Call Analytics SDK supports extracting this data in various ways and will be exp
 
 #### Basic Setup
 
+<details open>
+  <summary><b>Gradle</b></summary>
+
 You can import the dependency without specifying the platform and Gradle will pick the correct
 version for your project
 ```kotlin
@@ -65,6 +68,32 @@ debugImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
 customFlavorImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
 ```
 
+</details>
+
+<details>
+<summary><b>CocoaPods</b></summary>
+
+Add the following pod to your Podfile and build your project
+
+```
+pod 'CallAnalyticsSdk', '~> 1.0.2'
+```
+
+To import the library
+
+```
+import CallAnalyticsSdk
+```
+
+</details>
+
+<details>
+<summary><b>Downloadable XCFramework</b></summary>
+
+We also provide with each release tag a downloadable XCFramework which you can manually add to your iOS/Mac project
+
+</details>
+
 ## Using Call Analytics SDK
 
 #### Initialize Call Analytics SDK
@@ -74,7 +103,7 @@ information to the app at app start. You initialize the Sdk in your app by provi
 to the Sdk at app start
 
 <details open>
-  <summary>Android</summary>
+  <summary><b>Android</b></summary>
 
 ```kotlin
 // In onCreate() of your apps Launcher Activity add this code
@@ -101,7 +130,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 </details>
 
 <details>
-  <summary>iOS</summary>
+  <summary><b>iOS</b></summary>
 
 ```swift
 // In init() of your SwiftUI.App
@@ -146,7 +175,7 @@ CallAnalytics.init(
 Using CallAnalytics.sendSip() or CallAnalytics.sendSdp()
 
 <details open>
-  <summary>Android</summary>
+  <summary><b>Android</b></summary>
 
 ```kotlin
 CallAnalytics.sendSip(
@@ -159,7 +188,7 @@ CallAnalytics.sendSip(
 </details>
 
 <details>
-  <summary>iOS</summary>
+  <summary><b>iOS</b></summary>
 
 ```swift
 do {
@@ -180,7 +209,7 @@ Alternatively SDK supports parsing from app logs (can be enabled with SipfrontSd
 Using CallAnalytics.sendRtcp()
 
 <details open>
-  <summary>Android</summary>
+  <summary><b>Android</b></summary>
 
 ```kotlin
 CallAnalytics.sendRtcp(
@@ -204,7 +233,7 @@ CallAnalytics.sendRtcp(
 </details>
 
 <details>
-<summary>iOS</summary>
+<summary><b>iOS</b></summary>
 
 ```swift
 do {
@@ -235,7 +264,7 @@ do {
 Using CallAnalytics.sendState()
 
 <details open>
-  <summary>Android</summary>
+  <summary><b>Android</b></summary>
 
 ```kotlin
 CallAnalytics.sendState(
@@ -252,7 +281,7 @@ CallAnalytics.sendState(
 </details>
 
 <details>
-<summary>iOS</summary>
+<summary><b>iOS</b></summary>
 
 ```swift
 do {
