@@ -27,10 +27,7 @@ Call Analytics SDK supports extracting this data in various ways and will be exp
 
 ## Setup
 
-#### Basic Setup
-
-<details open>
-  <summary><b>Gradle</b></summary>
+### with Gradle
 
 You can import the dependency without specifying the platform and Gradle will pick the correct
 version for your project
@@ -68,10 +65,7 @@ debugImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
 customFlavorImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
 ```
 
-</details>
-
-<details>
-<summary><b>CocoaPods</b></summary>
+### with CocoaPods
 
 Add the following pod to your Podfile and build your project
 
@@ -85,14 +79,10 @@ To import the library
 import CallAnalyticsSdk
 ```
 
-</details>
-
-<details>
-<summary><b>Downloadable XCFramework</b></summary>
+### with downloadable XCFramework
 
 We also provide with each release tag a downloadable XCFramework which you can manually add to your iOS/Mac project
 
-</details>
 
 ## Using Call Analytics SDK
 
