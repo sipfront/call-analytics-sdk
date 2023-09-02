@@ -19,6 +19,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -61,7 +62,7 @@ internal class MqttClient private constructor(
         encodedPath = sessionConfig.mqttRtcpPath
     }.build()
 
-    @Throws(IllegalArgumentException::class)
+    @Throws(IllegalArgumentException::class, IllegalStateException::class, IOException::class)
     internal fun sendMessage(message: BaseMessage) {
         val url: Url = when (message) {
             is SipMessage,

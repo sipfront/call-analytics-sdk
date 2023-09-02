@@ -14,6 +14,7 @@ import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.LogParser
 import com.sipfront.sdk.mqtt.MqttClient
 import com.sipfront.sdk.utils.Platform
+import io.ktor.utils.io.errors.*
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
@@ -179,7 +180,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
     fun sendState(@ObjCName("state") msg: StateMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -205,7 +206,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
     fun sendRtcp(@ObjCName("rtcp") msg: RtcpMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -222,7 +223,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
     fun sendSip(@ObjCName("sip") msg: SipMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -239,7 +240,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
     fun sendSdp(@ObjCName("sdp") msg: SdpMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
