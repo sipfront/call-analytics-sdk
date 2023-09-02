@@ -5,15 +5,15 @@
 signing.keyId=<key>
 # The passphrase of the key pair
 signing.password=<pass>
-# Private key you exported earlier
+# Secret key ring file
 signing.secretKeyRingFile=<path/to/secring.gpg>
-# Your credentials for the Jira account
-ossrhUsername=<user>
-ossrhPassword=<pass>
+# Credentials for the Sonatype OSSRH
+ossrh.username=<user>
+ossrh.password=<pass>
 
 #################################################################
 # Debug credentials for Sipfront API (for development purposes) #
 #################################################################
-sipfrontApiUsername=<user>
-sipfrontApiPassword=<pass>
-sipfrontApiServer=<server>
+sipfront.api.username=<user>
+sipfront.api.password=<pass>
+sipfront.api.server=<server>

@@ -16,12 +16,12 @@ dependencyResolutionManagement {
 }
 
 val projectProperties = Properties().apply {
-    val localPropertiesFile = file("project.properties")
-    if (localPropertiesFile.exists()) {
-        load(FileInputStream(localPropertiesFile))
+    val projectPropertiesFile = file("project.properties")
+    if (projectPropertiesFile.exists()) {
+        load(FileInputStream(projectPropertiesFile))
     }
 }
 
-rootProject.name = "call-analytics"
+rootProject.name = projectProperties.getProperty("project.id")
 include(":call-analytics")
 includeBuild("maven-publish-script")

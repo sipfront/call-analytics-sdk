@@ -29,7 +29,7 @@ val projectProperties = Properties().apply {
         load(FileInputStream(localPropertiesFile))
     }
 }
-val packageName: String = projectProperties.getProperty("package-name")
+val packageName: String = projectProperties.getProperty("package.name")
 
 group = packageName
 /**
@@ -66,7 +66,7 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
         iosX64(), iosArm64(), iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "${projectProperties.getProperty("project-name")}Binary"
+            baseName = "${projectProperties.getProperty("project.name")}Binary"
             xcFramework.add(this)
         }
     }
@@ -136,17 +136,17 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
     }
 
     cocoapods {
-        name = projectProperties.getProperty("cocoapod-name")
+        name = projectProperties.getProperty("package.cocoapod.name")
         version = libs.versions.version.get()
-        summary = projectProperties.getProperty("description")
-        homepage = projectProperties.getProperty("homepage")
-        source = "{ :git => '${projectProperties.getProperty("git-https")}', :tag => 'v$version' }"
-        license = "{ :type => '${projectProperties.getProperty("license")}', :file => 'LICENSE' }"
-        authors = "{ '${projectProperties.getProperty("author-name")}' => '${projectProperties.getProperty("author-email")}' }"
+        summary = projectProperties.getProperty("project.description")
+        homepage = projectProperties.getProperty("project.homepage")
+        source = "{ :git => '${projectProperties.getProperty("repository.https")}', :tag => 'v$version' }"
+        license = "{ :type => '${projectProperties.getProperty("project.license.type")}', :file => 'LICENSE' }"
+        authors = "{ '${projectProperties.getProperty("author.fullname")}' => '${projectProperties.getProperty("author.email")}' }"
         ios.deploymentTarget = libs.versions.deployment.target.get()
 
         framework {
-            baseName = projectProperties.getProperty("cocoapod-name")
+            baseName = projectProperties.getProperty("package.cocoapod.name")
             isStatic = false
             transitiveExport = false
             // not supported anymore since iOS 14, see:
@@ -212,12 +212,14 @@ buildkonfig {
      * We add the Sipfront API credentials to the BuildKonfig only if this build is published to local Maven, that is
      * used only for development purposes
      */
-    val sipfrontApiUser = if (isPublishToMavenLocal) localProperties.getProperty("sipfrontApiUsername") else ""
-    val sipfrontApiPass = if (isPublishToMavenLocal) localProperties.getProperty("sipfrontApiPassword") else ""
-    val sipfrontApiServer = if (isPublishToMavenLocal) localProperties.getProperty("sipfrontApiServer") else ""
+    val sipfrontApiUser = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.username") else ""
+    val sipfrontApiPass = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.password") else ""
+    val sipfrontApiServer = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.server") else ""
 
     defaultConfigs {
         buildConfigField(STRING, "VERSION_CODE", libs.versions.version.get())
+        buildConfigField(STRING, "COMPANY_NAME", projectProperties.getProperty("company.name"))
+        buildConfigField(STRING, "PROJECT_NAME", projectProperties.getProperty("project.name"))
         buildConfigField(STRING, "NAMESPACE", packageName)
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_USER", sipfrontApiUser)
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_PASS", sipfrontApiPass)

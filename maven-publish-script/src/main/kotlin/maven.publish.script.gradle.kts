@@ -7,17 +7,7 @@ import java.util.*
 
 /**
  * In order to sign a publication you will need to add the Sonatype credentials and signing keys in the local.properties
- * file, using the following format:
- *
- * # The GPG key pair ID (last 8 digits of its fingerprint)
- * signing.keyId=<key>
- * # The passphrase of the key pair
- * signing.password=<pass>
- * # Private key you exported earlier
- * signing.secretKeyRingFile=<path/to/secring.gpg>
- * # Your credentials for the Sonatype account
- * ossrhUsername=<user>
- * ossrhPassword=<pass>
+ * See local.properties.example file for expected format
  */
 
 plugins {
@@ -29,8 +19,8 @@ plugins {
 ext["signing.keyId"] = null
 ext["signing.password"] = null
 ext["signing.secretKeyRingFile"] = null
-ext["ossrhUsername"] = null
-ext["ossrhPassword"] = null
+ext["ossrh.username"] = null
+ext["ossrh.password"] = null
 
 // Grabbing secrets from local.properties file or from environment variables, which could be used on CI
 val localProperties = project.rootProject.file("local.properties")
@@ -46,8 +36,8 @@ if (localProperties.exists()) {
     ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
     ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
     ext["signing.secretKeyRingFile"] = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
-    ext["ossrhUsername"] = System.getenv("OSSRH_USERNAME")
-    ext["ossrhPassword"] = System.getenv("OSSRH_PASSWORD")
+    ext["ossrh.username"] = System.getenv("OSSRH_USERNAME")
+    ext["ossrh.password"] = System.getenv("OSSRH_PASSWORD")
 }
 val projectProperties = Properties().apply {
     val localPropertiesFile = rootProject.file("project.properties")
@@ -64,8 +54,8 @@ publishing {
             name = "sonatype"
             setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
-                username = getExtraString("ossrhUsername")
-                password = getExtraString("ossrhPassword")
+                username = getExtraString("ossrh.username")
+                password = getExtraString("ossrh.password")
             }
         }
     }
@@ -85,25 +75,25 @@ publishing {
 
         // Provide artifacts information requited by Maven Central
         pom {
-            name.set(projectProperties.getProperty("name"))
-            description.set(projectProperties.getProperty("description"))
-            url.set(projectProperties.getProperty("homepage"))
+            name.set(projectProperties.getProperty("project.title"))
+            description.set(projectProperties.getProperty("project.description"))
+            url.set(projectProperties.getProperty("project.homepage"))
 
             licenses {
                 license {
-                    name.set(projectProperties.getProperty("license"))
-                    url.set(projectProperties.getProperty("license-url"))
+                    name.set(projectProperties.getProperty("project.license.type"))
+                    url.set(projectProperties.getProperty("project.license.url"))
                 }
             }
             developers {
                 developer {
-                    id.set(projectProperties.getProperty("author-id"))
-                    name.set(projectProperties.getProperty("author-name"))
-                    email.set(projectProperties.getProperty("author-email"))
+                    id.set(projectProperties.getProperty("author.id"))
+                    name.set(projectProperties.getProperty("author.fullname"))
+                    email.set(projectProperties.getProperty("author.email"))
                 }
             }
             scm {
-                url.set(projectProperties.getProperty("github-project-page"))
+                url.set(projectProperties.getProperty("repository.webpage"))
             }
         }
     }
