@@ -1,5 +1,7 @@
 package com.sipfront.sdk.mqtt
 
+import com.sipfront.sdk.BuildKonfig
+import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.json.JsonParser
 import com.sipfront.sdk.json.config.SessionConfig
 import com.sipfront.sdk.json.message.RtcpMessage
@@ -10,7 +12,9 @@ import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.utils.DispatcherProvider
 import com.sipfront.sdk.utils.KotlinHelper
+import com.sipfront.sdk.utils.Platform
 import io.ktor.client.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -41,6 +45,20 @@ internal class MqttClient private constructor(
         }
         install(ContentNegotiation) {
             json(JsonParser.json)
+        }
+        install(HttpRequestRetry) {
+            retryOnExceptionOrServerErrors(maxRetries = Constants.MQTT_MAX_RETRIES)
+            exponentialDelay()
+        }
+        install(HttpTimeout) {
+            connectTimeoutMillis = Constants.MQTT_TIMEOUT_MS_CONNECTION
+            socketTimeoutMillis = Constants.MQTT_TIMEOUT_MS_SOCKET
+            requestTimeoutMillis = Constants.MQTT_TIMEOUT_MS_REQUEST
+        }
+        install(UserAgent) {
+            // Example UserAgent: CallAnalyticsSdk.debug (iOS 14.1 - iPhone13)
+            agent =
+                "${BuildKonfig.PROJECT_NAME}.${Platform.getBuildType()} (${Platform.getOsVersion()} ${Platform.getOsVersion()} - ${Platform.getDeviceModel()})"
         }
         install(Logging) {
             level = LogLevel.ALL
@@ -97,9 +115,9 @@ internal class MqttClient private constructor(
         fun trustAllCerts(trustAllCerts: Boolean) = apply { this.trustAllCerts = trustAllCerts }
 
         fun build(): MqttClient {
-            KotlinHelper.multiLet(sessionConfig, trustAllCerts) { (data, certs) ->
+            KotlinHelper.multiLet(sessionConfig, trustAllCerts) { (sessionConfig, trustAllCerts) ->
                 return@build MqttClient(
-                    data as SessionConfig, certs as Boolean
+                    sessionConfig as SessionConfig, trustAllCerts as Boolean
                 )
             }
             throw IllegalStateException("Invalid configuration for MqttClient")
