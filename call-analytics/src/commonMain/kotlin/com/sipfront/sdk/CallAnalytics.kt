@@ -2,7 +2,6 @@ package com.sipfront.sdk
 
 import co.touchlab.stately.collections.ConcurrentMutableList
 import com.sipfront.sdk.constants.Constants
-import com.sipfront.sdk.constants.SipfrontIntent
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonParser
 import com.sipfront.sdk.json.config.Config
@@ -46,7 +45,7 @@ object CallAnalytics : ProguardKeep {
      *
      * The data is received on Android as Intent and on iOS as environment variable in ProcessInfo
      *
-     * The key is [SipfrontIntent.Extra.CONFIG] and data has the following JSON format:
+     * The key is [Constants.Keys.INIT_PARAM] and data has the following JSON format:
      *
      * ```
      *  {
@@ -77,7 +76,7 @@ object CallAnalytics : ProguardKeep {
         Log.enableLogging(config.enableDebugLogs)
         Log.debug()
             ?.i(
-                "Starting Call Analytics ${BuildKonfig.VERSION_CODE}-${Platform.getBuildType()} initialization on: " +
+                "Starting ${BuildKonfig.PROJECT_NAME} ${BuildKonfig.VERSION_CODE}-${Platform.getBuildType()} initialization on: " +
                         "${Platform.getDeviceModel()} - ${Platform.getOsFamily()} ${Platform.getOsVersion()}\n" +
                         "with Config: ${JsonParser.toString(config)}"
             )
@@ -160,7 +159,7 @@ object CallAnalytics : ProguardKeep {
                 this.config = config
                 logParser = LogParser()
                 Log.debug()?.i(
-                    "Successfully initialized Call Analytics ${BuildKonfig.VERSION_CODE}-${Platform.getBuildType()} with SessionConfig: $sessionConfig,  config: $config"
+                    "Successfully initialized ${BuildKonfig.PROJECT_NAME} ${BuildKonfig.VERSION_CODE}-${Platform.getBuildType()} with SessionConfig: $sessionConfig,  config: $config"
                 )
                 if (config.enableLogParser) {
                     logParser.start()
@@ -183,7 +182,7 @@ object CallAnalytics : ProguardKeep {
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendState(@ObjCName("state") msg: StateMessage) {
         if (!isInitialized()) {
-            throw IllegalStateException("Call Analytics isn't initialised")
+            throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
 
         runCatching { stateCache.last() }.getOrNull()?.let {
@@ -209,7 +208,7 @@ object CallAnalytics : ProguardKeep {
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendRtcp(@ObjCName("rtcp") msg: RtcpMessage) {
         if (!isInitialized()) {
-            throw IllegalStateException("Call Analytics isn't initialised")
+            throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
         rtcpCache.add(msg)
         mqttClient?.sendMessage(msg) ?: run {
@@ -226,7 +225,7 @@ object CallAnalytics : ProguardKeep {
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendSip(@ObjCName("sip") msg: SipMessage) {
         if (!isInitialized()) {
-            throw IllegalStateException("Call Analytics isn't initialised")
+            throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
         sipCache.add(msg)
         mqttClient?.sendMessage(msg) ?: run {
@@ -243,7 +242,7 @@ object CallAnalytics : ProguardKeep {
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendSdp(@ObjCName("sdp") msg: SdpMessage) {
         if (!isInitialized()) {
-            throw IllegalStateException("Call Analytics isn't initialised")
+            throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
         sdpCache.add(msg)
         mqttClient?.sendMessage(msg) ?: run {
@@ -271,8 +270,10 @@ object CallAnalytics : ProguardKeep {
         sessionConfig: SessionConfig, trustAllCerts: Boolean
     ): Boolean {
         return try {
-            mqttClient = MqttClient.Builder().sessionData(sessionConfig = sessionConfig)
-                .trustAllCerts(trustAllCerts = trustAllCerts).build()
+            mqttClient = MqttClient.Builder()
+                .sessionData(sessionConfig = sessionConfig)
+                .trustAllCerts(trustAllCerts = trustAllCerts)
+                .build()
             Log.debug()?.i("Successfully initialized MqttClient")
             true
         } catch (exception: Exception) {
@@ -280,150 +281,5 @@ object CallAnalytics : ProguardKeep {
             false
         }
     }
-
-    /*
-    private lateinit var pjsua2: Pjsua2
-    private var recording: Boolean = false
-    private var recorder: MediaRecorder? = null
-
-    /**
-     * ### Start [CallAnalytics]
-     *
-     * - Will start [CallAnalytics]
-     * - **Must be called from a thread registered with Pjsip**
-     */
-    @JvmStatic
-    fun start() {
-        try {
-            if (initialised.get()) {
-                Timber.i("Starting Call Analytics")
-                logParser = LogParser(debug = config.enableDebugLogs)
-                if (config.enableLogParser) {
-                    // Try to read SIP traces using Logcat
-                    logParser.start()
-                }
-                pjsua2 = Pjsua2(debug = config.enableDebugLogs)
-                if (config.enablePjsua) {
-                    // Try to ready RTCP messages using Pjsua2 API
-                    pjsua2.start()
-                }
-            } else {
-                Timber.e("Can't start Call Analytics because it hasn't been initialized!")
-            }
-        } catch (exception: Exception) {
-            Timber.e(exception)
-        }
-    }
-
-    /**
-     * ### Stop [CallAnalytics]
-     *
-     * - Stops all threads running within [CallAnalytics]
-     * - Resets all values to initial state
-     * - Ready to start new test afterwards
-     */
-    @JvmStatic
-    fun stop() {
-        try {
-            Timber.i("Stopping Call Analytics")
-            if (config.enablePjsua) {
-                pjsua2.stop()
-            }
-            if (config.enableLogParser) {
-                logParser.stop()
-            }
-        } catch (exception: Exception) {
-            Timber.e(exception)
-        } finally {
-            initializationData = null
-            mqttClient = null
-        }
-    }
-
-    /**
-     * ### Read SIP message using Pjsip OnCallTsxStateParam
-     *
-     * - This is an alternative to parsing from app logs
-     * - Will immediately stop automatic parsing from app logs
-     * - **Must be called from a thread registered with Pjsip**
-     *
-     * @param[org_pjsip_pjsua2_OnCallTsxStateParam] object must be of type org.pjsip.pjsua2.OnCallTsxStateParam
-     */
-    @JvmStatic
-    fun pjsipOnCallTsxState(org_pjsip_pjsua2_OnCallTsxStateParam: Any?) {
-        try {
-            if (!config.enablePjsua) {
-                throw UnsupportedOperationException("Can't use Pjsua method because it is disabled in config!")
-            }
-
-            logParser.apply {
-                if (isRunning()) {
-                    Timber.e("Requesting to read SIP logs from Pjsip Callback while LogParser already running! Stopping LogParser!")
-                    stop()
-                }
-            }
-
-            pjsua2.onCallTsxState(org_pjsip_pjsua2_OnCallTsxStateParam)
-        } catch (exception: java.lang.Exception) {
-            Timber.e(exception)
-        }
-    }
-
-    /**
-     * ### Read RTCP message using Pjsip Call object
-     *
-     * - This will start a thread that will continuously check the Call object for new RTCP messages
-     * - **Call object must not be cleared after providing it to this method**
-     * - **Must be called from a thread registered with Pjsip**
-     *
-     * @param[org_pjsip_pjsua2_Call] object must be of type org.pjsip.pjsua2.Call
-     */
-    @JvmStatic
-    fun pjsipAddCall(org_pjsip_pjsua2_Call: Any) {
-        try {
-            if (!config.enablePjsua) {
-                throw UnsupportedOperationException("Can't use Pjsua method because it is disabled in config!")
-            }
-
-            pjsua2.addCall(org_pjsip_pjsua2_Call)
-        } catch (exception: java.lang.Exception) {
-            Timber.e(exception)
-        }
-    }
-
-    @JvmStatic
-    fun startRecording(context: Context) {
-        recorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            MediaRecorder(context)
-        } else {
-            MediaRecorder()
-        }
-        val dir = Environment.getExternalStorageDirectory()
-        val file = File.createTempFile("sound", ".3gp", dir)
-        recorder?.apply {
-            setAudioSource(MediaRecorder.AudioSource.VOICE_DOWNLINK)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            setAudioSamplingRate(44100)
-            setAudioChannels(1)
-            setOutputFile(file.absolutePath)
-            prepare()
-            start()
-            recording = true
-        }
-    }
-
-    @JvmStatic
-    fun stopRecording() {
-        if (recording) {
-            recorder?.apply {
-                stop()
-                reset()
-                release()
-            }
-            recorder = null
-            recording = false
-        }
-    }*/
 }
 

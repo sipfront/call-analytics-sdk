@@ -1,5 +1,6 @@
 package com.sipfront.sdk.pjsip.pjsua2
 
+import com.sipfront.sdk.BuildKonfig
 import com.sipfront.sdk.CallAnalytics
 import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.json.message.RtcpMessage
@@ -29,7 +30,7 @@ internal class Pjsua2 {
     fun addCall(org_pjsip_pjsua2_Call: Any?) {
         try {
             if (!CallAnalytics.isInitialized()) {
-                Log.release().e("Can't add Pjsua2 Call because Call Analytics SDK hasn't been initialized")
+                Log.release().e("Can't add Pjsua2 Call because ${BuildKonfig.PROJECT_NAME} hasn't been initialized")
                 return
             }
             org_pjsip_pjsua2_Call?.let { call ->
@@ -103,7 +104,7 @@ internal class Pjsua2 {
     fun onCallTsxState(org_pjsip_pjsua2_OnCallTsxStateParam: Any?) {
         try {
             if (!CallAnalytics.isInitialized()) {
-                Log.release().e("Can't send SIP Message because Call Analytics SDK hasn't been initialized")
+                Log.release().e("Can't send SIP Message because ${BuildKonfig.PROJECT_NAME} hasn't been initialized")
                 return
             }
             if (org_pjsip_pjsua2_OnCallTsxStateParam == null) {

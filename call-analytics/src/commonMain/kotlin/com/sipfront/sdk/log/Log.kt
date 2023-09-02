@@ -1,10 +1,11 @@
 package com.sipfront.sdk.log
 
 import co.touchlab.kermit.*
+import com.sipfront.sdk.BuildKonfig
 
 object Log {
     private var isLoggingEnabled: Boolean = false
-    private var logger: Logger = Logger(loggerConfigInit(getLogWriter()), "CallAnalytics")
+    private var logger: Logger = Logger(loggerConfigInit(getLogWriter()), BuildKonfig.PROJECT_NAME)
 
     internal fun enableLogging(enable: Boolean) {
         isLoggingEnabled = enable
