@@ -128,8 +128,7 @@ struct MyApp: SwiftUI.App {
     init() {
         do {
             let initialized = try CallAnalytics.shared.initialize(
-                // custom processInfo provided to app by Sipfront test
-                params: SessionParams(json: ProcessInfo.processInfo.environment[SipfrontIntent.Extra.config.value]!),
+                params: SessionParams(),
                 // optional configuration of Sdk
                 config: Config.Builder()
                     .enableDebugLogs(true)
