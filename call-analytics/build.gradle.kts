@@ -1,11 +1,23 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.base.DokkaBase
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.dokka.base.DokkaBaseConfiguration
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import java.io.FileInputStream
+import java.net.URL
 import java.util.*
 
+buildscript {
+    dependencies {
+        classpath(libs.buildscriptdep.dokka.base)
+    }
+}
+
 plugins {
+    alias(libs.plugins.dokka).apply(true)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.cocoapods)
@@ -142,7 +154,8 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
         homepage = projectProperties.getProperty("project.homepage")
         source = "{ :git => '${projectProperties.getProperty("repository.https")}', :tag => 'v$version' }"
         license = "{ :type => '${projectProperties.getProperty("project.license.type")}', :file => 'LICENSE' }"
-        authors = "{ '${projectProperties.getProperty("author.fullname")}' => '${projectProperties.getProperty("author.email")}' }"
+        authors =
+            "{ '${projectProperties.getProperty("author.fullname")}' => '${projectProperties.getProperty("author.email")}' }"
         ios.deploymentTarget = libs.versions.deployment.target.get()
 
         framework {
@@ -235,4 +248,37 @@ val copyReleaseXCFramework by tasks.registering(Copy::class) {
 
 tasks.named("podPublishReleaseXCFramework").configure {
     finalizedBy(copyReleaseXCFramework)
+}
+
+// Dokka task generating documentation
+tasks.withType<DokkaTask>().configureEach {
+    moduleName.set(projectProperties.getProperty("project.name"))
+    moduleVersion.set(libs.versions.version.get())
+    suppressObviousFunctions.set(true)
+
+    pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
+        footerMessage = "Ⓒ 2023 Sipfront GmbH"
+        separateInheritedMembers = true
+    }
+
+    dokkaSourceSets.configureEach {
+        documentedVisibilities.set(setOf(DokkaConfiguration.Visibility.PUBLIC))
+        suppressGeneratedFiles.set(true)
+        includeNonPublic.set(false)
+        skipDeprecated.set(true)
+        reportUndocumented.set(true)
+        skipEmptyPackages.set(true)
+        includes.from("../MODULE.md")
+
+        perPackageOption {
+            matchingRegex.set("""^com\.sipfront\.sdk\.(pjsip|interfaces|json\.message\.base).*""")
+            suppress.set(true)
+        }
+
+        sourceLink {
+            localDirectory.set(file("${rootProject.projectDir}/call-analytics/src"))
+            remoteUrl.set(URL("https://github.com/sipfront/call-analytics-sdk/tree/master/call-analytics/src"))
+            remoteLineSuffix.set("#L")
+        }
+    }
 }
