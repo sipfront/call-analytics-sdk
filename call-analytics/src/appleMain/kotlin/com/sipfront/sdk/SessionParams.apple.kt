@@ -12,7 +12,7 @@ actual class SessionParams: ProguardKeep {
     @Throws(SerializationException::class, IllegalArgumentException::class)
     internal actual fun parse(): SessionConfig {
         val json: String = NSProcessInfo.processInfo.environment[Keys.INITIALIZATION] as String
-        Log.debug()?.e("Received JSON SessionParams: $json")
+        Log.debug()?.i("Received JSON SessionParams: $json")
         return JsonParser.toObject<SessionConfig>(json)
     }
 }

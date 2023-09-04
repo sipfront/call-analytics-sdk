@@ -95,7 +95,13 @@ private object PublicDarwinLoggerActual : PublicDarwinLogger {
              * otherwise all iOS logs would be hidden as private in our Browserstack tests!
              */
             "%{public}s",
-            message.freeze()
+            /**
+             * Previously at this place message.freeze() was used, but we are not using the old GC memory model and
+             * therefore I've removed it.
+             * Keeping this comment just in case some memory related crash resurfaces in order to know where and how
+             * to fix it.
+             */
+            message
         )
     }
 }
