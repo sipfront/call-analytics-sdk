@@ -1,0 +1,64 @@
+name: Generate and Publish Dokka Documentation
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (e.g., 1.0.2)'
+        required: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 19
+          
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+        
+      - name: Get commit message
+        id: get_commit_message
+        run: echo ::set-output name=MESSAGE::$(git log --format=%B -n 1 ${{ github.event.after }})
+        
+      - name: Zip XCFramework
+        run: |
+          zip -r CallAnalyticsSdk.xcframework.zip CallAnalyticsSdk.xcframework
+          
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.get_commit_message.outputs.MESSAGE }}
+          files: |
+            LICENSE
+            CallAnalyticsSdk.xcframework.zip
+            
+      # Runs a set of commands using the runners shell
+      - name: Update README.md
+        run: |
+          sed -i 's/<!-- VERSION_START -->.*<!-- VERSION_END -->/<!-- VERSION_START -->'"${{ steps.get_version.outputs.VERSION }}"'<!-- VERSION_END -->/' README.md
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git commit -am "Automated README Update"
+          git push
+
+      - name: Build and generate Dokka documentation
+        run: ./gradlew dokkaHtml --no-daemon --stacktrace
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: call-analytics/build/dokka/html  # adjust this to your Dokka output directory
