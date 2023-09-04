@@ -12,6 +12,8 @@ Data that is currently obtained:
 
 Call Analytics SDK supports extracting this data in various ways and will be expanded in the future
 
+See the <b>[project website](https://sipfront.github.io/call-analytics-sdk/)</b> for API documentation
+
 ## Supported Platforms
 
 * Android
@@ -32,7 +34,7 @@ Call Analytics SDK supports extracting this data in various ways and will be exp
 You can import the dependency without specifying the platform and Gradle will pick the correct
 version for your project
 ```kotlin
-implementation 'com.sipfront.sdk:call-analytics:1.0.2'
+implementation 'com.sipfront.sdk:call-analytics:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'
 ```
 
 #### Setup specifying Platform
@@ -40,10 +42,10 @@ implementation 'com.sipfront.sdk:call-analytics:1.0.2'
 You can also specify the platform, which especially makes sense for Android where a release and
 debug build of the library is available
 ```kotlin
-implementation 'com.sipfront.sdk:call-analytics-android:1.0.2'        //Android release
-implementation 'com.sipfront.sdk:call-analytics-android-debug:1.0.2'  //Android debug
-implementation 'com.sipfront.sdk:call-analytics-jvm:1.0.2'            //Java
-implementation 'com.sipfront.sdk:call-analytics-js:1.0.2'             //JavaScript
+implementation 'com.sipfront.sdk:call-analytics-android:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'        //Android release
+implementation 'com.sipfront.sdk:call-analytics-android-debug:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'  //Android debug
+implementation 'com.sipfront.sdk:call-analytics-jvm:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'            //Java
+implementation 'com.sipfront.sdk:call-analytics-js:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'             //JavaScript
 ```
 
 You can find a list of all [supported platforms here](https://central.sonatype.com/namespace/com.sipfront.sdk)
@@ -60,9 +62,9 @@ data to our servers it makes sense to exclude our SDK from your release builds i
 your apps size
 ```kotlin
 // Include only in debug builds
-debugImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
+debugImplementation 'com.sipfront.sdk:call-analytics:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'
 // Or include only in a custom build flavor
-customFlavorImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
+customFlavorImplementation 'com.sipfront.sdk:call-analytics:<!-- VERSION_START -->1.0.2<!-- VERSION_END -->'
 ```
 
 ### with CocoaPods
@@ -70,7 +72,7 @@ customFlavorImplementation 'com.sipfront.sdk:call-analytics:1.0.2'
 Add the following pod to your Podfile and build your project
 
 ```
-pod 'CallAnalyticsSdk', '~> 1.0.2'
+pod 'CallAnalyticsSdk', '~> <!-- VERSION_START -->1.0.2<!-- VERSION_END -->'
 ```
 
 To import the library
