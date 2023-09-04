@@ -3,7 +3,7 @@ package com.sipfront.sdk.mqtt
 import io.ktor.client.engine.*
 import io.ktor.client.engine.darwin.*
 
-actual fun getHttpClientEngine(trustAllCerts: Boolean, customSSLAlpn: String?): HttpClientEngine = Darwin.create {
+internal actual fun getHttpClientEngine(trustAllCerts: Boolean, customSSLAlpn: String?): HttpClientEngine = Darwin.create {
     /**
      * Currently no configuration on engine required.
      *

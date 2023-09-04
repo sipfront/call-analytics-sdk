@@ -1,6 +1,6 @@
 package com.sipfront.sdk.utils
 
-enum class OsFamily {
+internal enum class OsFamily {
     UNKNOWN,
     MACOSX,
     IOS,
@@ -14,7 +14,7 @@ enum class OsFamily {
     WATCHOS
 }
 
-expect object Platform {
+internal expect object Platform {
     fun getOsFamily(): OsFamily
     fun getOsVersion(): String
     fun isDebug(): Boolean

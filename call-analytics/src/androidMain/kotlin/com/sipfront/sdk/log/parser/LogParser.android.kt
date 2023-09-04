@@ -1,6 +1,6 @@
 package com.sipfront.sdk.log.parser
 
-actual fun processLogs(processLogLine: (String) -> Unit) {
+internal actual fun processLogs(processLogLine: (String) -> Unit) {
     Runtime.getRuntime().exec("logcat -c") // Clear logs
     Runtime.getRuntime().exec("logcat -v long") // Start to capture new logs
         .inputStream

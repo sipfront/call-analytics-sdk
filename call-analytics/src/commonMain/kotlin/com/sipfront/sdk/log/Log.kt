@@ -3,11 +3,11 @@ package com.sipfront.sdk.log
 import co.touchlab.kermit.*
 import com.sipfront.sdk.BuildKonfig
 
-object Log {
+internal object Log {
     private var isLoggingEnabled: Boolean = false
     private var logger: Logger = Logger(loggerConfigInit(getLogWriter()), BuildKonfig.PROJECT_NAME)
 
-    internal fun enableLogging(enable: Boolean) {
+    fun enableLogging(enable: Boolean) {
         isLoggingEnabled = enable
         Logger.setMinSeverity(if (isLoggingEnabled) Severity.Verbose else Severity.Warn)
     }
@@ -23,4 +23,4 @@ object Log {
     fun release(): Logger = logger
 }
 
-expect fun getLogWriter(): LogWriter
+internal expect fun getLogWriter(): LogWriter

@@ -150,4 +150,4 @@ internal class LogParser {
     }
 }
 
-expect fun processLogs(processLogLine: (String) -> Unit)
+internal expect fun processLogs(processLogLine: (String) -> Unit)

@@ -1,6 +1,6 @@
 package com.sipfront.sdk.utils
 
-actual object Platform {
+internal actual object Platform {
     private const val NOT_AVAILABLE = "Not available in JS"
     actual fun getOsFamily(): OsFamily = OsFamily.JAVASCRIPT
 

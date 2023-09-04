@@ -5,7 +5,7 @@ import com.sipfront.sdk.json.serializer.MessageClassSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable(with = MessageClassSerializer::class)
-enum class MessageClass(override val value: String) : EnumValue {
+internal enum class MessageClass(override val value: String) : EnumValue {
     TRACE(Value.trace),
     CALL(Value.call),
     RTCP(Value.rtp),

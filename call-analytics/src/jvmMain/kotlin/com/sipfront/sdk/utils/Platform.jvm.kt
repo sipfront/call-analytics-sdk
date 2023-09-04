@@ -1,6 +1,6 @@
 package com.sipfront.sdk.utils
 
-actual object Platform {
+internal actual object Platform {
     actual fun getOsFamily(): OsFamily = OsFamily.JAVA
 
     actual fun getOsVersion(): String = System.getProperty("os.version")

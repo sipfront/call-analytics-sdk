@@ -5,7 +5,7 @@ import org.minidns.hla.DnssecResolverApi
 import org.minidns.hla.ResolverResult
 import org.minidns.record.CNAME
 
-actual fun resolveCname(server: String): String? {
+internal actual fun resolveCname(server: String): String? {
     val result: ResolverResult<CNAME> =
         DnssecResolverApi.INSTANCE.resolve(server, CNAME::class.java)
 

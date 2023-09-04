@@ -1,3 +1,3 @@
 package com.sipfront.sdk.utils
 
-expect fun randomUUID(): String
+internal expect fun randomUUID(): String

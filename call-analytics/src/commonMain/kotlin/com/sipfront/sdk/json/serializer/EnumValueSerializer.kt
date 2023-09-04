@@ -11,7 +11,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-abstract class EnumValueSerializer<T : EnumValue>(private val enumValues: Array<T>) : KSerializer<T>, ProguardKeep {
+internal abstract class EnumValueSerializer<T : EnumValue>(private val enumValues: Array<T>) : KSerializer<T>, ProguardKeep {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(EnumValue::class.simpleName!!, PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: T) {

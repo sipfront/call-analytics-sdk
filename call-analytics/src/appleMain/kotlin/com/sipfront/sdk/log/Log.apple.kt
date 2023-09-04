@@ -7,7 +7,7 @@ import platform.darwin.*
 import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.concurrent.freeze
 
-actual fun getLogWriter(): LogWriter = XcodePublicSeverityWriter()
+internal actual fun getLogWriter(): LogWriter = XcodePublicSeverityWriter()
 
 internal open class XcodePublicSeverityWriter(
     private val messageStringFormatter: MessageStringFormatter = DefaultFormatter
