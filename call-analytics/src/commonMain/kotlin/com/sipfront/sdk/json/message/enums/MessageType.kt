@@ -9,6 +9,11 @@ import kotlinx.serialization.Serializable
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
+/**
+ * Represents different types of messages used within the SDK.
+ *
+ * This interface is a marker for various message types, each represented as an enum.
+ */
 @OptIn(ExperimentalObjCName::class)
 @ObjCName("Message")
 interface MessageType : EnumValue {
@@ -37,23 +42,62 @@ interface MessageType : EnumValue {
         internal const val STATE_CALL_IN_PROGRESS: String = "CALL_IN_PROGRESS"
     }
 
+    /**
+     * Represents RTCP message types.
+     *
+     * Currently, only one type [RTCP] is defined.
+     */
     @Serializable(with = RtcpSerializer::class)
     enum class Rtcp(override val value: String) : MessageType {
+        /**
+         * Represents the default RTCP message type.
+         */
         RTCP(MessageType.RTCP)
     }
 
+    /**
+     * Represents SIP message types.
+     *
+     * Types include:
+     * - [OUTGOING]: Message is outgoing.
+     * - [INCOMING]: Message is incoming.
+     */
     @Serializable(with = SipSerializer::class)
     enum class Sip(override val value: String) : MessageType {
+        /**
+         * Represents an outgoing SIP message.
+         */
         OUTGOING(SIP_OUTGOING),
+        /**
+         * Represents an incoming SIP message.
+         */
         INCOMING(SIP_INCOMING)
     }
 
+    /**
+     * Represents SDP message types.
+     *
+     * Types include:
+     * - [OUTGOING]: SDP message is outgoing.
+     * - [INCOMING]: SDP message is incoming.
+     */
     @Serializable(with = SdpSerializer::class)
     enum class Sdp(override val value: String) : MessageType {
+        /**
+         * Represents an outgoing SDP message.
+         */
         OUTGOING(SDP_OUTGOING),
+        /**
+         * Represents an incoming SDP message.
+         */
         INCOMING(SDP_INCOMING)
     }
 
+    /**
+     * Represents various call state messages.
+     *
+     * This enum encapsulates different states a call can be in, such as being established, ended, rejected, and so on.
+     */
     @Serializable(with = StateSerializer::class)
     enum class State(override val value: String) : MessageType {
         CREATE(STATE_CREATE),

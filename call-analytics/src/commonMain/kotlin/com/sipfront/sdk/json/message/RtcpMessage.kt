@@ -2,8 +2,12 @@ package com.sipfront.sdk.json.message
 
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonKeys
+import com.sipfront.sdk.json.message.RtcpMessage.Builder
 import com.sipfront.sdk.json.message.base.BaseMessage
-import com.sipfront.sdk.json.message.enums.*
+import com.sipfront.sdk.json.message.enums.CallDirection
+import com.sipfront.sdk.json.message.enums.MediaDirection
+import com.sipfront.sdk.json.message.enums.MessageClass
+import com.sipfront.sdk.json.message.enums.MessageType
 import com.sipfront.sdk.json.message.utils.RtcpMath
 import com.sipfront.sdk.utils.KotlinHelper
 import kotlinx.serialization.SerialName
@@ -13,7 +17,33 @@ import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
 /**
- * Message containing RTCP data
+ * Represents a message containing RTCP data.
+ *
+ * This data class encapsulates various RTCP parameters including call information,
+ * media directions, jitter, packet count, and more.
+ *
+ * @property callId The unique identifier for the call.
+ * @property addressLocal The local address associated with the call.
+ * @property addressRemote The remote address associated with the call.
+ * @property addressRemoteDisplayName The display name associated with the remote address.
+ * @property callDirection The direction of the call.
+ * @property audioDirection The direction of the audio media.
+ * @property videoDirection The direction of the video media.
+ * @property audioRemoteDirection The remote direction of the audio media.
+ * @property videoRemoteDirection The remote direction of the video media.
+ * @property rxJitter The jitter in milliseconds for received data.
+ * @property rxPackets The total number of received RTP packets.
+ * @property rxLost The total number of RTP packets lost during reception.
+ * @property rxBytes The total number of received RTP bytes.
+ * @property txPackets The total number of sent RTP packets.
+ * @property txBytes The total number of sent RTP bytes.
+ * @property rtt The current round trip time in milliseconds.
+ *
+ * @throws IllegalStateException If [callId], [addressLocal], [addressRemote], [addressRemoteDisplayName] or [callDirection]
+ * is missing before calling [Builder.build]
+ *
+ * @since 1.0.0
+ * @author Dominik Ridjic
  */
 @Serializable
 @SerialName("RtcpMessage")
@@ -21,9 +51,9 @@ data class RtcpMessage internal constructor(
     @SerialName(JsonKeys.Call.id)
     val callId: String,
     @SerialName(JsonKeys.Address.local)
-    val addresslocal: String,
+    val addressLocal: String,
     @SerialName(JsonKeys.Address.remote)
-    val addressremote: String,
+    val addressRemote: String,
     @SerialName(JsonKeys.Address.remoteDisplayName)
     val addressRemoteDisplayName: String,
     @SerialName(JsonKeys.Call.direction)
@@ -62,6 +92,11 @@ data class RtcpMessage internal constructor(
     @SerialName(JsonKeys.Rtcp.interfaces)
     internal val interfaces: List<RtcpInterface>? = RtcpMath.createRtcpInterface(this)
 
+    /**
+     * Builder class for [RtcpMessage].
+     *
+     * Provides a fluent API to set various properties for the [RtcpMessage] and then build it.
+     */
     @OptIn(ExperimentalObjCName::class)
     class Builder : ProguardKeep {
         private var callId: String? = null
@@ -169,7 +204,10 @@ data class RtcpMessage internal constructor(
         fun rtt(@ObjCName("_") rtt: Double) = apply { this.rtt = rtt }
 
         /**
-         * Builds the [RtcpMessage]
+         * Constructs the [RtcpMessage] based on the provided properties.
+         *
+         * @throws IllegalStateException If the configuration for [RtcpMessage] is invalid.
+         * @return An instance of [RtcpMessage].
          */
         @Throws(IllegalStateException::class)
         fun build(): RtcpMessage {
@@ -182,8 +220,8 @@ data class RtcpMessage internal constructor(
             ) { (callId, addressLocal, addressRemote, displayNameRemote, callDirection) ->
                 return@build RtcpMessage(
                     callId = callId as String,
-                    addresslocal = addressLocal as String,
-                    addressremote = addressRemote as String,
+                    addressLocal = addressLocal as String,
+                    addressRemote = addressRemote as String,
                     addressRemoteDisplayName = displayNameRemote as String,
                     callDirection = callDirection as CallDirection,
                     audioDirection = audioDirection,

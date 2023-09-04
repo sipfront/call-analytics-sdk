@@ -10,7 +10,27 @@ import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
 /**
- * Message describing the current call state
+ * Represents a message describing the current call state.
+ *
+ * This data class encapsulates various parameters related to the call state, including call ID, local and remote addresses, call and media directions, and more.
+ *
+ * @property callId The unique identifier for the call.
+ * @property addressLocal The local address associated with the call.
+ * @property addressRemote The remote address associated with the call.
+ * @property addressRemoteDisplayName The display name associated with the remote address.
+ * @property callDirection The direction of the call.
+ * @property audioDirection The direction of the audio media.
+ * @property videoDirection The direction of the video media.
+ * @property audioRemoteDirection The remote direction of the audio media.
+ * @property videoRemoteDirection The remote direction of the video media.
+ * @property type The type of the message, typically representing the call state.
+ * @property clazz The class of the message.
+ * @property timestamp The timestamp when the message was created or received.
+ *
+ * @throws IllegalStateException If [type] is missing before calling [Builder.build]
+ *
+ * @since 1.0.0
+ * @author Dominik Ridjic
  */
 @Serializable
 @SerialName("StateMessage")
@@ -18,9 +38,9 @@ data class StateMessage internal constructor(
     @SerialName(JsonKeys.Call.id)
     val callId: String? = null,
     @SerialName(JsonKeys.Address.local)
-    val addresslocal: String? = null,
+    val addressLocal: String? = null,
     @SerialName(JsonKeys.Address.remote)
-    val addressremote: String? = null,
+    val addressRemote: String? = null,
     @SerialName(JsonKeys.Address.remoteDisplayName)
     val addressRemoteDisplayName: String? = null,
     @SerialName(JsonKeys.Call.direction)
@@ -40,72 +60,95 @@ data class StateMessage internal constructor(
     @SerialName(JsonKeys.Message.timestamp)
     override val timestamp: Double = currentTimeMillisFormatted()
 ) : BaseMessage() {
+    /**
+     * Builder class for [StateMessage].
+     *
+     * Provides a fluent API to set various properties for the [StateMessage] and then build it.
+     */
     @OptIn(ExperimentalObjCName::class)
     class Builder : ProguardKeep {
         private var callId: String? = null
-        private var localAddress: String? = null
-        private var remoteAddress: String? = null
-        private var remoteDisplayName: String? = null
+        private var addressLocal: String? = null
+        private var addressRemote: String? = null
+        private var addressRemoteDisplayName: String? = null
         private var callDirection: CallDirection? = null
         private var type: MessageType.State? = null
         private var audioDirection: MediaDirection = MediaDirection.INACTIVE
         private var videoDirection: MediaDirection = MediaDirection.INACTIVE
 
         /**
-         * The Call-Id of a call
+         * Set the [StateMessage.callId] for the [StateMessage].
+         *
+         * @param callId The unique identifier for the call.
          */
         @ObjCName("call")
         fun callId(id: String) = apply { this.callId = id }
 
         /**
-         * The local address (this device) of a call
+         * Set the [StateMessage.addressLocal] for the [StateMessage].
+         *
+         * @param address The local address associated with the call.
          */
         @ObjCName("address")
-        fun addressLocal(@ObjCName("local") address: String) = apply { this.localAddress = address }
+        fun addressLocal(@ObjCName("local") address: String) = apply { this.addressLocal = address }
 
         /**
-         * The remote address of a call
+         * Set the [StateMessage.addressRemote] for the [StateMessage].
+         *
+         * @param address The remote address associated with the call.
          */
         @ObjCName("address")
         fun addressRemote(@ObjCName("remote") address: String) =
-            apply { this.remoteAddress = address }
+            apply { this.addressRemote = address }
 
         /**
-         * The display name of a call
+         * Set the [StateMessage.addressRemoteDisplayName] for the [StateMessage].
+         *
+         * @param displayName The display name associated with the remote address.
          */
         @ObjCName("displayName")
         fun displayNameRemote(@ObjCName("remote") displayName: String) =
-            apply { this.remoteDisplayName = displayName }
+            apply { this.addressRemoteDisplayName = displayName }
 
         /**
-         * The [MessageType.State] describing the current call state
+         * Set the [StateMessage.type] for the [StateMessage].
+         *
+         * @param type The type of the message, typically representing the call state.
          */
         fun type(@ObjCName("_") type: MessageType.State) =
             apply { this.type = type }
 
         /**
-         * The [CallDirection] of a call
+         * Set the [StateMessage.callDirection] for the [StateMessage].
+         *
+         * @param direction The direction of the call.
          */
         @ObjCName("call")
         fun callDirection(direction: CallDirection) =
             apply { this.callDirection = direction }
 
         /**
-         * The audio [MediaDirection] of a call
+         * Set the [StateMessage.audioDirection] for the [StateMessage].
+         *
+         * @param direction The direction of the audio media.
          */
         @ObjCName("audio")
         fun audioDirection(direction: MediaDirection) =
             apply { this.audioDirection = direction }
-
         /**
-         * The video [MediaDirection] of a call
+         * Set the [StateMessage.videoDirection] for the [StateMessage].
+         *
+         * @param direction The direction of the video media.
          */
         @ObjCName("video")
         fun videoDirection(direction: MediaDirection) =
             apply { this.videoDirection = direction }
 
         /**
-         * Builds the [StateMessage]
+         * Constructs the [StateMessage] based on the provided properties.
+         *
+         * @throws IllegalStateException If the configuration for [StateMessage] is invalid.
+         * @return An instance of [StateMessage].
          */
         @Throws(IllegalStateException::class)
         fun build(): StateMessage {
@@ -123,9 +166,9 @@ data class StateMessage internal constructor(
                         else -> MessageClass.CALL
                     },
                     callId = callId,
-                    addresslocal = localAddress,
-                    addressremote = remoteAddress,
-                    addressRemoteDisplayName = remoteDisplayName,
+                    addressLocal = addressLocal,
+                    addressRemote = addressRemote,
+                    addressRemoteDisplayName = addressRemoteDisplayName,
                     callDirection = callDirection,
                     audioDirection = audioDirection,
                     videoDirection = videoDirection

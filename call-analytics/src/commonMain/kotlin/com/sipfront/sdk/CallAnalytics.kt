@@ -23,6 +23,72 @@ import kotlin.experimental.ExperimentalObjCName
 import kotlin.jvm.JvmStatic
 import kotlin.native.ObjCName
 
+/**
+ * The [CallAnalytics] singleton object provides a unified interface for
+ * sending call-related data to Sipfront servers.
+ *
+ * Usage:
+ * To use [CallAnalytics], first invoke the [init] method and after successfully initialization you can
+ * use the various send* methods
+ *
+ * Android Example:
+ * ```kotlin
+ * // In onCreate() of your apps Launcher Activity add this code
+ * override fun onCreate(savedInstanceState: Bundle?) {
+ *     if (savedInstanceState == null) {
+ *         try {
+ *             val initialized = CallAnalytics.init(
+ *                 // custom Intent arguments provided to app by Sipfront test
+ *                 SessionParams(intent),
+ *                 // optional configuration
+ *                 Config.Builder()
+ *                     .enableDebugLogs(enable = true)
+ *                     .build()
+ *             )
+ *             if(initialized) {
+ *                 Log.i("CallAnalytics initialized")
+ *             }
+ *         } catch (e: Exception) {
+ *             Log.e("Could not initialise CallAnalytics, cause: ${e.message}")
+ *         }
+ *     }
+ * }
+ * ```
+ *
+ * iOS Example:
+ * ```
+ * // In init() of your SwiftUI.App
+ * struct MyApp: SwiftUI.App {
+ *     init() {
+ *         do {
+ *             let initialized = try CallAnalytics.shared.initialize(
+ *                 params: SessionParams(),
+ *                 // optional configuration of Sdk
+ *                 config: Config.Builder()
+ *                     .enableDebugLogs(true)
+ *                     .trustAllCerts(true)
+ *                     .build()
+ *             )
+ *             if initialized {
+ *                 Logger.info("CallAnalytics initialized")
+ *             }
+ *         } catch {
+ *             Logger.notifications.error("CallAnalytics init error: \(error)")
+ *         }
+ *     }
+ * }
+ * ```
+ *
+ * Note:
+ * Implementors of the library should ensure proper internet connectivity
+ * and necessary permissions before invoking the methods.
+ *
+ * @throws IllegalStateException If any send* methods are used before [CallAnalytics] has been initialized
+ * @throws IllegalArgumentException If data provided to [init] methods is invalid
+ *
+ * @since 1.0.0
+ * @author Dominik Ridjic
+ */
 @OptIn(ExperimentalObjCName::class)
 object CallAnalytics : ProguardKeep {
     private val initialised: AtomicBoolean = atomic(false)

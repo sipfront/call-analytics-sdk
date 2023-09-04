@@ -2,6 +2,7 @@ package com.sipfront.sdk.json.message
 
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonKeys
+import com.sipfront.sdk.json.message.SipMessage.Builder
 import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.json.message.enums.MessageClass
 import com.sipfront.sdk.json.message.enums.MessageType
@@ -12,7 +13,18 @@ import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
 /**
- * Message containing a SIP message
+ * Represents a message containing Session Initiation Protocol (SIP) data.
+ *
+ * This data class encapsulates SIP-related parameters including the actual SIP message, its type, and associated timestamp.
+ *
+ * @property message The actual SIP message content.
+ * @property type The type of the SIP message, either incoming or outgoing.
+ * @property timestamp The timestamp when the message was created or received.
+ *
+ * @throws IllegalStateException If [message] or [type] is missing before calling [Builder.build]
+ *
+ * @since 1.0.0
+ * @author Dominik Ridjic
  */
 @Serializable
 @SerialName("SipMessage")
@@ -26,6 +38,11 @@ data class SipMessage internal constructor(
     @SerialName(JsonKeys.Message.timestamp)
     override val timestamp: Double = currentTimeMillisFormatted()
 ) : BaseMessage() {
+    /**
+     * Builder class for [SipMessage].
+     *
+     * Provides a fluent API to set various properties for the [SipMessage] and then build it.
+     */
     @OptIn(ExperimentalObjCName::class)
     class Builder : ProguardKeep {
         private var message: String? = null
@@ -43,7 +60,10 @@ data class SipMessage internal constructor(
         fun type(@ObjCName("_") type: MessageType.Sip) = apply { this.type = type }
 
         /**
-         * Builds the [SipMessage]
+         * Constructs the [SipMessage] based on the provided properties.
+         *
+         * @throws IllegalStateException If the configuration for [SipMessage] is invalid.
+         * @return An instance of [SipMessage].
          */
         @Throws(IllegalStateException::class)
         fun build(): SipMessage {
