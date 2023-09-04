@@ -1,6 +1,0 @@
-framework module CallAnalyticsSdk {
-    umbrella header "CallAnalyticsSdk.h"
-
-    export *
-    module * { export * }
-}
