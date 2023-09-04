@@ -1,42 +1,39 @@
-name: Generate and Publish Dokka Documentation
+name: Release Workflow
 
 on:
   push:
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version (e.g., 1.0.2)'
-        required: true
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
+      # Setup Environment
       - name: Checkout code
         uses: actions/checkout@v3
-
+        with:
+          ref: ${{ github.ref }}
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: 19
-          
+
+      # Get Variables
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
-        
       - name: Get commit message
         id: get_commit_message
         run: echo ::set-output name=MESSAGE::$(git log --format=%B -n 1 ${{ github.event.after }})
-        
+
+      # Create XCFramework Zip and attach to Release
       - name: Zip XCFramework
         run: |
           zip -r CallAnalyticsSdk.xcframework.zip CallAnalyticsSdk.xcframework
-          
-      - name: Release
+      - name: Attach zip to Release
         uses: softprops/action-gh-release@v1
         with:
           body: ${{ steps.get_commit_message.outputs.MESSAGE }}
@@ -44,18 +41,19 @@ jobs:
             LICENSE
             CallAnalyticsSdk.xcframework.zip
             
-      # Runs a set of commands using the runners shell
+      # Update version codes in README
       - name: Update README.md
         run: |
           sed -i 's/<!-- VERSION_START -->.*<!-- VERSION_END -->/<!-- VERSION_START -->'"${{ steps.get_version.outputs.VERSION }}"'<!-- VERSION_END -->/' README.md
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git commit -am "Automated README Update"
-          git push
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Automated README v${{ steps.get_version.outputs.VERSION }} Update"
+          git push origin "${GITHUB_REF#refs/heads/}"
 
+      # Update GitHub Pages Documentation
       - name: Build and generate Dokka documentation
         run: ./gradlew dokkaHtml --no-daemon --stacktrace
-
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
