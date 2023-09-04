@@ -29,7 +29,7 @@ See the <b>[project website](https://sipfront.github.io/call-analytics-sdk/)</b>
 
 ## Setup
 
-Current Version: <b><!-- VERSION_START -->1.0.2<!-- VERSION_END --></b>
+Current Version: <b><!-- VERSION_START -->1.0.3<!-- VERSION_END --></b>
 
 ### with Gradle
 
