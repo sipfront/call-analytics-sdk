@@ -28,7 +28,9 @@ plugins {
 
 val javaVersion: JavaVersion = JavaVersion.VERSION_17
 val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(javaVersion.majorVersion)
-val isPublishToMavenLocal = gradle.startParameter.taskNames.contains("publishToMavenLocal")
+// true for any publish to local Maven, including subtasks like publishAndroidDebugPublicationToMavenLocal
+val isPublishToMavenLocal =
+    gradle.startParameter.taskNames.any { taskName -> "^publish.*ToMavenLocal$".toRegex().matches(taskName) }
 val localProperties = Properties().apply {
     val localPropertiesFile = rootProject.file("local.properties")
     if (localPropertiesFile.exists()) {
