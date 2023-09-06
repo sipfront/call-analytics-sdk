@@ -7,12 +7,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class RtcpInterface(
     @SerialName(JsonKeys.Rtcp.Interface.name) val name: String = "external",
-    @SerialName(JsonKeys.Rtcp.Interface.rate) val rate: Rate,
+    @SerialName(JsonKeys.Rtcp.Interface.rate) val rate: Rate?,
     @SerialName(JsonKeys.Rtcp.Interface.ingress) val ingress: Ingress,
     @SerialName(JsonKeys.Rtcp.Interface.egress) val egress: Egress,
-    @SerialName(JsonKeys.Rtcp.Interface.ingressRate) val ingressRate: IngressRate,
-    @SerialName(JsonKeys.Rtcp.Interface.egressRate) val egressRate: EgressRate,
+    @SerialName(JsonKeys.Rtcp.Interface.ingressRate) val ingressRate: IngressRate?,
+    @SerialName(JsonKeys.Rtcp.Interface.egressRate) val egressRate: EgressRate?,
     @SerialName(JsonKeys.Rtcp.Interface.voipMetrics) val voipMetrics: VoipMetrics,
+    @SerialName(JsonKeys.Rtcp.Interface.mediaOutbound) val mediaOutbound: MediaStats,
+    @SerialName(JsonKeys.Rtcp.Interface.mediaInbound) val mediaInbound: MediaStats,
 )
 
 @Serializable
@@ -82,12 +84,40 @@ internal data class VoipMetrics(
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.jitterAverage) val jitterAverage: Double,
     /**
-     * Measures current (last) packet round-trip-tipe (RTT) in microseconds (positive number starting at 0.0)
+     * Measures current (last) packet round-trip-time (RTT) in microseconds (positive number starting at 0.0)
      * Note: Mobile SDK API accepts this value in milliseconds and will thus be converted before stored here
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.rttDscAverage) val rttDscAverage: Double,
     /**
      * Total number of lost packets (positive number starting at 0)
      */
-    @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.packetlossTotal) val packetlossTotal: Long,
+    @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.packetLossTotal) val packetLossTotal: Long,
+)
+
+@Serializable
+internal data class MediaStats(
+    /**
+     * This WebRTC property represents the audio level of the media source.
+     *
+     * It is a number between 0 and 1 (linear), where 1.0 represents 0 dBov (decibels relative to full scale),
+     * 0 represents silence, and 0.5 represents approximately 6 dB SPL change in the sound pressure level from 0 dBov.
+     *
+     * @since 1.0.4
+     *
+     * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/audioLevel)
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.MediaStats.audioLevel) val audioLevel: Double,
+    /**
+     * This WebRTC property represents the total audio energy of the media source over the lifetime of a call.
+     *
+     * A number produced by summing the energy of every sample over the lifetime of this stats object.
+     * The energy of each sample is calculated by dividing the sample's value by the highest-intensity encodable value,
+     * squaring the result, and then multiplying by the duration of the sample in seconds.
+     * Note that if multiple audio channels are used, the audio energy of a sample refers to the highest energy of any channel.
+     *
+     * @since 1.0.4
+     *
+     * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/totalAudioEnergy)
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.MediaStats.totalAudioEnergy) val totalAudioEnergy: Double,
 )

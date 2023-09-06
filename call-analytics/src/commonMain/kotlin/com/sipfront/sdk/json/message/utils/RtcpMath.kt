@@ -1,13 +1,14 @@
 package com.sipfront.sdk.json.message.utils
 
 import com.sipfront.sdk.CallAnalytics
+import com.sipfront.sdk.json.message.*
 import com.sipfront.sdk.json.message.Egress
 import com.sipfront.sdk.json.message.EgressRate
 import com.sipfront.sdk.json.message.Ingress
 import com.sipfront.sdk.json.message.IngressRate
+import com.sipfront.sdk.json.message.MediaStats
 import com.sipfront.sdk.json.message.Rate
 import com.sipfront.sdk.json.message.RtcpInterface
-import com.sipfront.sdk.json.message.RtcpMessage
 import com.sipfront.sdk.json.message.VoipMetrics
 import com.sipfront.sdk.log.Log
 import kotlin.math.roundToLong
@@ -26,51 +27,72 @@ internal object RtcpMath {
     private const val JITTER_IMPACT_FACTOR = 0.11
 
     @Throws(NoSuchElementException::class)
-    internal fun createRtcpInterface(now: RtcpMessage): List<RtcpInterface>? {
+    internal fun createRtcpInterface(currentMsg: RtcpMessage): List<RtcpInterface> {
         // we need the previous RtcpMessage in order to calculate averages, if we cannot find any we return null
-        val last = runCatching { CallAnalytics.rtcpCache.last() }.getOrNull() ?: return null
+        val previousMsg = runCatching { CallAnalytics.rtcpCache.last() }.getOrNull()
+        val elapsedTimeSeconds: Double = previousMsg?.let { (currentMsg.timestamp - previousMsg.timestamp) } ?: 0.0
 
-        val elapsedTimeSeconds: Double = (now.timestamp - last.timestamp)
-        val packetsRxPerSecond: Double =
-            (now.rxPackets - last.rxPackets) / elapsedTimeSeconds
-        val packetsTxPerSecond: Double =
-            (now.txPackets - last.txPackets) / elapsedTimeSeconds
-        val bytesRxPerSecond: Double = (now.rxBytes - last.rxBytes) / elapsedTimeSeconds
-        val bytesTxPerSecond: Double = (now.txBytes - last.txBytes) / elapsedTimeSeconds
-        val lostRxPerSecond: Double = ((now.rxLost - last.rxLost) / elapsedTimeSeconds)
-        val mos: Double = calculateMeanOpinionScore(now)
+        val packetsRxPerSecond: Double = calculateRate(currentMsg.rxPackets, previousMsg?.rxPackets, elapsedTimeSeconds)
+        val packetsTxPerSecond: Double = calculateRate(currentMsg.txPackets, previousMsg?.txPackets, elapsedTimeSeconds)
+        val bytesRxPerSecond: Double = calculateRate(currentMsg.rxBytes, previousMsg?.rxBytes, elapsedTimeSeconds)
+        val bytesTxPerSecond: Double = calculateRate(currentMsg.txBytes, previousMsg?.txBytes, elapsedTimeSeconds)
+        val lostRxPerSecond: Double = calculateRate(currentMsg.rxLost, previousMsg?.rxLost, elapsedTimeSeconds)
+        val mos: Double = calculateMeanOpinionScore(currentMsg)
 
+        /**
+         * Some elements require a previous RtcpMessage to be available from whom to calculate averages.
+         * These elements may be null in which case they are not encoded in the JSON
+         */
         return listOf(
             RtcpInterface(
-                rate = Rate(packetsLost = lostRxPerSecond.roundToLong()),
+                rate = previousMsg?.let {
+                    Rate(
+                        packetsLost = lostRxPerSecond.roundToLong()
+                    )
+                },
                 ingress = Ingress(
-                    packets = now.rxPackets, bytes = now.rxBytes
+                    packets = currentMsg.rxPackets, bytes = currentMsg.rxBytes
                 ),
                 egress = Egress(
-                    packets = now.txPackets, bytes = now.txBytes
+                    packets = currentMsg.txPackets, bytes = currentMsg.txBytes
                 ),
-                ingressRate = IngressRate(
-                    packets = packetsRxPerSecond.roundToLong(),
-                    bytes = bytesRxPerSecond.roundToLong()
+                ingressRate = previousMsg?.let {
+                    IngressRate(
+                        packets = packetsRxPerSecond.roundToLong(),
+                        bytes = bytesRxPerSecond.roundToLong()
+                    )
+                },
+                egressRate = previousMsg?.let {
+                    EgressRate(
+                        packets = packetsTxPerSecond.roundToLong(),
+                        bytes = bytesTxPerSecond.roundToLong()
+                    )
+                },
+                mediaOutbound = MediaStats(
+                    audioLevel = currentMsg.txAudioLevel,
+                    totalAudioEnergy = currentMsg.txTotalAudioEnergy
                 ),
-                egressRate = EgressRate(
-                    packets = packetsTxPerSecond.roundToLong(),
-                    bytes = bytesTxPerSecond.roundToLong()
+                mediaInbound = MediaStats(
+                    audioLevel = currentMsg.rxAudioLevel,
+                    totalAudioEnergy = currentMsg.rxTotalAudioEnergy
                 ),
                 voipMetrics = VoipMetrics(
                     mosAverage = if (mos.isValid(VoipMetrics::mosAverage.name)) mos else 0.0,
-                    jitterAverage = if (now.rxJitter.isValid(VoipMetrics::jitterAverage.name)) now.rxJitter else 0.0,
+                    jitterAverage = if (currentMsg.rxJitter.isValid(VoipMetrics::jitterAverage.name)) currentMsg.rxJitter else 0.0,
                     /**
-                     * converting round-trip-time (rtt) to microsec because that's what Sipfront Web API
+                     * converting round-trip-time (rtt) to microsecond because that's what Sipfront Web API
                      * currently expects, but still keeping Sipfront Mobile SDK consistent by expecting
-                     * millisec accross all values
+                     * millisecond across all values
                      */
-                    rttDscAverage = if (now.rtt.isValid(VoipMetrics::rttDscAverage.name)) (now.rtt * 1000) else 0.0,
-                    packetlossTotal = now.rxLost
+                    rttDscAverage = if (currentMsg.rtt.isValid(VoipMetrics::rttDscAverage.name)) (currentMsg.rtt * 1000) else 0.0,
+                    packetLossTotal = currentMsg.rxLost
                 ),
             )
         )
     }
+
+    private fun calculateRate(currentMsg: Long, previousMsg: Long?, elapsedTimeSeconds: Double): Double =
+        previousMsg?.let { (currentMsg - it) / elapsedTimeSeconds } ?: 0.0
 
     private fun calculateMeanOpinionScore(rtcp: RtcpMessage): Double {
         return try {

@@ -35,8 +35,12 @@ import kotlin.native.ObjCName
  * @property rxPackets The total number of received RTP packets.
  * @property rxLost The total number of RTP packets lost during reception.
  * @property rxBytes The total number of received RTP bytes.
+ * @property rxAudioLevel The audio level of incoming media.
+ * @property rxTotalAudioEnergy The total audio energy of incoming media over the lifetime of the call.
  * @property txPackets The total number of sent RTP packets.
  * @property txBytes The total number of sent RTP bytes.
+ * @property txAudioLevel The audio level of outgoing media.
+ * @property txTotalAudioEnergy The total audio energy of outgoing media over the lifetime of the call.
  * @property rtt The current round trip time in milliseconds.
  *
  * @throws IllegalStateException If [callId], [addressLocal], [addressRemote], [addressRemoteDisplayName] or [callDirection]
@@ -48,55 +52,40 @@ import kotlin.native.ObjCName
 @Serializable
 @SerialName("RtcpMessage")
 data class RtcpMessage internal constructor(
-    @SerialName(JsonKeys.Call.id)
-    val callId: String,
-    @SerialName(JsonKeys.Address.local)
-    val addressLocal: String,
-    @SerialName(JsonKeys.Address.remote)
-    val addressRemote: String,
-    @SerialName(JsonKeys.Address.remoteDisplayName)
-    val addressRemoteDisplayName: String,
-    @SerialName(JsonKeys.Call.direction)
-    val callDirection: CallDirection,
-    @SerialName(MediaDirection.Type.audiodir)
-    val audioDirection: MediaDirection,
-    @SerialName(MediaDirection.Type.videodir)
-    val videoDirection: MediaDirection,
-    @SerialName(MediaDirection.Type.remoteaudiodir)
-    val audioRemoteDirection: MediaDirection = audioDirection.toRemote(),
-    @SerialName(MediaDirection.Type.remotevideodir)
-    val videoRemoteDirection: MediaDirection = videoDirection.toRemote(),
-    @SerialName(JsonKeys.param)
-    val param: String = "audio",
-    @Transient
-    val rxJitter: Double = 0.0,
-    @Transient
-    val rxPackets: Long = 0L,
-    @Transient
-    val rxLost: Long = 0L,
-    @Transient
-    val rxBytes: Long = 0L,
-    @Transient
-    val txPackets: Long = 0L,
-    @Transient
-    val txBytes: Long = 0L,
-    @Transient
-    val rtt: Double = 0.0,
-    @SerialName(JsonKeys.Message.type)
-    override val type: MessageType.Rtcp = MessageType.Rtcp.RTCP,
-    @SerialName(JsonKeys.Message.clazz)
-    override val clazz: MessageClass = MessageClass.CALL,
-    @SerialName(JsonKeys.Message.timestamp)
-    override val timestamp: Double = currentTimeMillisFormatted()
+    @SerialName(JsonKeys.Call.id) val callId: String,
+    @SerialName(JsonKeys.Address.local) val addressLocal: String,
+    @SerialName(JsonKeys.Address.remote) val addressRemote: String,
+    @SerialName(JsonKeys.Address.remoteDisplayName) val addressRemoteDisplayName: String,
+    @SerialName(JsonKeys.Call.direction) val callDirection: CallDirection,
+    @SerialName(MediaDirection.Type.audiodir) val audioDirection: MediaDirection,
+    @SerialName(MediaDirection.Type.videodir) val videoDirection: MediaDirection,
+    @SerialName(MediaDirection.Type.remoteaudiodir) val audioRemoteDirection: MediaDirection = audioDirection.toRemote(),
+    @SerialName(MediaDirection.Type.remotevideodir) val videoRemoteDirection: MediaDirection = videoDirection.toRemote(),
+    @SerialName(JsonKeys.param) val param: String = "audio",
+    @Transient val rxJitter: Double = 0.0,
+    @Transient val rxPackets: Long = 0L,
+    @Transient val rxLost: Long = 0L,
+    @Transient val rxBytes: Long = 0L,
+    @Transient val rxAudioLevel: Double = 0.0,
+    @Transient val rxTotalAudioEnergy: Double = 0.0,
+    @Transient val txPackets: Long = 0L,
+    @Transient val txBytes: Long = 0L,
+    @Transient val txAudioLevel: Double = 0.0,
+    @Transient val txTotalAudioEnergy: Double = 0.0,
+    @Transient val rtt: Double = 0.0,
+    @SerialName(JsonKeys.Message.type) override val type: MessageType.Rtcp = MessageType.Rtcp.RTCP,
+    @SerialName(JsonKeys.Message.clazz) override val clazz: MessageClass = MessageClass.CALL,
+    @SerialName(JsonKeys.Message.timestamp) override val timestamp: Double = currentTimeMillisFormatted()
 ) : BaseMessage() {
     @SerialName(JsonKeys.Rtcp.interfaces)
-    internal val interfaces: List<RtcpInterface>? = RtcpMath.createRtcpInterface(this)
+    internal val interfaces: List<RtcpInterface> = RtcpMath.createRtcpInterface(this)
 
     /**
      * Builder class for [RtcpMessage].
      *
      * Provides a fluent API to set various properties for the [RtcpMessage] and then build it.
      */
+    @Suppress("unused")
     @OptIn(ExperimentalObjCName::class)
     class Builder : ProguardKeep {
         private var callId: String? = null
@@ -110,8 +99,12 @@ data class RtcpMessage internal constructor(
         private var rxPackets: Long = 0L
         private var rxLost: Long = 0L
         private var rxBytes: Long = 0L
+        private var rxAudioLevel: Double = 0.0
+        private var rxTotalAudioEnergy: Double = 0.0
         private var txPackets: Long = 0L
         private var txBytes: Long = 0L
+        private var txAudioLevel: Double = 0.0
+        private var txTotalAudioEnergy: Double = 0.0
         private var rtt: Double = 0.0
 
         /**
@@ -142,25 +135,20 @@ data class RtcpMessage internal constructor(
          * The [CallDirection] of a call, mandatory property
          */
         @ObjCName("call")
-        fun callDirection(direction: CallDirection) =
-            apply { this.callDirection = direction }
+        fun callDirection(direction: CallDirection) = apply { this.callDirection = direction }
 
         /**
          * The audio [MediaDirection] of a call
          */
         @ObjCName("audio")
-        @Suppress("MemberVisibilityCanBePrivate")
-        fun audioDirection(direction: MediaDirection) =
-            apply { this.audioDirection = direction }
+        fun audioDirection(direction: MediaDirection) = apply { this.audioDirection = direction }
 
 
         /**
          * The video [MediaDirection] of a call
          */
         @ObjCName("video")
-        @Suppress("MemberVisibilityCanBePrivate")
-        fun videoDirection(direction: MediaDirection) =
-            apply { this.videoDirection = direction }
+        fun videoDirection(direction: MediaDirection) = apply { this.videoDirection = direction }
 
         /**
          * Total number of RX (received) RTP packets
@@ -175,13 +163,32 @@ data class RtcpMessage internal constructor(
         fun txPackets(packets: Long) = apply { this.txPackets = packets }
 
         /**
+         * This WebRTC property represents the audio level of the media source (outgoing).
+         *
+         * @since 1.0.4
+         *
+         * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/audioLevel)
+         */
+        fun txAudioLevel(@ObjCName("_") txAudioLevel: Double) = apply { this.txAudioLevel = txAudioLevel }
+
+        /**
+         * This WebRTC property represents the total audio energy of the media source over the lifetime of a call. (outgoing)
+         *
+         * @since 1.0.4
+         *
+         * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/totalAudioEnergy)
+         */
+        fun txTotalAudioEnergy(@ObjCName("_") txTotalAudioEnergy: Double) =
+            apply { this.txTotalAudioEnergy = txTotalAudioEnergy }
+
+        /**
          * Total number of TX (transmitted) RTP bytes
          */
         @ObjCName("tx")
         fun txBytes(bytes: Long) = apply { this.txBytes = bytes }
 
         /**
-         * Jitter in millseconds
+         * Jitter in milliseconds
          */
         @ObjCName("rx")
         fun rxJitter(jitter: Double) = apply { this.rxJitter = jitter }
@@ -199,6 +206,25 @@ data class RtcpMessage internal constructor(
         fun rxBytes(bytes: Long) = apply { this.rxBytes = bytes }
 
         /**
+         * This WebRTC property represents the audio level of the media source (incoming).
+         *
+         * @since 1.0.4
+         *
+         * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/audioLevel)
+         */
+        fun rxAudioLevel(@ObjCName("_") rxAudioLevel: Double) = apply { this.rxAudioLevel = rxAudioLevel }
+
+        /**
+         * This WebRTC property represents the total audio energy of the media source over the lifetime of a call. (incoming)
+         *
+         * @since 1.0.4
+         *
+         * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/totalAudioEnergy)
+         */
+        fun rxTotalAudioEnergy(@ObjCName("_") rxTotalAudioEnergy: Double) =
+            apply { this.rxTotalAudioEnergy = rxTotalAudioEnergy }
+
+        /**
          * Current round trip time in milliseconds
          */
         fun rtt(@ObjCName("_") rtt: Double) = apply { this.rtt = rtt }
@@ -212,11 +238,7 @@ data class RtcpMessage internal constructor(
         @Throws(IllegalStateException::class)
         fun build(): RtcpMessage {
             KotlinHelper.multiLet(
-                callId,
-                addressLocal,
-                addressRemote,
-                displayNameRemote,
-                callDirection
+                callId, addressLocal, addressRemote, displayNameRemote, callDirection
             ) { (callId, addressLocal, addressRemote, displayNameRemote, callDirection) ->
                 return@build RtcpMessage(
                     callId = callId as String,
@@ -230,8 +252,12 @@ data class RtcpMessage internal constructor(
                     rxPackets = rxPackets,
                     rxLost = rxLost,
                     rxBytes = rxBytes,
+                    rxAudioLevel = rxAudioLevel,
+                    rxTotalAudioEnergy = rxTotalAudioEnergy,
                     txPackets = txPackets,
                     txBytes = txBytes,
+                    txAudioLevel = txAudioLevel,
+                    txTotalAudioEnergy = txTotalAudioEnergy,
                     rtt = rtt
                 )
             }
