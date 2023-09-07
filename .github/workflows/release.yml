@@ -44,7 +44,7 @@ jobs:
       # Update version codes in README
       - name: Update README.md
         run: |
-          sed -i 's/<!-- VERSION_START -->.*<!-- VERSION_END -->/<!-- VERSION_START -->'"${{ steps.get_version.outputs.VERSION }}"'<!-- VERSION_END -->/' README.md
+          sed -i 's/[0-9]\+\.[0-9]\+\.[0-9]\+/'"${{ steps.get_version.outputs.VERSION }}"'/' README.md
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
