@@ -50,7 +50,7 @@ data class SipMessage internal constructor(
         private val clazz: MessageClass = MessageClass.TRACE
 
         /**
-         * The sent or received SIP message, mandatory property
+         * Sent or received SIP message, mandatory property
          */
         fun message(@ObjCName("_") message: String) = apply { this.message = message }
 

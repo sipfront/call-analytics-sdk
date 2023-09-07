@@ -3,7 +3,6 @@ package com.sipfront.sdk.mqtt.sslsocket
 import android.annotation.SuppressLint
 import java.security.KeyStore
 import java.security.cert.X509Certificate
-import java.util.*
 import javax.net.ssl.*
 
 internal class SSLConfigAndroid(trustAllCerts: Boolean, customSslAlpn: String? = null): SSLConfigJvm(trustAllCerts) {
@@ -12,8 +11,8 @@ internal class SSLConfigAndroid(trustAllCerts: Boolean, customSslAlpn: String? =
     private val sslContext: SSLContext = createSSLContext(arrayOf(trustManager))
     private val sslSocketFactory: SSLSocketFactory = createSSLSocketFactory(customSslAlpn)
 
-    override internal fun getTrustManager(): X509TrustManager = trustManager
-    override internal fun getSSLSocketFactory(): SSLSocketFactory = sslSocketFactory
+    override fun getTrustManager(): X509TrustManager = trustManager
+    override fun getSSLSocketFactory(): SSLSocketFactory = sslSocketFactory
 
     private fun createSSLSocketFactory(customSslAlpn: String?): SSLSocketFactory = customSslAlpn?.let { sslAlpn ->
         object : DelegatingSSLSocketFactory(sslContext.socketFactory) {

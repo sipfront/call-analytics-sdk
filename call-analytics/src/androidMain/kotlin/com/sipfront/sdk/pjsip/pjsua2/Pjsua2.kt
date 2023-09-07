@@ -37,7 +37,7 @@ internal class Pjsua2 {
                 if (!isCallAdded()) {
                     pjsua2Call = call
                     runBlocking {
-                        if (isRunning.compareAndSet(false, true)) {
+                        if (isRunning.compareAndSet(expect = false, update = true)) {
                             rtcpJob = launch(start = CoroutineStart.LAZY) {
                                 while (isCallAdded() && PjSipObjectParser.isCallActive(call)) {
                                     // Check whether this job is cancelled, since a coroutine must cooperate to be cancellable.

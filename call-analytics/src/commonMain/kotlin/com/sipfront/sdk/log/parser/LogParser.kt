@@ -39,7 +39,7 @@ internal class LogParser {
                     // cooperate to be cancellable.
                     ensureActive()
                     // If line starts with a timestamp we know that a new line has been printed.
-                    // Now we can check the buffer for SIP/SDP messages and afterwards clear
+                    // Now we can check the buffer for SIP/SDP messages and afterward clear
                     // the buffer and continue with the next iteration
                     if (line.matches(regexTimestamp)) {
                         val logLine = buffer.toString()
@@ -116,7 +116,7 @@ internal class LogParser {
             is ParsedSipMessage -> {
                 sipCache[message.hashCode()] = message
                 // If SIP contains SDP caching SIP alone is not sufficient because the SDP parser will still
-                // detect SDP that hasn't been cached if we print the SIP message to Log. Therefore we
+                // detect SDP that hasn't been cached if we print the SIP message to Log. Therefore, we
                 // additionally store the SDP message in cache
                 message.sdpPacket?.let { sdpPacket ->
                     cache(ParsedSdpMessage(sdpPacket))

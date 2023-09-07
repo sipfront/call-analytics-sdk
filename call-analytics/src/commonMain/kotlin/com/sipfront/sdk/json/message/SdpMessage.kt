@@ -45,7 +45,7 @@ data class SdpMessage internal constructor(
         private var type: MessageType.Sdp? = null
 
         /**
-         * The sent or received SDP message, mandatory property
+         * Sent or received SDP message, mandatory property
          */
         fun message(@ObjCName("_") message: String) = apply { this.message = message }
 

@@ -65,6 +65,7 @@ data class StateMessage internal constructor(
      *
      * Provides a fluent API to set various properties for the [StateMessage] and then build it.
      */
+    @Suppress("unused")
     @OptIn(ExperimentalObjCName::class)
     class Builder : ProguardKeep {
         private var callId: String? = null
@@ -79,7 +80,7 @@ data class StateMessage internal constructor(
         /**
          * Set the [StateMessage.callId] for the [StateMessage].
          *
-         * @param callId The unique identifier for the call.
+         * @param id The unique identifier for the call.
          */
         @ObjCName("call")
         fun callId(id: String) = apply { this.callId = id }

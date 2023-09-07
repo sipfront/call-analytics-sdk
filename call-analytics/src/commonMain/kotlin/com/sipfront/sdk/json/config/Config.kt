@@ -35,6 +35,7 @@ data class Config private constructor(
      *
      * Provides a fluent API to set various properties for the [Config] and then build it.
      */
+    @Suppress("unused")
     @OptIn(ExperimentalObjCRefinement::class)
     class Builder : ProguardKeep {
         private var enablePjsua: Boolean = false

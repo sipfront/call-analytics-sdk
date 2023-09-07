@@ -2,6 +2,7 @@ package com.sipfront.sdk
 
 import co.touchlab.stately.collections.ConcurrentMutableList
 import com.sipfront.sdk.constants.Constants
+import com.sipfront.sdk.constants.Keys
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonParser
 import com.sipfront.sdk.json.config.Config
@@ -14,6 +15,7 @@ import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.LogParser
 import com.sipfront.sdk.mqtt.MqttClient
 import com.sipfront.sdk.utils.Platform
+import com.sipfront.sdk.utils.getUserAgent
 import io.ktor.utils.io.errors.*
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
@@ -28,7 +30,7 @@ import kotlin.native.ObjCName
  * sending call-related data to Sipfront servers.
  *
  * Usage:
- * To use [CallAnalytics], first invoke the [init] method and after successfully initialization you can
+ * To use [CallAnalytics], first invoke the [init] method and after successful initialization you can
  * use the various send* methods
  *
  * Android Example:
@@ -89,6 +91,7 @@ import kotlin.native.ObjCName
  * @since 1.0.0
  * @author Dominik Ridjic
  */
+@Suppress("unused")
 @OptIn(ExperimentalObjCName::class)
 object CallAnalytics : ProguardKeep {
     private val initialised: AtomicBoolean = atomic(false)
@@ -112,7 +115,7 @@ object CallAnalytics : ProguardKeep {
      *
      * The data is received on Android as Intent and on iOS as environment variable in ProcessInfo
      *
-     * The key is [Constants.Keys.INIT_PARAM] and data has the following JSON format:
+     * The key is [Keys.INITIALIZATION] and data has the following JSON format:
      *
      * ```
      *  {
@@ -143,9 +146,7 @@ object CallAnalytics : ProguardKeep {
         Log.enableLogging(config.enableDebugLogs)
         Log.debug()
             ?.i(
-                "Starting ${BuildKonfig.PROJECT_NAME} ${BuildKonfig.VERSION_CODE}-${Platform.getBuildType()} initialization on: " +
-                        "${Platform.getDeviceModel()} - ${Platform.getOsFamily()} ${Platform.getOsVersion()}\n" +
-                        "with Config: ${JsonParser.toString(config)}"
+                "Starting ${getUserAgent()} initialization with Config: ${JsonParser.toString(config)}"
             )
 
         if (!isInitialized()) {
@@ -226,7 +227,7 @@ object CallAnalytics : ProguardKeep {
                 this.config = config
                 logParser = LogParser()
                 Log.debug()?.i(
-                    "Successfully initialized ${BuildKonfig.PROJECT_NAME} ${BuildKonfig.VERSION_CODE}-${Platform.getBuildType()} with SessionConfig: $sessionConfig,  config: $config"
+                    "Successfully initialized ${getUserAgent()} with SessionConfig: $sessionConfig,  config: $config"
                 )
                 if (config.enableLogParser) {
                     logParser.start()

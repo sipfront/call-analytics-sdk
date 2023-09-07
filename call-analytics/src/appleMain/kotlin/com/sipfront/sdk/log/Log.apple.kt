@@ -5,7 +5,6 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ptr
 import platform.darwin.*
 import kotlin.experimental.ExperimentalNativeApi
-import kotlin.native.concurrent.freeze
 
 internal actual fun getLogWriter(): LogWriter = XcodePublicSeverityWriter()
 
@@ -61,7 +60,6 @@ internal open class PublicOSLogWriter internal constructor(
         }
     }
 
-    @OptIn(ExperimentalNativeApi::class)
     open fun logThrowable(osLogSeverity: UByte, throwable: Throwable) {
         throwable.message?.let { darwinLogger.log(osLogSeverity, it) }
     }
@@ -96,7 +94,7 @@ private object PublicDarwinLoggerActual : PublicDarwinLogger {
              */
             "%{public}s",
             /**
-             * Previously at this place message.freeze() was used, but we are not using the old GC memory model and
+             * Previously at this place message.freeze() was used, but we are not using the old GC memory model, and
              * therefore I've removed it.
              * Keeping this comment just in case some memory related crash resurfaces in order to know where and how
              * to fix it.

@@ -1,6 +1,5 @@
 package com.sipfront.sdk.mqtt
 
-import com.sipfront.sdk.BuildKonfig
 import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.json.JsonParser
 import com.sipfront.sdk.json.config.SessionConfig
@@ -12,7 +11,7 @@ import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.utils.DispatcherProvider
 import com.sipfront.sdk.utils.KotlinHelper
-import com.sipfront.sdk.utils.Platform
+import com.sipfront.sdk.utils.getUserAgent
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.*
@@ -56,9 +55,7 @@ internal class MqttClient private constructor(
             requestTimeoutMillis = Constants.MQTT_TIMEOUT_MS_REQUEST
         }
         install(UserAgent) {
-            // Example UserAgent: CallAnalyticsSdk.debug (iOS 14.1 - iPhone13)
-            agent =
-                "${BuildKonfig.PROJECT_NAME}.${Platform.getBuildType()} (${Platform.getOsVersion()} ${Platform.getOsVersion()} - ${Platform.getDeviceModel()})"
+            agent = getUserAgent()
         }
         install(Logging) {
             level = LogLevel.ALL

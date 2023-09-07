@@ -43,6 +43,7 @@ enum class CallDirection(override val value: String): EnumValue {
      *
      * @return The [CallDirection] representing the inverted direction.
      */
+    @Suppress("unused")
     internal fun invert(): CallDirection = when (this) {
         INCOMING -> OUTGOING
         OUTGOING -> INCOMING

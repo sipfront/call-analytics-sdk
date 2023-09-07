@@ -7,8 +7,11 @@ import kotlinx.serialization.SerializationException
 /**
  * ### Parse session params provided with Sipfront test
  *
- * Format differs depending on which platform a test is run, this class normalizes and parses the data in order to
+ * The Format differs depending on which platform a test is run, this class normalizes and parses the data in order to
  * correctly set up the test
+ *
+ * @since 1.0.0
+ * @author Dominik Ridjic
  */
 expect class SessionParams: ProguardKeep {
     @Throws(IllegalArgumentException::class, SerializationException::class)
