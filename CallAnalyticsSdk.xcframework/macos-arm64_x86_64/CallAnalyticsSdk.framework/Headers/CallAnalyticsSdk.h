@@ -174,7 +174,7 @@ __attribute__((swift_name("CallAnalytics")))
 /**
  * @note annotations
  *   kotlin.jvm.JvmStatic
- * @note This method converts instances of IllegalStateException, IllegalArgumentException, IOException to errors.
+ * @note This method converts instances of IllegalStateException, IllegalArgumentException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
 - (BOOL)sendRtcp:(CASRtcpMessage *)rtcp error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("send(rtcp:)")));
@@ -182,7 +182,7 @@ __attribute__((swift_name("CallAnalytics")))
 /**
  * @note annotations
  *   kotlin.jvm.JvmStatic
- * @note This method converts instances of IllegalStateException, IllegalArgumentException, IOException to errors.
+ * @note This method converts instances of IllegalStateException, IllegalArgumentException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
 - (BOOL)sendSdp:(CASSdpMessage *)sdp error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("send(sdp:)")));
@@ -190,7 +190,7 @@ __attribute__((swift_name("CallAnalytics")))
 /**
  * @note annotations
  *   kotlin.jvm.JvmStatic
- * @note This method converts instances of IllegalStateException, IllegalArgumentException, IOException to errors.
+ * @note This method converts instances of IllegalStateException, IllegalArgumentException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
 - (BOOL)sendSip:(CASSipMessage *)sip error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("send(sip:)")));
@@ -198,7 +198,7 @@ __attribute__((swift_name("CallAnalytics")))
 /**
  * @note annotations
  *   kotlin.jvm.JvmStatic
- * @note This method converts instances of IllegalStateException, IllegalArgumentException, IOException to errors.
+ * @note This method converts instances of IllegalStateException, IllegalArgumentException to errors.
  * Other uncaught Kotlin exceptions are fatal.
 */
 - (BOOL)sendState:(CASStateMessage *)state error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("send(state:)")));
@@ -243,7 +243,7 @@ __attribute__((swift_name("RtcpMessage")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
 + (instancetype)new __attribute__((unavailable));
 @property (class, readonly, getter=companion) CASRtcpMessageCompanion *companion __attribute__((swift_name("companion")));
-- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes txPackets:(int64_t)txPackets txBytes:(int64_t)txBytes rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:rxPackets:rxLost:rxBytes:txPackets:txBytes:rtt:type:clazz:timestamp:)")));
+- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
@@ -306,6 +306,12 @@ __attribute__((swift_name("RtcpMessage")))
  * @note annotations
  *   kotlinx.serialization.Transient
 */
+@property (readonly) double rxAudioLevel __attribute__((swift_name("rxAudioLevel")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Transient
+*/
 @property (readonly) int64_t rxBytes __attribute__((swift_name("rxBytes")));
 
 /**
@@ -328,9 +334,21 @@ __attribute__((swift_name("RtcpMessage")))
 
 /**
  * @note annotations
+ *   kotlinx.serialization.Transient
+*/
+@property (readonly) double rxTotalAudioEnergy __attribute__((swift_name("rxTotalAudioEnergy")));
+
+/**
+ * @note annotations
  *   kotlinx.serialization.SerialName(value="timestamp")
 */
 @property (readonly) double timestamp __attribute__((swift_name("timestamp")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Transient
+*/
+@property (readonly) double txAudioLevel __attribute__((swift_name("txAudioLevel")));
 
 /**
  * @note annotations
@@ -343,6 +361,12 @@ __attribute__((swift_name("RtcpMessage")))
  *   kotlinx.serialization.Transient
 */
 @property (readonly) int64_t txPackets __attribute__((swift_name("txPackets")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Transient
+*/
+@property (readonly) double txTotalAudioEnergy __attribute__((swift_name("txTotalAudioEnergy")));
 
 /**
  * @note annotations
@@ -381,12 +405,16 @@ __attribute__((swift_name("RtcpMessage.Builder")))
 - (CASRtcpMessageBuilder *)callId:(NSString *)id __attribute__((swift_name("call(id:)")));
 - (CASRtcpMessageBuilder *)displayNameRemote:(NSString *)remote __attribute__((swift_name("displayName(remote:)")));
 - (CASRtcpMessageBuilder *)rtt_:(double)__ __attribute__((swift_name("rtt(_:)")));
+- (CASRtcpMessageBuilder *)rxAudioLevel_:(double)__ __attribute__((swift_name("rxAudioLevel(_:)")));
 - (CASRtcpMessageBuilder *)rxBytes:(int64_t)bytes __attribute__((swift_name("rx(bytes:)")));
 - (CASRtcpMessageBuilder *)rxJitter:(double)jitter __attribute__((swift_name("rx(jitter:)")));
 - (CASRtcpMessageBuilder *)rxLost:(int64_t)lost __attribute__((swift_name("rx(lost:)")));
 - (CASRtcpMessageBuilder *)rxPackets:(int64_t)packets __attribute__((swift_name("rx(packets:)")));
+- (CASRtcpMessageBuilder *)rxTotalAudioEnergy_:(double)__ __attribute__((swift_name("rxTotalAudioEnergy(_:)")));
+- (CASRtcpMessageBuilder *)txAudioLevel_:(double)__ __attribute__((swift_name("txAudioLevel(_:)")));
 - (CASRtcpMessageBuilder *)txBytes:(int64_t)bytes __attribute__((swift_name("tx(bytes:)")));
 - (CASRtcpMessageBuilder *)txPackets:(int64_t)packets __attribute__((swift_name("tx(packets:)")));
+- (CASRtcpMessageBuilder *)txTotalAudioEnergy_:(double)__ __attribute__((swift_name("txTotalAudioEnergy(_:)")));
 - (CASRtcpMessageBuilder *)videoDirection:(CASMedia *)direction __attribute__((swift_name("video(direction:)")));
 @end
 
@@ -978,15 +1006,6 @@ __attribute__((swift_name("Kotlinx_serialization_coreSerializationException")))
 - (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
 - (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
 - (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-@end
-
-__attribute__((swift_name("Ktor_ioIOException")))
-@interface CASKtor_ioIOException : CASKotlinException
-- (instancetype)initWithMessage:(NSString *)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithMessage:(NSString *)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-+ (instancetype)new __attribute__((unavailable));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
 @end
 
 __attribute__((swift_name("Kotlinx_serialization_coreSerializationStrategy")))
