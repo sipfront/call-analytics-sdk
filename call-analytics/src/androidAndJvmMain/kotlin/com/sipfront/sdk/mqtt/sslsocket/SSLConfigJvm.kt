@@ -2,7 +2,6 @@ package com.sipfront.sdk.mqtt.sslsocket
 
 import java.security.KeyStore
 import java.security.cert.X509Certificate
-import java.util.*
 import javax.net.ssl.*
 
 internal open class SSLConfigJvm(trustAllCerts: Boolean) {
@@ -27,7 +26,7 @@ internal open class SSLConfigJvm(trustAllCerts: Boolean) {
         val trustManagers = trustManagerFactory.trustManagers
         if (trustManagers.size != 1 || trustManagers[0] !is X509TrustManager) {
             throw IllegalStateException(
-                "Unexpected default trust managers: ${Arrays.toString(trustManagers)}"
+                "Unexpected default trust managers: ${trustManagers.contentToString()}"
             )
         }
         return trustManagers[0] as X509TrustManager
