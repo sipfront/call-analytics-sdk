@@ -1,6 +1,7 @@
 package com.sipfront.sdk
 
 import co.touchlab.stately.collections.ConcurrentMutableList
+import com.sipfront.sdk.CallAnalytics.init
 import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.constants.Keys
 import com.sipfront.sdk.interfaces.ProguardKeep
@@ -16,7 +17,6 @@ import com.sipfront.sdk.log.parser.LogParser
 import com.sipfront.sdk.mqtt.MqttClient
 import com.sipfront.sdk.utils.Platform
 import com.sipfront.sdk.utils.getUserAgent
-import io.ktor.utils.io.errors.*
 import kotlinx.atomicfu.AtomicBoolean
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
@@ -134,7 +134,7 @@ object CallAnalytics : ProguardKeep {
      *
      *  @param sessionParams [SessionParams] contains the data required to register on Sipfront
      *  @param config [Config] optional configuration to use
-     *  @return[Boolean] true if successfully initialised
+     *  @return[Boolean] true if successfully initialized
      */
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class, SerializationException::class)
@@ -184,9 +184,9 @@ object CallAnalytics : ProguardKeep {
      *
      *  **[CallAnalytics] will immediately start parsing app logs for SIP messages and transmit them if found**
      *
-     *  @param json [String] contains the data as JSON required to register on Sipfront
+     *  @param json [String] contains the data as JSON required for registering on Sipfront
      *  @param config [Config] optional configuration to use
-     *  @return [Boolean] true if successfully initialised
+     *  @return [Boolean] true if successfully initialized
      */
     @JvmStatic
     @Throws(IllegalStateException::class)
@@ -212,7 +212,7 @@ object CallAnalytics : ProguardKeep {
      *
      *  @param sessionConfig [SessionConfig] contains the data required to register on Sipfront
      *  @param config [Config] optional configuration to use
-     *  @return[Boolean] true if successfully initialised
+     *  @return[Boolean] true if successfully initialized
      */
     @JvmStatic
     @Throws(IllegalStateException::class)
@@ -247,7 +247,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendState(@ObjCName("state") msg: StateMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -273,7 +273,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendRtcp(@ObjCName("rtcp") msg: RtcpMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -290,7 +290,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendSip(@ObjCName("sip") msg: SipMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -307,7 +307,7 @@ object CallAnalytics : ProguardKeep {
      */
     @ObjCName("send")
     @JvmStatic
-    @Throws(IllegalStateException::class, IllegalArgumentException::class, IOException::class)
+    @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun sendSdp(@ObjCName("sdp") msg: SdpMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
@@ -320,7 +320,7 @@ object CallAnalytics : ProguardKeep {
 
     /**
      * Returns true if [CallAnalytics] has been initialized
-     * @return[Boolean] true if [CallAnalytics] has been initialiued
+     * @return[Boolean] true if [CallAnalytics] has been initialized
      */
     @Suppress("BooleanMethodIsAlwaysInverted")
     @JvmStatic

@@ -22,7 +22,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -77,7 +76,7 @@ internal class MqttClient private constructor(
         encodedPath = sessionConfig.mqttRtcpPath
     }.build()
 
-    @Throws(IllegalArgumentException::class, IllegalStateException::class, IOException::class)
+    @Throws(IllegalArgumentException::class)
     internal fun sendMessage(message: BaseMessage) {
         val url: Url = when (message) {
             is SipMessage,
@@ -89,16 +88,20 @@ internal class MqttClient private constructor(
         }
         Log.debug()?.v { "MQTT request to URL: $url\nBody:${JsonParser.toString(message)}" }
         CoroutineScope(DispatcherProvider.IO).launch {
-            val response: HttpResponse = httpClient.request {
-                method = HttpMethod.Post
-                url(url)
-                contentType(ContentType.Application.Json)
-                setBody(message)
-            }
+            try {
+                val response: HttpResponse = httpClient.request {
+                    method = HttpMethod.Post
+                    url(url)
+                    contentType(ContentType.Application.Json)
+                    setBody(message)
+                }
 
-            when (response.status) {
-                HttpStatusCode.OK -> Log.debug()?.d("MQTT response: ${response.bodyAsText()}")
-                else -> Log.release().e("MQTT response: ${response.bodyAsText()}")
+                when (response.status) {
+                    HttpStatusCode.OK -> Log.debug()?.d("MQTT response: ${response.bodyAsText()}")
+                    else -> Log.release().e("MQTT response: ${response.bodyAsText()}")
+                }
+            } catch (e: Exception) {
+                Log.release().e("MQTT Request Error", e)
             }
         }
     }

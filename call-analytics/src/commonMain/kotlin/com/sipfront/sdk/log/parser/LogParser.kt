@@ -31,14 +31,14 @@ internal class LogParser {
 
 
     fun start() {
-        try {
-            Log.debug()?.i("Start reading SIP traces using Logcat")
-            job = scope.launch(DispatcherProvider.IO) {
+        Log.debug()?.i("Start reading SIP traces using Logcat")
+        job = scope.launch(DispatcherProvider.IO) {
+            try {
                 processLogs { line ->
-                    // Check whether this job is cancelled, since a coroutine must
+                    // Check whether this job is canceled, since a coroutine must
                     // cooperate to be cancellable.
                     ensureActive()
-                    // If line starts with a timestamp we know that a new line has been printed.
+                    // If line starts with a timestamp, we know that a new line has been printed.
                     // Now we can check the buffer for SIP/SDP messages and afterward clear
                     // the buffer and continue with the next iteration
                     if (line.matches(regexTimestamp)) {
@@ -49,11 +49,11 @@ internal class LogParser {
                         buffer.append("$line\n")
                     }
                 }
+            } catch (cancellation: CancellationException) {
+                Log.debug()?.i("LogParser stopped regularly")
+            } catch (exception: Exception) {
+                Log.release().e("Failed to start LogParser", exception)
             }
-        } catch (cancellation: CancellationException) {
-            Log.debug()?.i("LogParser stopped regularly")
-        } catch (exception: Exception) {
-            Log.release().e("Failed to start LogParser", exception)
         }
     }
 
