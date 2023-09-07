@@ -12,7 +12,7 @@ enum class PjMediaDir(val value: Int) {
     companion object {
         @JvmStatic
         fun valueOf(value: Int): PjMediaDir {
-            for (mediaDir in PjMediaDir.values())
+            for (mediaDir in entries)
                 if (mediaDir.value == value) return mediaDir
             return PJMEDIA_DIR_NONE
         }

@@ -13,7 +13,7 @@ enum class PjsipEventIdE(val value: Int) {
     companion object {
         @JvmStatic
         fun valueOf(value: Int): PjsipEventIdE {
-            for (pjsipEventIdE in PjsipEventIdE.values())
+            for (pjsipEventIdE in entries)
                 if (pjsipEventIdE.value == value) return pjsipEventIdE
             return PJSIP_EVENT_UNKNOWN
         }

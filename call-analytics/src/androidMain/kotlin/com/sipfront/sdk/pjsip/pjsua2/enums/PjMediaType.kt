@@ -9,7 +9,7 @@ enum class PjMediaType(val value: Int) {
     companion object {
         @JvmStatic
         fun valueOf(value: Int): PjMediaType {
-            for (mediaType in PjMediaType.values())
+            for (mediaType in entries)
                 if (mediaType.value == value) return mediaType
             return PJMEDIA_TYPE_NONE
         }

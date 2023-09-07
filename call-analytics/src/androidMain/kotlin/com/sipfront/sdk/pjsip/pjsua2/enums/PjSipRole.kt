@@ -16,7 +16,7 @@ enum class PjSipRole(val value: Int) {
     companion object {
         @JvmStatic
         fun valueOf(value: Int): PjSipRole {
-            for (role in PjSipRole.values())
+            for (role in entries)
                 if (role.value == value) return role
             return PJSIP_ROLE_UAC
         }
