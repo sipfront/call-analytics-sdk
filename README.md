@@ -83,10 +83,9 @@ To import the library
 import CallAnalyticsSdk
 ```
 
-### with downloadable XCFramework
+### with Swift Package Manager or as downloadable XCFramework
 
-We also provide with each release tag a downloadable XCFramework which you can manually add to your iOS/Mac project
-
+You can add the library also from XCode with Swift Package Manager or alternatively manually add the XCFramework that we provide with every release tag as zip file
 
 ## Using Call Analytics SDK
 
