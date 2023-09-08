@@ -169,7 +169,8 @@ data class RtcpMessage internal constructor(
          *
          * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/audioLevel)
          */
-        fun txAudioLevel(@ObjCName("_") txAudioLevel: Double) = apply { this.txAudioLevel = txAudioLevel }
+        @ObjCName("tx")
+        fun txAudioLevel(audioLevel: Double) = apply { this.txAudioLevel = audioLevel }
 
         /**
          * This WebRTC property represents the total audio energy of the media source over the lifetime of a call. (outgoing)
@@ -178,8 +179,9 @@ data class RtcpMessage internal constructor(
          *
          * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/totalAudioEnergy)
          */
-        fun txTotalAudioEnergy(@ObjCName("_") txTotalAudioEnergy: Double) =
-            apply { this.txTotalAudioEnergy = txTotalAudioEnergy }
+        @ObjCName("tx")
+        fun txTotalAudioEnergy(totalAudioEnergy: Double) =
+            apply { this.txTotalAudioEnergy = totalAudioEnergy }
 
         /**
          * Total number of TX (transmitted) RTP bytes
@@ -212,7 +214,8 @@ data class RtcpMessage internal constructor(
          *
          * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/audioLevel)
          */
-        fun rxAudioLevel(@ObjCName("_") rxAudioLevel: Double) = apply { this.rxAudioLevel = rxAudioLevel }
+        @ObjCName("rx")
+        fun rxAudioLevel(audioLevel: Double) = apply { this.rxAudioLevel = audioLevel }
 
         /**
          * This WebRTC property represents the total audio energy of the media source over the lifetime of a call. (incoming)
@@ -221,8 +224,9 @@ data class RtcpMessage internal constructor(
          *
          * See [WebRTC documentation](https://developer.mozilla.org/en-US/docs/Web/API/RTCAudioSourceStats/totalAudioEnergy)
          */
-        fun rxTotalAudioEnergy(@ObjCName("_") rxTotalAudioEnergy: Double) =
-            apply { this.rxTotalAudioEnergy = rxTotalAudioEnergy }
+        @ObjCName("rx")
+        fun rxTotalAudioEnergy(totalAudioEnergy: Double) =
+            apply { this.rxTotalAudioEnergy = totalAudioEnergy }
 
         /**
          * Current round trip time in milliseconds
