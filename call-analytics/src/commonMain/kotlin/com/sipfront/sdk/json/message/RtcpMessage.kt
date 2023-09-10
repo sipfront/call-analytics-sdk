@@ -151,16 +151,16 @@ data class RtcpMessage internal constructor(
         fun videoDirection(direction: MediaDirection) = apply { this.videoDirection = direction }
 
         /**
-         * Total number of RX (received) RTP packets
-         */
-        @ObjCName("rx")
-        fun rxPackets(packets: Long) = apply { this.rxPackets = packets }
-
-        /**
          * Total number of TX (transmitted) RTP packets
          */
         @ObjCName("tx")
         fun txPackets(packets: Long) = apply { this.txPackets = packets }
+
+        /**
+         * Total number of TX (transmitted) RTP bytes
+         */
+        @ObjCName("tx")
+        fun txBytes(bytes: Long) = apply { this.txBytes = bytes }
 
         /**
          * This WebRTC property represents the audio level of the media source (outgoing).
@@ -184,10 +184,16 @@ data class RtcpMessage internal constructor(
             apply { this.txTotalAudioEnergy = totalAudioEnergy }
 
         /**
-         * Total number of TX (transmitted) RTP bytes
+         * Total number of RX (received) RTP packets
          */
-        @ObjCName("tx")
-        fun txBytes(bytes: Long) = apply { this.txBytes = bytes }
+        @ObjCName("rx")
+        fun rxPackets(packets: Long) = apply { this.rxPackets = packets }
+
+        /**
+         * Total number of RX (received) RTP bytes
+         */
+        @ObjCName("rx")
+        fun rxBytes(bytes: Long) = apply { this.rxBytes = bytes }
 
         /**
          * Jitter in milliseconds
@@ -200,12 +206,6 @@ data class RtcpMessage internal constructor(
          */
         @ObjCName("rx")
         fun rxLost(lost: Long) = apply { this.rxLost = lost }
-
-        /**
-         * Total number of RX (received) RTP bytes
-         */
-        @ObjCName("rx")
-        fun rxBytes(bytes: Long) = apply { this.rxBytes = bytes }
 
         /**
          * This WebRTC property represents the audio level of the media source (incoming).
