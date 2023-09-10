@@ -154,7 +154,7 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
         version = libs.versions.version.get()
         summary = projectProperties.getProperty("project.description")
         homepage = projectProperties.getProperty("project.homepage")
-        source = "{ :git => '${projectProperties.getProperty("repository.https")}', :tag => 'v$version' }"
+        source = "{ :git => '${projectProperties.getProperty("repository.https")}', :tag => '$version' }"
         license = "{ :type => '${projectProperties.getProperty("project.license.type")}', :file => 'LICENSE' }"
         authors =
             "{ '${projectProperties.getProperty("author.fullname")}' => '${projectProperties.getProperty("author.email")}' }"
