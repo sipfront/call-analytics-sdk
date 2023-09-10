@@ -405,16 +405,16 @@ __attribute__((swift_name("RtcpMessage.Builder")))
 - (CASRtcpMessageBuilder *)callId:(NSString *)id __attribute__((swift_name("call(id:)")));
 - (CASRtcpMessageBuilder *)displayNameRemote:(NSString *)remote __attribute__((swift_name("displayName(remote:)")));
 - (CASRtcpMessageBuilder *)rtt_:(double)__ __attribute__((swift_name("rtt(_:)")));
-- (CASRtcpMessageBuilder *)rxAudioLevel_:(double)__ __attribute__((swift_name("rxAudioLevel(_:)")));
+- (CASRtcpMessageBuilder *)rxAudioLevel:(double)audioLevel __attribute__((swift_name("rx(audioLevel:)")));
 - (CASRtcpMessageBuilder *)rxBytes:(int64_t)bytes __attribute__((swift_name("rx(bytes:)")));
 - (CASRtcpMessageBuilder *)rxJitter:(double)jitter __attribute__((swift_name("rx(jitter:)")));
 - (CASRtcpMessageBuilder *)rxLost:(int64_t)lost __attribute__((swift_name("rx(lost:)")));
 - (CASRtcpMessageBuilder *)rxPackets:(int64_t)packets __attribute__((swift_name("rx(packets:)")));
-- (CASRtcpMessageBuilder *)rxTotalAudioEnergy_:(double)__ __attribute__((swift_name("rxTotalAudioEnergy(_:)")));
-- (CASRtcpMessageBuilder *)txAudioLevel_:(double)__ __attribute__((swift_name("txAudioLevel(_:)")));
+- (CASRtcpMessageBuilder *)rxTotalAudioEnergy:(double)totalAudioEnergy __attribute__((swift_name("rx(totalAudioEnergy:)")));
+- (CASRtcpMessageBuilder *)txAudioLevel:(double)audioLevel __attribute__((swift_name("tx(audioLevel:)")));
 - (CASRtcpMessageBuilder *)txBytes:(int64_t)bytes __attribute__((swift_name("tx(bytes:)")));
 - (CASRtcpMessageBuilder *)txPackets:(int64_t)packets __attribute__((swift_name("tx(packets:)")));
-- (CASRtcpMessageBuilder *)txTotalAudioEnergy_:(double)__ __attribute__((swift_name("txTotalAudioEnergy(_:)")));
+- (CASRtcpMessageBuilder *)txTotalAudioEnergy:(double)totalAudioEnergy __attribute__((swift_name("tx(totalAudioEnergy:)")));
 - (CASRtcpMessageBuilder *)videoDirection:(CASMedia *)direction __attribute__((swift_name("video(direction:)")));
 @end
 
