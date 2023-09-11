@@ -212,13 +212,17 @@ CallAnalytics.sendRtcp(
         .addressRemote("+4912322222")
         .displayNameRemote("John Doe")
         .audioDirection(MediaDirection.SEND_RECEIVE)
-        .rtt(rtt)             //round trip time in milliseconds
-        .rxJitter(jitter)     //jitter in milliseconds
-        .rxLost(lost)         //lost packets total
-        .rxBytes(bytes)       //bytes received total
-        .rxPackets(packets)   //packets received total
-        .txBytes(bytes)       //bytes sent total
-        .txPackets(packets)   //packets sent total
+        .rtt(rtt)                   //round trip time in milliseconds
+        .rxJitter(jitter)           //jitter in milliseconds
+        .rxLost(lost)               //lost packets total
+        .rxBytes(bytes)             //bytes received total
+        .rxPackets(packets)         //packets received total
+        .rxAudioLevel(level)        //incoming audio level
+        .rxTotalAudioEnergy(energy) //incoming audio energy
+        .txBytes(bytes)             //bytes sent total
+        .txPackets(packets)         //packets sent total
+        .txAudioLevel(level)        //outgoing audio level
+        .txTotalAudioEnergy(energy) //outgoing audio energy
         .build()
 )
 ```
@@ -237,13 +241,17 @@ do {
         .video(direction: Media.receiveOnly)
         .call(id: "MyCallId")
         .call(direction: Call.incoming)
-        .rtt(1.0)           //round trip time in milliseconds
-        .rx(lost: 0)        //lost packets total
-        .rx(bytes: 99)      //bytes received total
-        .rx(packets: 9)     //packets received total
-        .rx(jitter: 9)      //jitter in milliseconds
-        .tx(packets: 10)    //packets sent total
-        .tx(bytes: 100)     //bytes sent total
+        .rtt(1.0)                   //round trip time in milliseconds
+        .rx(lost: 0)                //lost packets total
+        .rx(jitter: 9)              //jitter in milliseconds
+        .rx(packets: 9)             //packets received total
+        .rx(bytes: 99)              //bytes received total
+        .rx(audioLevel: 0.1)        //incoming audio level
+        .rx(totalAudioEnergy: 2.1)  //incoming audio energy
+        .tx(packets: 10)            //packets sent total
+        .tx(bytes: 100)             //bytes sent total
+        .tx(audioLevel: 0.6)        //outgoing audio level
+        .tx(totalAudioEnergy: 6.1)  //outgoing audio energy
         .build())
 } catch {
     Logger.notifications.error("CallAnalytics request error: \(error)")
