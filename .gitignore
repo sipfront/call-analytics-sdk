@@ -34,3 +34,5 @@ render.experimental.xml
 
 # PGP Signing Keys
 *.asc
+
+/kotlin-js-store/yarn.lock
