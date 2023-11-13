@@ -15,7 +15,7 @@ import kotlinx.coroutines.*
 internal class LogParser {
     companion object {
         private const val DEBUG_LOG_PREFIX: String = "Parsed Sip/Sdp Message:"
-        private const val REGEX_TIMESTAMP: String = "^\\[\\s\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d{3}.*"
+        private const val REGEX_TIMESTAMP: String = """^\[\s\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\.\d{3}.*"""
     }
 
     private val regexTimestamp: Regex = Regex(REGEX_TIMESTAMP)
@@ -60,7 +60,7 @@ internal class LogParser {
     fun stop() {
         Log.debug()?.i("Stop reading SIP traces using Logcat")
         MainScope().launch {
-            // Cancel the job and wait for its completion on main thread.
+            // Cancel the job and wait for its completion on the main thread.
             job?.cancelAndJoin()
             job = null
             sipCache.clear()
@@ -81,9 +81,9 @@ internal class LogParser {
                 cache(parsed)
             }
             Log.debug()
-                ?.v("$DEBUG_LOG_PREFIX ${parsed.getSipMessage()}\n\nLocal: ${parsed.localAdr}\nCaller: ${parsed.caller}\nCallee: ${parsed.callee}\nCall-ID Register: ${parsed.callIdRegister}\nCall-ID Call: ${parsed.callIdInvite}")
+                ?.v("$DEBUG_LOG_PREFIX ${parsed.sipPacket}\n\nTo: ${parsed.to}\nFrom: ${parsed.from}\nCall-ID: ${parsed.callId}\nCSeq: ${parsed.commandSequence}\nContent-Length: ${parsed.contentLength}\nMessage-Direction: ${parsed.messageType}")
             CallAnalytics.sendSip(
-                msg = SipMessage.Builder().message(parsed.getSipMessage()).type(parsed.messageType).build()
+                msg = SipMessage.Builder().message(parsed.sipPacket).type(parsed.messageType).build()
             )
             return true
         }
