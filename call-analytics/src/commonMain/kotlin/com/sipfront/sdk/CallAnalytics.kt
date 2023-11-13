@@ -22,6 +22,9 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 import kotlinx.serialization.SerializationException
 import kotlin.experimental.ExperimentalObjCName
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
+import kotlin.js.JsName
 import kotlin.jvm.JvmStatic
 import kotlin.native.ObjCName
 
@@ -92,7 +95,8 @@ import kotlin.native.ObjCName
  * @author Dominik Ridjic
  */
 @Suppress("unused")
-@OptIn(ExperimentalObjCName::class)
+@OptIn(ExperimentalObjCName::class, ExperimentalJsExport::class)
+@JsExport
 object CallAnalytics : ProguardKeep {
     private val initialised: AtomicBoolean = atomic(false)
     private lateinit var config: Config
@@ -139,6 +143,7 @@ object CallAnalytics : ProguardKeep {
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class, SerializationException::class)
     @ObjCName("initialize")
+    @JsExport.Ignore
     fun init(
         @ObjCName("params") sessionParams: SessionParams,
         @ObjCName("config") config: Config = Config.Builder().build()
@@ -191,7 +196,8 @@ object CallAnalytics : ProguardKeep {
     @JvmStatic
     @Throws(IllegalStateException::class)
     @ObjCName("initialize")
-    private fun init(
+    @JsName("initWithJson")
+    fun init(
         json: String, config: Config = Config.Builder().build()
     ): Boolean {
         if (!isInitialized()) {

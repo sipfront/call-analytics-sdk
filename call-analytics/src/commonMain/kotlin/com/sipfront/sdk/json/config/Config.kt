@@ -6,6 +6,8 @@ import com.sipfront.sdk.utils.Platform
 import kotlinx.serialization.Serializable
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 import kotlin.native.HiddenFromObjC
 import kotlin.native.ObjCName
 
@@ -21,9 +23,10 @@ import kotlin.native.ObjCName
  * @since 1.0.0
  * @author Dominik Ridjic
  */
-@OptIn(ExperimentalObjCName::class)
+@OptIn(ExperimentalObjCName::class, ExperimentalJsExport::class)
 @Suppress("DataClassPrivateConstructor")
 @Serializable
+@JsExport
 data class Config private constructor(
     internal val enablePjsua: Boolean,
     val enableLogParser: Boolean,

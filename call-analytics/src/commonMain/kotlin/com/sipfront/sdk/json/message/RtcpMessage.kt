@@ -14,6 +14,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.experimental.ExperimentalObjCName
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 import kotlin.native.ObjCName
 
 /**
@@ -49,8 +51,11 @@ import kotlin.native.ObjCName
  * @since 1.0.0
  * @author Dominik Ridjic
  */
+@Suppress("NON_EXPORTABLE_TYPE")
+@OptIn(ExperimentalJsExport::class)
 @Serializable
 @SerialName("RtcpMessage")
+@JsExport
 data class RtcpMessage internal constructor(
     @SerialName(JsonKeys.Call.id) val callId: String,
     @SerialName(JsonKeys.Address.local) val addressLocal: String,

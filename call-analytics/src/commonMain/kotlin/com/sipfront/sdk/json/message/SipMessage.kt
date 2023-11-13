@@ -10,6 +10,8 @@ import com.sipfront.sdk.utils.KotlinHelper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.experimental.ExperimentalObjCName
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 import kotlin.native.ObjCName
 
 /**
@@ -26,8 +28,11 @@ import kotlin.native.ObjCName
  * @since 1.0.0
  * @author Dominik Ridjic
  */
+@Suppress("NON_EXPORTABLE_TYPE")
+@OptIn(ExperimentalJsExport::class)
 @Serializable
 @SerialName("SipMessage")
+@JsExport
 data class SipMessage internal constructor(
     @SerialName(JsonKeys.param)
     val message: String,
