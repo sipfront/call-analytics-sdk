@@ -148,7 +148,7 @@ object CallAnalytics : ProguardKeep {
         @ObjCName("params") sessionParams: SessionParams,
         @ObjCName("config") config: Config = Config.Builder().build()
     ): Boolean {
-        Log.enableLogging(config.enableDebugLogs)
+        Log.enableDebugLogs(config.enableDebugLogs)
         Log.debug()
             ?.i(
                 "Starting ${getUserAgent()} initialization with Config: ${JsonParser.toString(config)}"
