@@ -6,6 +6,7 @@ import org.jetbrains.dokka.base.DokkaBaseConfiguration
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import java.io.FileInputStream
 import java.net.URL
 import java.util.*
@@ -44,6 +45,7 @@ val projectProperties = Properties().apply {
     }
 }
 val packageName: String = projectProperties.getProperty("package.name")
+val projectName: String = projectProperties.getProperty("project.name")
 
 group = packageName
 /**
@@ -80,14 +82,19 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
         iosX64(), iosArm64(), iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "${projectProperties.getProperty("project.name")}Binary"
+            baseName = "${projectName}Binary"
             xcFramework.add(this)
         }
     }
     macosArm64()
     macosX64()
     js {
-        browser {}
+        browser {
+            webpackTask {
+                mainOutputFileName = "$projectName.js"
+                output.library = projectName
+            }
+        }
         nodejs {}
         binaries.executable()
     }
@@ -234,7 +241,7 @@ buildkonfig {
     defaultConfigs {
         buildConfigField(STRING, "VERSION_CODE", libs.versions.version.get())
         buildConfigField(STRING, "COMPANY_NAME", projectProperties.getProperty("company.name"))
-        buildConfigField(STRING, "PROJECT_NAME", projectProperties.getProperty("project.name"))
+        buildConfigField(STRING, "PROJECT_NAME", projectName)
         buildConfigField(STRING, "NAMESPACE", packageName)
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_USER", sipfrontApiUser)
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_PASS", sipfrontApiPass)
@@ -254,7 +261,7 @@ tasks.named("podPublishReleaseXCFramework").configure {
 
 // Dokka task generating documentation
 tasks.withType<DokkaTask>().configureEach {
-    moduleName.set(projectProperties.getProperty("project.name"))
+    moduleName.set(projectName)
     moduleVersion.set(libs.versions.version.get())
     suppressObviousFunctions.set(true)
 
