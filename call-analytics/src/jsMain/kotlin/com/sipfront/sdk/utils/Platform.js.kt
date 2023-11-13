@@ -1,5 +1,6 @@
 package com.sipfront.sdk.utils
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 internal actual object Platform {
     private const val NOT_AVAILABLE = "Not available in JS"
     actual fun getOsFamily(): OsFamily = OsFamily.JAVASCRIPT
