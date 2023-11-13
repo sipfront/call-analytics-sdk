@@ -100,7 +100,7 @@ import kotlin.native.ObjCName
 object CallAnalytics : ProguardKeep {
     private val initialised: AtomicBoolean = atomic(false)
     private lateinit var config: Config
-    private lateinit var logParser: LogParser
+    private var logParser: LogParser? = null
     private var sessionConfig: SessionConfig? = null
     private var mqttClient: MqttClient? = null
     internal val rtcpCache: ConcurrentMutableList<RtcpMessage> = ConcurrentMutableList()
@@ -231,12 +231,12 @@ object CallAnalytics : ProguardKeep {
             if (initialised.value) {
                 this.sessionConfig = sessionConfig
                 this.config = config
-                logParser = LogParser()
                 Log.debug()?.i(
                     "Successfully initialized ${getUserAgent()} with SessionConfig: $sessionConfig,  config: $config"
                 )
                 if (config.enableLogParser) {
-                    logParser.start()
+                    logParser = LogParser()
+                    logParser?.start()
                 }
                 return true
             } else {
