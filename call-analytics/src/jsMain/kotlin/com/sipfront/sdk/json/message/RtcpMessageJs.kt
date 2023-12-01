@@ -14,6 +14,7 @@ import com.sipfront.sdk.json.message.enums.MediaDirection
  * @since 1.0.6
  * @author Dominik Ridjic
  */
+@Suppress("unused")
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 class RtcpMessageJs {
