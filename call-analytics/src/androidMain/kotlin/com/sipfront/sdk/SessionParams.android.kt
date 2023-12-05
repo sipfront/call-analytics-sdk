@@ -13,8 +13,9 @@ actual class SessionParams(private val intent: Intent) : ProguardKeep {
     @Throws(SerializationException::class, IllegalArgumentException::class)
     internal actual fun parse(): SessionConfig {
         intent.getStringExtra(Keys.INITIALIZATION)?.let { json ->
-            Log.debug()?.i("Received Intent SessionParams: $json")
-            return JsonParser.toObject(json)
+            val sessionParams = JsonParser.toObject<SessionConfig>(json)
+            Log.debug()?.i("Received Intent SessionParams: $sessionParams")
+            return sessionParams
         } ?: run {
             val extras: String = intent.extras?.keySet()?.map {
                 it to (intent.extras?.getString(it) ?: "null")

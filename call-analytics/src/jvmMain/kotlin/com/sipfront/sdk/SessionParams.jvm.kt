@@ -9,7 +9,14 @@ import kotlinx.serialization.SerializationException
 actual class SessionParams(private val json: String): ProguardKeep {
     @Throws(SerializationException::class, IllegalArgumentException::class)
     internal actual fun parse(): SessionConfig {
-        Log.debug()?.i("Received Json SessionParams: $json")
-        return JsonParser.toObject<SessionConfig>(json)
+        try {
+            val sessionParams = JsonParser.toObject<SessionConfig>(json)
+            Log.debug()?.i("Received JSON SessionParams: $sessionParams")
+            return sessionParams
+        } catch (e: SerializationException) {
+            throw e
+        } catch (e: Exception) {
+            throw IllegalArgumentException("Couldn't parse SessionParams: ${e.message}")
+        }
     }
 }

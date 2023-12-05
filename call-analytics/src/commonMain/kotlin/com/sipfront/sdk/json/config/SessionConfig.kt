@@ -3,6 +3,7 @@ package com.sipfront.sdk.json.config
 import com.sipfront.sdk.BuildKonfig
 import com.sipfront.sdk.json.JsonKeys
 import com.sipfront.sdk.mqtt.MqttClient
+import com.sipfront.sdk.utils.MaskedString
 import com.sipfront.sdk.utils.randomUUID
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -54,8 +55,8 @@ internal data class SessionConfig(
         internal fun debugData(): SessionConfig {
             return SessionConfig(
                 credentials = Credentials(
-                    username = BuildKonfig.SIPFRONT_API_DEBUG_USER,
-                    password = BuildKonfig.SIPFRONT_API_DEBUG_PASS
+                    username = MaskedString(BuildKonfig.SIPFRONT_API_DEBUG_USER, 3),
+                    password = MaskedString(BuildKonfig.SIPFRONT_API_DEBUG_PASS)
                 ),
                 sessionId = OVERRIDE_SESSION_ID,
                 server = BuildKonfig.SIPFRONT_API_DEBUG_SERVER,
