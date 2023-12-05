@@ -8,8 +8,9 @@ import com.sipfront.sdk.log.Log
 import kotlinx.serialization.SerializationException
 import platform.Foundation.NSProcessInfo
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class SessionParams : ProguardKeep {
-    @Throws(SerializationException::class, IllegalArgumentException::class, IllegalStateException::class)
+    @Throws(IllegalArgumentException::class, SerializationException::class)
     internal actual fun parse(): SessionConfig {
         try {
             val json: String = NSProcessInfo.processInfo.environment[Keys.INITIALIZATION] as String
@@ -19,7 +20,7 @@ actual class SessionParams : ProguardKeep {
         } catch (e: SerializationException) {
             throw e
         } catch (e: Exception) {
-            throw IllegalStateException("Couldn't parse SessionParams: ${e.message}")
+            throw IllegalArgumentException("Couldn't parse SessionParams: ${e.message}")
         }
     }
 }

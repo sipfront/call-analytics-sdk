@@ -8,9 +8,9 @@ import com.sipfront.sdk.json.config.SessionConfig
 import com.sipfront.sdk.log.Log
 import kotlinx.serialization.SerializationException
 
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING", "ACTUAL_ANNOTATIONS_NOT_MATCH_EXPECT")
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class SessionParams(private val intent: Intent) : ProguardKeep {
-    @Throws(SerializationException::class, IllegalArgumentException::class)
+    @Throws(IllegalArgumentException::class, SerializationException::class)
     internal actual fun parse(): SessionConfig {
         intent.getStringExtra(Keys.INITIALIZATION)?.let { json ->
             val sessionParams = JsonParser.toObject<SessionConfig>(json)
