@@ -278,6 +278,7 @@ object CallAnalytics : ProguardKeep {
      * Sends [RtcpMessage] to Sipfront
      * @param msg [RtcpMessage]
      */
+    @Suppress("NON_EXPORTABLE_TYPE")
     @ObjCName("send")
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
