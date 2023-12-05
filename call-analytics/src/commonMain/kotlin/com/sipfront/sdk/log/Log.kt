@@ -1,6 +1,9 @@
 package com.sipfront.sdk.log
 
-import co.touchlab.kermit.*
+import co.touchlab.kermit.LogWriter
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
+import co.touchlab.kermit.loggerConfigInit
 import com.sipfront.sdk.BuildKonfig
 
 internal object Log {

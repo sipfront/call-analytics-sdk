@@ -200,6 +200,7 @@ object CallAnalytics : ProguardKeep {
     fun init(
         json: String, config: Config = Config.Builder().build()
     ): Boolean {
+        Log.enableDebugLogs(config.enableDebugLogs)
         if (!isInitialized()) {
             return init(
                 sessionConfig = JsonParser.toObject(
