@@ -19,7 +19,7 @@ import com.sipfront.sdk.json.message.enums.MediaDirection
 @JsExport
 class RtcpMessageJs {
 
-    companion object {
+    private companion object {
         private const val UNAVAILABLE: String = "unavailable"
     }
 

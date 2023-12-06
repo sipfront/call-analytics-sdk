@@ -15,11 +15,11 @@ import kotlinx.serialization.Serializable
  * @author Dominik Ridjic
  */
 @Serializable(with = MaskedStringSerializer::class)
-class MaskedString(
+internal class MaskedString(
     private val data: String,
     private val index: Int = DEFAULT_INDEX
 ) {
-    companion object {
+    private companion object {
         /**
          * [Char] that will be used to mask sensitive data
          *

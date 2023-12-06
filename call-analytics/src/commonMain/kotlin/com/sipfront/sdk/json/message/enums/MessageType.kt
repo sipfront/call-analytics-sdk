@@ -17,29 +17,29 @@ import kotlin.native.ObjCName
 @OptIn(ExperimentalObjCName::class)
 @ObjCName("Message")
 interface MessageType : EnumValue {
-    companion object {
-        internal const val SIP_OUTGOING: String = "TRACE_TX_MSG"
-        internal const val SIP_INCOMING: String = "TRACE_RX_MSG"
-        internal const val SDP_OUTGOING: String = SIP_OUTGOING
-        internal const val SDP_INCOMING: String = SIP_INCOMING
-        internal const val RTCP: String = "CALL_RTCP"
-        internal const val STATE_REGISTER: String = "REGISTER_OK"
-        internal const val STATE_REGISTERING: String = "REGISTERING"
-        internal const val STATE_UNREGISTERING: String = "UNREGISTERING"
-        internal const val STATE_CREATE: String = "CREATE"
-        internal const val STATE_SHUTDOWN: String = "SHUTDOWN"
-        internal const val STATE_EXIT: String = "EXIT"
-        internal const val STATE_CALL_INCOMING: String = "CALL_INCOMING"
-        internal const val STATE_CALL_OUTGOING: String = "CALL_OUTGOING"
-        internal const val STATE_CALL_RINGING: String = "CALL_RINGING"
-        internal const val STATE_CALL_ESTABLISHED: String = "CALL_ESTABLISHED"
-        internal const val STATE_CALL_RTPESTAB: String = "CALL_RTPESTAB"
-        internal const val STATE_CALL_ENDED_LOCAL: String = "CALL_ENDED_LOCAL"
-        internal const val STATE_CALL_ENDED_REMOTE: String = "CALL_ENDED_REMOTE"
-        internal const val STATE_CALL_REJECTED: String = "CALL_REJECTED"
-        internal const val STATE_CALL_FAILED: String = "CALL_FAILED"
-        internal const val STATE_CALL_CLOSED: String = "CALL_CLOSED"
-        internal const val STATE_CALL_IN_PROGRESS: String = "CALL_IN_PROGRESS"
+    private companion object {
+        const val SIP_OUTGOING: String = "TRACE_TX_MSG"
+        const val SIP_INCOMING: String = "TRACE_RX_MSG"
+        const val SDP_OUTGOING: String = SIP_OUTGOING
+        const val SDP_INCOMING: String = SIP_INCOMING
+        const val RTCP: String = "CALL_RTCP"
+        const val STATE_REGISTER: String = "REGISTER_OK"
+        const val STATE_REGISTERING: String = "REGISTERING"
+        const val STATE_UNREGISTERING: String = "UNREGISTERING"
+        const val STATE_CREATE: String = "CREATE"
+        const val STATE_SHUTDOWN: String = "SHUTDOWN"
+        const val STATE_EXIT: String = "EXIT"
+        const val STATE_CALL_INCOMING: String = "CALL_INCOMING"
+        const val STATE_CALL_OUTGOING: String = "CALL_OUTGOING"
+        const val STATE_CALL_RINGING: String = "CALL_RINGING"
+        const val STATE_CALL_ESTABLISHED: String = "CALL_ESTABLISHED"
+        const val STATE_CALL_RTPESTAB: String = "CALL_RTPESTAB"
+        const val STATE_CALL_ENDED_LOCAL: String = "CALL_ENDED_LOCAL"
+        const val STATE_CALL_ENDED_REMOTE: String = "CALL_ENDED_REMOTE"
+        const val STATE_CALL_REJECTED: String = "CALL_REJECTED"
+        const val STATE_CALL_FAILED: String = "CALL_FAILED"
+        const val STATE_CALL_CLOSED: String = "CALL_CLOSED"
+        const val STATE_CALL_IN_PROGRESS: String = "CALL_IN_PROGRESS"
     }
 
     /**

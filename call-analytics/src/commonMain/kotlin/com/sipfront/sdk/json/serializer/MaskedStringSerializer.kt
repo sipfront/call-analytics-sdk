@@ -14,7 +14,7 @@ import kotlinx.serialization.encoding.Encoder
  * @since 1.0.6
  * @author Dominik Ridjic
  */
-object MaskedStringSerializer : KSerializer<MaskedString> {
+internal object MaskedStringSerializer : KSerializer<MaskedString> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("MaskedString", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: MaskedString) {
