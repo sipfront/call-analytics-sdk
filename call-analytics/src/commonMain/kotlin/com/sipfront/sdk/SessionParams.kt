@@ -13,7 +13,6 @@ import kotlinx.serialization.SerializationException
  * @since 1.0.0
  * @author Dominik Ridjic
  */
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 expect class SessionParams: ProguardKeep {
     @Throws(IllegalArgumentException::class, SerializationException::class)
     internal fun parse(): SessionConfig

@@ -1,6 +1,5 @@
 package com.sipfront.sdk.utils
 
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 internal actual object Platform {
     private const val VERSION_NOT_AVAILABLE = "VERSION_NOT_AVAILABLE"
     private const val NOT_A_BROWSER = "NOT_A_BROWSER"

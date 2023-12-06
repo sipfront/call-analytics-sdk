@@ -1,12 +1,11 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.dokka.base.DokkaBase
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.dokka.base.DokkaBaseConfiguration
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import java.io.FileInputStream
 import java.net.URL
 import java.util.*
@@ -57,6 +56,16 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class) kotlin {
     explicitApi = ExplicitApiMode.Disabled
+
+    targets.all {
+        compilations.all {
+            compilerOptions.configure {
+                // Suppresses EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING
+                // See: https://youtrack.jetbrains.com/issue/KT-61573
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
 
     targetHierarchy.custom {
         common {

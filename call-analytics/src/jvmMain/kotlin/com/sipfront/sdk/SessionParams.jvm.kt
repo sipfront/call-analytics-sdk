@@ -6,7 +6,6 @@ import com.sipfront.sdk.json.config.SessionConfig
 import com.sipfront.sdk.log.Log
 import kotlinx.serialization.SerializationException
 
-@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class SessionParams(private val json: String): ProguardKeep {
     @Throws(IllegalArgumentException::class, SerializationException::class)
     internal actual fun parse(): SessionConfig {
