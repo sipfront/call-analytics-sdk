@@ -20,6 +20,10 @@ $dokka.location:com.sipfront.sdk.json.message.enums/CallDirection/entries/#/Poin
 $dokka.location:com.sipfront.sdk.json.message.enums/CallDirection/value/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction/value.html
 $dokka.location:com.sipfront.sdk.json.message.enums/CallDirection/valueOf/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction/value-of.html
 $dokka.location:com.sipfront.sdk.json.message.enums/CallDirection/values/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction/values.html
+$dokka.location:com.sipfront.sdk.json.message.enums/CallDirectionJs///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction-js/index.html
+$dokka.location:com.sipfront.sdk.json.message.enums/CallDirectionJs/INCOMING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction-js/-i-n-c-o-m-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/CallDirectionJs/NONE/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction-js/-n-o-n-e.html
+$dokka.location:com.sipfront.sdk.json.message.enums/CallDirectionJs/OUTGOING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-call-direction-js/-o-u-t-g-o-i-n-g.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection.INACTIVE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction/-i-n-a-c-t-i-v-e/index.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection.RECEIVE_ONLY///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction/-r-e-c-e-i-v-e_-o-n-l-y/index.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection.SEND_ONLY///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction/-s-e-n-d_-o-n-l-y/index.html
@@ -29,6 +33,11 @@ $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection/entries/#/Poi
 $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection/value/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction/value.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection/valueOf/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction/value-of.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MediaDirection/values/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction/values.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MediaDirectionJs///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction-js/index.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MediaDirectionJs/INACTIVE/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction-js/-i-n-a-c-t-i-v-e.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MediaDirectionJs/RECEIVE_ONLY/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction-js/-r-e-c-e-i-v-e_-o-n-l-y.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MediaDirectionJs/SEND_ONLY/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction-js/-s-e-n-d_-o-n-l-y.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MediaDirectionJs/SEND_RECEIVE/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-media-direction-js/-s-e-n-d_-r-e-c-e-i-v-e.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MessageType.Companion///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type/-companion/index.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MessageType.Rtcp.RTCP///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type/-rtcp/-r-t-c-p/index.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MessageType.Rtcp///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type/-rtcp/index.html
@@ -73,6 +82,29 @@ $dokka.location:com.sipfront.sdk.json.message.enums/MessageType.State/value/#/Po
 $dokka.location:com.sipfront.sdk.json.message.enums/MessageType.State/valueOf/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type/-state/value-of.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MessageType.State/values/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type/-state/values.html
 $dokka.location:com.sipfront.sdk.json.message.enums/MessageType///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type/index.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/index.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/RTCP/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-r-t-c-p.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/SDP_INCOMING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-d-p_-i-n-c-o-m-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/SDP_OUTGOING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-d-p_-o-u-t-g-o-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/SIP_INCOMING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-i-p_-i-n-c-o-m-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/SIP_OUTGOING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-i-p_-o-u-t-g-o-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_CLOSED/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-c-l-o-s-e-d.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_ENDED_LOCAL/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-e-n-d-e-d_-l-o-c-a-l.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_ENDED_REMOTE/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-e-n-d-e-d_-r-e-m-o-t-e.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_ESTABLISHED/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-e-s-t-a-b-l-i-s-h-e-d.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_FAILED/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-f-a-i-l-e-d.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_INCOMING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-i-n-c-o-m-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_IN_PROGRESS/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-i-n_-p-r-o-g-r-e-s-s.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_OUTGOING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-o-u-t-g-o-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_REJECTED/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-r-e-j-e-c-t-e-d.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_RINGING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-r-i-n-g-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CALL_RTP_ESTABLISHED/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-a-l-l_-r-t-p_-e-s-t-a-b-l-i-s-h-e-d.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_CREATE/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-c-r-e-a-t-e.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_EXIT/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-e-x-i-t.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_REGISTER/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-r-e-g-i-s-t-e-r.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_REGISTERING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-r-e-g-i-s-t-e-r-i-n-g.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_SHUTDOWN/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-s-h-u-t-d-o-w-n.html
+$dokka.location:com.sipfront.sdk.json.message.enums/MessageTypeJs/STATE_UNREGISTERING/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message.enums/-message-type-js/-s-t-a-t-e_-u-n-r-e-g-i-s-t-e-r-i-n-g.html
 $dokka.location:com.sipfront.sdk.json.message////PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/index.html
 $dokka.location:com.sipfront.sdk.json.message/RtcpMessage.Builder///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message/-builder/index.html
 $dokka.location:com.sipfront.sdk.json.message/RtcpMessage.Builder/Builder/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message/-builder/-builder.html
@@ -119,6 +151,27 @@ $dokka.location:com.sipfront.sdk.json.message/RtcpMessage/txTotalAudioEnergy/#/P
 $dokka.location:com.sipfront.sdk.json.message/RtcpMessage/type/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message/type.html
 $dokka.location:com.sipfront.sdk.json.message/RtcpMessage/videoDirection/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message/video-direction.html
 $dokka.location:com.sipfront.sdk.json.message/RtcpMessage/videoRemoteDirection/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message/video-remote-direction.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs.Companion///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/-companion/index.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/index.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/RtcpMessageJs/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/-rtcp-message-js.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/addressLocal/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/address-local.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/addressRemote/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/address-remote.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/audioDirection/#com.sipfront.sdk.json.message.enums.MediaDirection/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/audio-direction.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/build/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/build.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/callId/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/call-id.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/displayNameRemote/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/display-name-remote.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rtt/#kotlin.Double/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rtt.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rxAudioLevel/#kotlin.Double/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rx-audio-level.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rxBytes/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rx-bytes.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rxJitter/#kotlin.Double/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rx-jitter.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rxLost/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rx-lost.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rxPackets/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rx-packets.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/rxTotalAudioEnergy/#kotlin.Double/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/rx-total-audio-energy.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/txAudioLevel/#kotlin.Double/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/tx-audio-level.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/txBytes/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/tx-bytes.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/txPackets/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/tx-packets.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/txTotalAudioEnergy/#kotlin.Double/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/tx-total-audio-energy.html
+$dokka.location:com.sipfront.sdk.json.message/RtcpMessageJs/videoDirection/#com.sipfront.sdk.json.message.enums.MediaDirection/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-rtcp-message-js/video-direction.html
 $dokka.location:com.sipfront.sdk.json.message/SdpMessage.Builder///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-sdp-message/-builder/index.html
 $dokka.location:com.sipfront.sdk.json.message/SdpMessage.Builder/Builder/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-sdp-message/-builder/-builder.html
 $dokka.location:com.sipfront.sdk.json.message/SdpMessage.Builder/build/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-sdp-message/-builder/build.html
@@ -160,9 +213,22 @@ $dokka.location:com.sipfront.sdk.json.message/StateMessage/timestamp/#/PointingT
 $dokka.location:com.sipfront.sdk.json.message/StateMessage/type/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-state-message/type.html
 $dokka.location:com.sipfront.sdk.json.message/StateMessage/videoDirection/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-state-message/video-direction.html
 $dokka.location:com.sipfront.sdk.json.message/StateMessage/videoRemoteDirection/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.message/-state-message/video-remote-direction.html
+$dokka.location:com.sipfront.sdk.json.serializer////PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.serializer/index.html
+$dokka.location:com.sipfront.sdk.json.serializer/MaskedStringSerializer///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.serializer/-masked-string-serializer/index.html
+$dokka.location:com.sipfront.sdk.json.serializer/MaskedStringSerializer/descriptor/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.serializer/-masked-string-serializer/descriptor.html
+$dokka.location:com.sipfront.sdk.json.serializer/MaskedStringSerializer/deserialize/#kotlinx.serialization.encoding.Decoder/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.serializer/-masked-string-serializer/deserialize.html
+$dokka.location:com.sipfront.sdk.json.serializer/MaskedStringSerializer/serialize/#kotlinx.serialization.encoding.Encoder#com.sipfront.sdk.utils.MaskedString/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.serializer/-masked-string-serializer/serialize.html
+$dokka.location:com.sipfront.sdk.utils////PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/index.html
+$dokka.location:com.sipfront.sdk.utils/MaskedString.Companion///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/-masked-string/-companion/index.html
+$dokka.location:com.sipfront.sdk.utils/MaskedString///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/-masked-string/index.html
+$dokka.location:com.sipfront.sdk.utils/MaskedString/MaskedString/#kotlin.String#kotlin.Int/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/-masked-string/-masked-string.html
+$dokka.location:com.sipfront.sdk.utils/MaskedString/mask/#kotlin.String#kotlin.Int/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/-masked-string/mask.html
+$dokka.location:com.sipfront.sdk.utils/MaskedString/toString/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/-masked-string/to-string.html
+$dokka.location:com.sipfront.sdk.utils/MaskedString/unmasked/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.utils/-masked-string/unmasked.html
 $dokka.location:com.sipfront.sdk////PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/index.html
 $dokka.location:com.sipfront.sdk/CallAnalytics///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/-call-analytics/index.html
 $dokka.location:com.sipfront.sdk/CallAnalytics/init/#com.sipfront.sdk.SessionParams#com.sipfront.sdk.json.config.Config/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/-call-analytics/init.html
+$dokka.location:com.sipfront.sdk/CallAnalytics/init/#kotlin.String#com.sipfront.sdk.json.config.Config/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/-call-analytics/init.html
 $dokka.location:com.sipfront.sdk/CallAnalytics/isInitialized/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/-call-analytics/is-initialized.html
 $dokka.location:com.sipfront.sdk/CallAnalytics/sendRtcp/#com.sipfront.sdk.json.message.RtcpMessage/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/-call-analytics/send-rtcp.html
 $dokka.location:com.sipfront.sdk/CallAnalytics/sendSdp/#com.sipfront.sdk.json.message.SdpMessage/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk/-call-analytics/send-sdp.html
@@ -174,4 +240,6 @@ com.sipfront.sdk
 com.sipfront.sdk.json.config
 com.sipfront.sdk.json.message
 com.sipfront.sdk.json.message.enums
+com.sipfront.sdk.json.serializer
+com.sipfront.sdk.utils
 
