@@ -138,7 +138,7 @@ object CallAnalytics : ProguardKeep {
      *
      *  @param sessionParams [SessionParams] contains the data required to register on Sipfront
      *  @param config [Config] optional configuration to use
-     *  @return[Boolean] true if successfully initialized
+     *  @return [Boolean] true if successfully initialized
      */
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class, SerializationException::class)

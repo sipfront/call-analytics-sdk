@@ -33,8 +33,8 @@ internal class MqttClient private constructor(
             basic {
                 credentials {
                     BasicAuthCredentials(
-                        username = sessionConfig.credentials.username.getOriginal(),
-                        password = sessionConfig.credentials.password.getOriginal()
+                        username = sessionConfig.credentials.username.unmasked(),
+                        password = sessionConfig.credentials.password.unmasked()
                     )
                 }
                 sendWithoutRequest { request ->
