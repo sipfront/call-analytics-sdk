@@ -6,9 +6,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@class CASCallAnalytics, CASSessionParams, CASConfig, CASRtcpMessage, CASSdpMessage, CASSipMessage, CASStateMessage, CASBaseMessageCompanion, CASBaseMessage, CASRtcpMessageCompanion, CASCall, CASMedia, CASMessageRtcp, CASRtcpMessageBuilder, CASSdpMessageCompanion, CASMessageSdp, CASSdpMessageBuilder, CASSipMessageCompanion, CASMessageSip, CASSipMessageBuilder, CASStateMessageCompanion, CASMessageState, CASStateMessageBuilder, CASKotlinEnumCompanion, CASKotlinEnum<E>, CASCallCompanion, CASKotlinArray<T>, CASMediaCompanion, CASMessageCompanion, CASMessageRtcpCompanion, CASMessageSdpCompanion, CASMessageSipCompanion, CASMessageStateCompanion, CASConfigCompanion, CASConfigBuilder, CASKotlinThrowable, CASKotlinException, CASKotlinRuntimeException, CASKotlinIllegalArgumentException, CASKotlinx_serialization_coreSerializersModule, CASKotlinx_serialization_coreSerialKind, CASKotlinNothing;
+@class CASCallAnalytics, CASSessionParams, CASConfig, CASRtcpMessage, CASSdpMessage, CASSipMessage, CASStateMessage, CASConfigCompanion, CASConfigBuilder, CASBaseMessageCompanion, CASBaseMessage, CASRtcpMessageCompanion, CASCall, CASMedia, CASMessageRtcp, CASRtcpMessageBuilder, CASSdpMessageCompanion, CASMessageSdp, CASSdpMessageBuilder, CASSipMessageCompanion, CASMessageSip, CASSipMessageBuilder, CASStateMessageCompanion, CASMessageState, CASStateMessageBuilder, CASKotlinArray<T>, CASKotlinEnumCompanion, CASKotlinEnum<E>, CASCallCompanion, CASMediaCompanion, CASMessageCompanion, CASMessageRtcpCompanion, CASMessageSdpCompanion, CASMessageSipCompanion, CASMessageStateCompanion, CASMaskedStringSerializer, CASMaskedString, CASMaskedStringCompanion, CASKotlinThrowable, CASKotlinException, CASKotlinRuntimeException, CASKotlinIllegalArgumentException, CASKotlinx_serialization_coreSerializersModule, CASKotlinx_serialization_coreSerialKind, CASKotlinNothing;
 
-@protocol CASProguardKeep, CASMessage, CASKotlinx_serialization_coreKSerializer, CASKotlinComparable, CASEnumValue, CASKotlinx_serialization_coreEncoder, CASKotlinx_serialization_coreSerialDescriptor, CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDecoder, CASKotlinx_serialization_coreDeserializationStrategy, CASKotlinIterator, CASKotlinx_serialization_coreCompositeEncoder, CASKotlinAnnotation, CASKotlinx_serialization_coreCompositeDecoder, CASKotlinx_serialization_coreSerializersModuleCollector, CASKotlinKClass, CASKotlinKDeclarationContainer, CASKotlinKAnnotatedElement, CASKotlinKClassifier;
+@protocol CASProguardKeep, CASKotlinx_serialization_coreKSerializer, CASMessage, CASKotlinComparable, CASEnumValue, CASKotlinx_serialization_coreEncoder, CASKotlinx_serialization_coreSerialDescriptor, CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDecoder, CASKotlinx_serialization_coreDeserializationStrategy, CASKotlinIterator, CASKotlinx_serialization_coreCompositeEncoder, CASKotlinAnnotation, CASKotlinx_serialization_coreCompositeDecoder, CASKotlinx_serialization_coreSerializersModuleCollector, CASKotlinKClass, CASKotlinKDeclarationContainer, CASKotlinKAnnotatedElement, CASKotlinKClassifier;
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
@@ -168,6 +168,14 @@ __attribute__((swift_name("CallAnalytics")))
 /**
  * @note annotations
  *   kotlin.jvm.JvmStatic
+ * @note This method converts instances of IllegalStateException to errors.
+ * Other uncaught Kotlin exceptions are fatal.
+*/
+- (BOOL)initializeJson:(NSString *)json config:(CASConfig *)config error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("initialize(json:config:)"))) __attribute__((swift_error(nonnull_error)));
+
+/**
+ * @note annotations
+ *   kotlin.jvm.JvmStatic
 */
 - (BOOL)isInitialized __attribute__((swift_name("isInitialized()")));
 
@@ -215,6 +223,44 @@ __attribute__((swift_name("EnumValue")))
 @protocol CASEnumValue <CASProguardKeep>
 @required
 @property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Config")))
+@interface CASConfig : CASBase <CASProguardKeep>
+@property (class, readonly, getter=companion) CASConfigCompanion *companion __attribute__((swift_name("companion")));
+- (CASConfig *)doCopyEnablePjsua:(BOOL)enablePjsua enableLogParser:(BOOL)enableLogParser enableDebugLogs:(BOOL)enableDebugLogs trustAllCerts:(BOOL)trustAllCerts __attribute__((swift_name("doCopy(enablePjsua:enableLogParser:enableDebugLogs:trustAllCerts:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) BOOL enableDebugLogs __attribute__((swift_name("enableDebugLogs")));
+@property (readonly) BOOL enableLogParser __attribute__((swift_name("enableLogParser")));
+@property (readonly) BOOL trustAllCerts __attribute__((swift_name("trustAllCerts")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Config.Builder")))
+@interface CASConfigBuilder : CASBase <CASProguardKeep>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (CASConfig *)build __attribute__((swift_name("build()")));
+- (CASConfigBuilder *)enableDebugLogs_:(BOOL)__ __attribute__((swift_name("enableDebugLogs(_:)")));
+- (CASConfigBuilder *)trustAllCerts_:(BOOL)__ __attribute__((swift_name("trustAllCerts(_:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Config.Companion")))
+@interface CASConfigCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASConfigCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
 @end
 
 
@@ -665,6 +711,17 @@ __attribute__((swift_name("StateMessage.Companion")))
 - (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
 @end
 
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("BaseMessage.Companion")))
+@interface CASBaseMessageCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASBaseMessageCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
 __attribute__((swift_name("KotlinComparable")))
 @protocol CASKotlinComparable
 @required
@@ -894,120 +951,6 @@ __attribute__((swift_name("MessageState.Companion")))
 - (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
 @end
 
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("BaseMessage.Companion")))
-@interface CASBaseMessageCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASBaseMessageCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Config")))
-@interface CASConfig : CASBase <CASProguardKeep>
-@property (class, readonly, getter=companion) CASConfigCompanion *companion __attribute__((swift_name("companion")));
-- (CASConfig *)doCopyEnablePjsua:(BOOL)enablePjsua enableLogParser:(BOOL)enableLogParser enableDebugLogs:(BOOL)enableDebugLogs trustAllCerts:(BOOL)trustAllCerts __attribute__((swift_name("doCopy(enablePjsua:enableLogParser:enableDebugLogs:trustAllCerts:)")));
-- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
-- (NSUInteger)hash __attribute__((swift_name("hash()")));
-- (NSString *)description __attribute__((swift_name("description()")));
-@property (readonly) BOOL enableDebugLogs __attribute__((swift_name("enableDebugLogs")));
-@property (readonly) BOOL enableLogParser __attribute__((swift_name("enableLogParser")));
-@property (readonly) BOOL trustAllCerts __attribute__((swift_name("trustAllCerts")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Config.Builder")))
-@interface CASConfigBuilder : CASBase <CASProguardKeep>
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (CASConfig *)build __attribute__((swift_name("build()")));
-- (CASConfigBuilder *)enableDebugLogs_:(BOOL)__ __attribute__((swift_name("enableDebugLogs(_:)")));
-- (CASConfigBuilder *)trustAllCerts_:(BOOL)__ __attribute__((swift_name("trustAllCerts(_:)")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Config.Companion")))
-@interface CASConfigCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASConfigCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-@end
-
-__attribute__((swift_name("KotlinThrowable")))
-@interface CASKotlinThrowable : CASBase
-- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-
-/**
- * @note annotations
- *   kotlin.experimental.ExperimentalNativeApi
-*/
-- (CASKotlinArray<NSString *> *)getStackTrace __attribute__((swift_name("getStackTrace()")));
-- (void)printStackTrace __attribute__((swift_name("printStackTrace()")));
-- (NSString *)description __attribute__((swift_name("description()")));
-@property (readonly) CASKotlinThrowable * _Nullable cause __attribute__((swift_name("cause")));
-@property (readonly) NSString * _Nullable message __attribute__((swift_name("message")));
-- (NSError *)asError __attribute__((swift_name("asError()")));
-@end
-
-__attribute__((swift_name("KotlinException")))
-@interface CASKotlinException : CASKotlinThrowable
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-@end
-
-__attribute__((swift_name("KotlinRuntimeException")))
-@interface CASKotlinRuntimeException : CASKotlinException
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-@end
-
-__attribute__((swift_name("KotlinIllegalStateException")))
-@interface CASKotlinIllegalStateException : CASKotlinRuntimeException
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-@end
-
-__attribute__((swift_name("KotlinIllegalArgumentException")))
-@interface CASKotlinIllegalArgumentException : CASKotlinRuntimeException
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-@end
-
-__attribute__((swift_name("Kotlinx_serialization_coreSerializationException")))
-@interface CASKotlinx_serialization_coreSerializationException : CASKotlinIllegalArgumentException
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
-- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
-@end
-
 __attribute__((swift_name("Kotlinx_serialization_coreSerializationStrategy")))
 @protocol CASKotlinx_serialization_coreSerializationStrategy
 @required
@@ -1028,12 +971,105 @@ __attribute__((swift_name("Kotlinx_serialization_coreKSerializer")))
 @end
 
 __attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("KotlinEnumCompanion")))
-@interface CASKotlinEnumCompanion : CASBase
+__attribute__((swift_name("MaskedStringSerializer")))
+@interface CASMaskedStringSerializer : CASBase <CASKotlinx_serialization_coreKSerializer>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)maskedStringSerializer __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMaskedStringSerializer *shared __attribute__((swift_name("shared")));
+- (CASMaskedString *)deserializeDecoder:(id<CASKotlinx_serialization_coreDecoder>)decoder __attribute__((swift_name("deserialize(decoder:)")));
+- (void)serializeEncoder:(id<CASKotlinx_serialization_coreEncoder>)encoder value:(CASMaskedString *)value __attribute__((swift_name("serialize(encoder:value:)")));
+@property (readonly) id<CASKotlinx_serialization_coreSerialDescriptor> descriptor __attribute__((swift_name("descriptor")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MaskedStringSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MaskedString")))
+@interface CASMaskedString : CASBase
+- (instancetype)initWithData:(NSString *)data index:(int32_t)index __attribute__((swift_name("init(data:index:)"))) __attribute__((objc_designated_initializer));
+@property (class, readonly, getter=companion) CASMaskedStringCompanion *companion __attribute__((swift_name("companion")));
+- (NSString *)maskData:(NSString *)data index:(int32_t)index __attribute__((swift_name("mask(data:index:)")));
+- (NSString *)description __attribute__((swift_name("description()")));
+- (NSString *)unmasked __attribute__((swift_name("unmasked()")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MaskedString.Companion")))
+@interface CASMaskedStringCompanion : CASBase
 + (instancetype)alloc __attribute__((unavailable));
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
 + (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASKotlinEnumCompanion *shared __attribute__((swift_name("shared")));
+@property (class, readonly, getter=shared) CASMaskedStringCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+@end
+
+__attribute__((swift_name("KotlinThrowable")))
+@interface CASKotlinThrowable : CASBase
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
+
+/**
+ * @note annotations
+ *   kotlin.experimental.ExperimentalNativeApi
+*/
+- (CASKotlinArray<NSString *> *)getStackTrace __attribute__((swift_name("getStackTrace()")));
+- (void)printStackTrace __attribute__((swift_name("printStackTrace()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) CASKotlinThrowable * _Nullable cause __attribute__((swift_name("cause")));
+@property (readonly) NSString * _Nullable message __attribute__((swift_name("message")));
+- (NSError *)asError __attribute__((swift_name("asError()")));
+@end
+
+__attribute__((swift_name("KotlinException")))
+@interface CASKotlinException : CASKotlinThrowable
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
+@end
+
+__attribute__((swift_name("KotlinRuntimeException")))
+@interface CASKotlinRuntimeException : CASKotlinException
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
+@end
+
+__attribute__((swift_name("KotlinIllegalStateException")))
+@interface CASKotlinIllegalStateException : CASKotlinRuntimeException
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
+@end
+
+__attribute__((swift_name("KotlinIllegalArgumentException")))
+@interface CASKotlinIllegalArgumentException : CASKotlinRuntimeException
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
+@end
+
+__attribute__((swift_name("Kotlinx_serialization_coreSerializationException")))
+@interface CASKotlinx_serialization_coreSerializationException : CASKotlinIllegalArgumentException
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (instancetype)initWithMessage:(NSString * _Nullable)message __attribute__((swift_name("init(message:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithCause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(cause:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -1046,6 +1082,15 @@ __attribute__((swift_name("KotlinArray")))
 - (id<CASKotlinIterator>)iterator __attribute__((swift_name("iterator()")));
 - (void)setIndex:(int32_t)index value:(T _Nullable)value __attribute__((swift_name("set(index:value:)")));
 @property (readonly) int32_t size __attribute__((swift_name("size")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("KotlinEnumCompanion")))
+@interface CASKotlinEnumCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASKotlinEnumCompanion *shared __attribute__((swift_name("shared")));
 @end
 
 __attribute__((swift_name("Kotlinx_serialization_coreEncoder")))
