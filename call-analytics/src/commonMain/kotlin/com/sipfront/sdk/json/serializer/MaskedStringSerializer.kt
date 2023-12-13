@@ -9,7 +9,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 /**
- * Custom serializer for [MaskedString]
+ * Custom [KSerializer] for [MaskedString]
  *
  * @since 1.0.6
  * @author Dominik Ridjic
