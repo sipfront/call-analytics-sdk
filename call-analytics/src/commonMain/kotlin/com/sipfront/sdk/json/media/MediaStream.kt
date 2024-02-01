@@ -108,6 +108,11 @@ data class MediaStream internal constructor(
          */
         fun direction(@ObjCName("_") direction: MediaStreamDirection) = apply { this.direction = direction }
 
+        /**
+         * The mime-type
+         */
+        fun mimeType(@ObjCName("_") mimeType: String) = apply { this.mimeType = mimeType }
+
 
         private fun getBaseMimeType(mimeType: String): String = mimeType.substringBefore(delimiter = ";")
 
