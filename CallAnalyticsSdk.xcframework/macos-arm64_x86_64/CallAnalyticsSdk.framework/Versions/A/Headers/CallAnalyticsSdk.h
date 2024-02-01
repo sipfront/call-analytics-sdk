@@ -6,9 +6,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@class CASCallAnalytics, CASSessionParams, CASConfig, CASRtcpMessage, CASSdpMessage, CASSipMessage, CASStateMessage, CASConfigCompanion, CASConfigBuilder, CASBaseMessageCompanion, CASBaseMessage, CASRtcpMessageCompanion, CASCall, CASMedia, CASMessageRtcp, CASRtcpMessageBuilder, CASSdpMessageCompanion, CASMessageSdp, CASSdpMessageBuilder, CASSipMessageCompanion, CASMessageSip, CASSipMessageBuilder, CASStateMessageCompanion, CASMessageState, CASStateMessageBuilder, CASKotlinArray<T>, CASKotlinEnumCompanion, CASKotlinEnum<E>, CASCallCompanion, CASMediaCompanion, CASMessageCompanion, CASMessageRtcpCompanion, CASMessageSdpCompanion, CASMessageSipCompanion, CASMessageStateCompanion, CASMaskedStringSerializer, CASMaskedString, CASMaskedStringCompanion, CASKotlinThrowable, CASKotlinException, CASKotlinRuntimeException, CASKotlinIllegalArgumentException, CASKotlinx_serialization_coreSerializersModule, CASKotlinx_serialization_coreSerialKind, CASKotlinNothing;
+@class CASCallAnalytics, CASSessionParams, CASConfig, CASRtcpMessage, CASSdpMessage, CASSipMessage, CASStateMessage, CASMediaStream, CASConfigCompanion, CASConfigBuilder, CASKotlinEnumCompanion, CASKotlinEnum<E>, CASCallCompanion, CASCall, CASKotlinArray<T>, CASMediaCompanion, CASMedia, CASMediaStreamDirectionCompanion, CASMediaStreamDirection, CASMediaStreamKindCompanion, CASMediaStreamKind, CASMessageRtcpCompanion, CASMessageRtcp, CASMessageSdpCompanion, CASMessageSdp, CASMessageSipCompanion, CASMessageSip, CASMessageStateCompanion, CASMessageState, CASRoleCompanion, CASRole, CASMediaStreamCompanion, CASKotlinByteArray, CASMediaStreamBuilder, CASBaseMessageCompanion, CASBaseMessage, CASRtcpMessageCompanion, CASRtcpMessageBuilder, CASSdpMessageCompanion, CASSdpMessageBuilder, CASSipMessageCompanion, CASSipMessageBuilder, CASStateMessageCompanion, CASStateMessageBuilder, CASKotlinThrowable, CASKotlinException, CASKotlinRuntimeException, CASKotlinIllegalArgumentException, CASKotlinByteIterator, CASKotlinx_serialization_coreSerializersModule, CASKotlinx_serialization_coreSerialKind, CASKotlinNothing;
 
-@protocol CASProguardKeep, CASKotlinx_serialization_coreKSerializer, CASMessage, CASKotlinComparable, CASEnumValue, CASKotlinx_serialization_coreEncoder, CASKotlinx_serialization_coreSerialDescriptor, CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDecoder, CASKotlinx_serialization_coreDeserializationStrategy, CASKotlinIterator, CASKotlinx_serialization_coreCompositeEncoder, CASKotlinAnnotation, CASKotlinx_serialization_coreCompositeDecoder, CASKotlinx_serialization_coreSerializersModuleCollector, CASKotlinKClass, CASKotlinKDeclarationContainer, CASKotlinKAnnotatedElement, CASKotlinKClassifier;
+@protocol CASProguardKeep, CASKotlinx_serialization_coreKSerializer, CASKotlinComparable, CASEnumValue, CASMessage, CASKotlinx_serialization_coreEncoder, CASKotlinx_serialization_coreSerialDescriptor, CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDecoder, CASKotlinx_serialization_coreDeserializationStrategy, CASKotlinIterator, CASKotlinx_serialization_coreCompositeEncoder, CASKotlinAnnotation, CASKotlinx_serialization_coreCompositeDecoder, CASKotlinx_serialization_coreSerializersModuleCollector, CASKotlinKClass, CASKotlinKDeclarationContainer, CASKotlinKAnnotatedElement, CASKotlinKClassifier;
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
@@ -210,6 +210,14 @@ __attribute__((swift_name("CallAnalytics")))
  * Other uncaught Kotlin exceptions are fatal.
 */
 - (BOOL)sendState:(CASStateMessage *)state error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("send(state:)")));
+
+/**
+ * @note annotations
+ *   kotlin.jvm.JvmStatic
+ * @note This method converts instances of IllegalStateException, IllegalArgumentException to errors.
+ * Other uncaught Kotlin exceptions are fatal.
+*/
+- (BOOL)uploadMediaStream:(CASMediaStream *)mediaStream error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("upload(mediaStream:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -260,6 +268,409 @@ __attribute__((swift_name("Config.Companion")))
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
 + (instancetype)companion __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) CASConfigCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+@end
+
+__attribute__((swift_name("KotlinComparable")))
+@protocol CASKotlinComparable
+@required
+- (int32_t)compareToOther:(id _Nullable)other __attribute__((swift_name("compareTo(other:)")));
+@end
+
+__attribute__((swift_name("KotlinEnum")))
+@interface CASKotlinEnum<E> : CASBase <CASKotlinComparable>
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer));
+@property (class, readonly, getter=companion) CASKotlinEnumCompanion *companion __attribute__((swift_name("companion")));
+- (int32_t)compareToOther:(E)other __attribute__((swift_name("compareTo(other:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (readonly) NSString *name __attribute__((swift_name("name")));
+@property (readonly) int32_t ordinal __attribute__((swift_name("ordinal")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/CallDirectionSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Call")))
+@interface CASCall : CASKotlinEnum<CASCall *> <CASEnumValue>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASCallCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASCall *incoming __attribute__((swift_name("incoming")));
+@property (class, readonly) CASCall *outgoing __attribute__((swift_name("outgoing")));
+@property (class, readonly) CASCall *none __attribute__((swift_name("none")));
++ (CASKotlinArray<CASCall *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASCall *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Call.Companion")))
+@interface CASCallCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASCallCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MediaDirectionSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Media")))
+@interface CASMedia : CASKotlinEnum<CASMedia *> <CASEnumValue>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMediaCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMedia *sendReceive __attribute__((swift_name("sendReceive")));
+@property (class, readonly) CASMedia *receiveOnly __attribute__((swift_name("receiveOnly")));
+@property (class, readonly) CASMedia *sendOnly __attribute__((swift_name("sendOnly")));
+@property (class, readonly) CASMedia *inactive __attribute__((swift_name("inactive")));
++ (CASKotlinArray<CASMedia *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMedia *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Media.Companion")))
+@interface CASMediaCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMediaCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MediaStreamDirectionSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStreamDirection")))
+@interface CASMediaStreamDirection : CASKotlinEnum<CASMediaStreamDirection *> <CASEnumValue>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMediaStreamDirectionCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMediaStreamDirection *outgoing __attribute__((swift_name("outgoing")));
+@property (class, readonly) CASMediaStreamDirection *incoming __attribute__((swift_name("incoming")));
++ (CASKotlinArray<CASMediaStreamDirection *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMediaStreamDirection *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStreamDirection.Companion")))
+@interface CASMediaStreamDirectionCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMediaStreamDirectionCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MediaStreamKindSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStreamKind")))
+@interface CASMediaStreamKind : CASKotlinEnum<CASMediaStreamKind *> <CASEnumValue>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMediaStreamKindCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMediaStreamKind *audio __attribute__((swift_name("audio")));
+@property (class, readonly) CASMediaStreamKind *video __attribute__((swift_name("video")));
+@property (class, readonly) CASMediaStreamKind *none __attribute__((swift_name("none")));
++ (CASKotlinArray<CASMediaStreamKind *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMediaStreamKind *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStreamKind.Companion")))
+@interface CASMediaStreamKindCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMediaStreamKindCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+__attribute__((swift_name("Message")))
+@protocol CASMessage <CASEnumValue>
+@required
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/RtcpSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageRtcp")))
+@interface CASMessageRtcp : CASKotlinEnum<CASMessageRtcp *> <CASMessage>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMessageRtcpCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMessageRtcp *rtcp __attribute__((swift_name("rtcp")));
++ (CASKotlinArray<CASMessageRtcp *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMessageRtcp *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageRtcp.Companion")))
+@interface CASMessageRtcpCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMessageRtcpCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/SdpSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageSdp")))
+@interface CASMessageSdp : CASKotlinEnum<CASMessageSdp *> <CASMessage>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMessageSdpCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMessageSdp *outgoing __attribute__((swift_name("outgoing")));
+@property (class, readonly) CASMessageSdp *incoming __attribute__((swift_name("incoming")));
++ (CASKotlinArray<CASMessageSdp *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMessageSdp *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageSdp.Companion")))
+@interface CASMessageSdpCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMessageSdpCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/SipSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageSip")))
+@interface CASMessageSip : CASKotlinEnum<CASMessageSip *> <CASMessage>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMessageSipCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMessageSip *outgoing __attribute__((swift_name("outgoing")));
+@property (class, readonly) CASMessageSip *incoming __attribute__((swift_name("incoming")));
++ (CASKotlinArray<CASMessageSip *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMessageSip *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageSip.Companion")))
+@interface CASMessageSipCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMessageSipCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/StateSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageState")))
+@interface CASMessageState : CASKotlinEnum<CASMessageState *> <CASMessage>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASMessageStateCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASMessageState *create __attribute__((swift_name("create")));
+@property (class, readonly) CASMessageState *register_ __attribute__((swift_name("register_")));
+@property (class, readonly) CASMessageState *registering __attribute__((swift_name("registering")));
+@property (class, readonly) CASMessageState *unregistering __attribute__((swift_name("unregistering")));
+@property (class, readonly) CASMessageState *shutdown __attribute__((swift_name("shutdown")));
+@property (class, readonly) CASMessageState *exit __attribute__((swift_name("exit")));
+@property (class, readonly) CASMessageState *callIncoming __attribute__((swift_name("callIncoming")));
+@property (class, readonly) CASMessageState *callOutgoing __attribute__((swift_name("callOutgoing")));
+@property (class, readonly) CASMessageState *callRinging __attribute__((swift_name("callRinging")));
+@property (class, readonly) CASMessageState *callEstablished __attribute__((swift_name("callEstablished")));
+@property (class, readonly) CASMessageState *callRtpEstablished __attribute__((swift_name("callRtpEstablished")));
+@property (class, readonly) CASMessageState *callEndedLocal __attribute__((swift_name("callEndedLocal")));
+@property (class, readonly) CASMessageState *callEndedRemote __attribute__((swift_name("callEndedRemote")));
+@property (class, readonly) CASMessageState *callRejected __attribute__((swift_name("callRejected")));
+@property (class, readonly) CASMessageState *callFailed __attribute__((swift_name("callFailed")));
+@property (class, readonly) CASMessageState *callClosed __attribute__((swift_name("callClosed")));
+@property (class, readonly) CASMessageState *callInProgress __attribute__((swift_name("callInProgress")));
++ (CASKotlinArray<CASMessageState *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASMessageState *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MessageState.Companion")))
+@interface CASMessageStateCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMessageStateCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/RoleSerializer))
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Role")))
+@interface CASRole : CASKotlinEnum<CASRole *> <CASEnumValue>
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
+- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
+@property (class, readonly, getter=companion) CASRoleCompanion *companion __attribute__((swift_name("companion")));
+@property (class, readonly) CASRole *caller __attribute__((swift_name("caller")));
+@property (class, readonly) CASRole *callee __attribute__((swift_name("callee")));
+@property (class, readonly) CASRole *none __attribute__((swift_name("none")));
++ (CASKotlinArray<CASRole *> *)values __attribute__((swift_name("values()")));
+@property (class, readonly) NSArray<CASRole *> *entries __attribute__((swift_name("entries")));
+@property (readonly) NSString *value __attribute__((swift_name("value")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("Role.Companion")))
+@interface CASRoleCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASRoleCompanion *shared __attribute__((swift_name("shared")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
+- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
+@end
+
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Serializable
+ *   kotlinx.serialization.SerialName(value="MediaStream")
+*/
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStream")))
+@interface CASMediaStream : CASBase
+@property (class, readonly, getter=companion) CASMediaStreamCompanion *companion __attribute__((swift_name("companion")));
+- (CASMediaStream *)doCopyData:(CASKotlinByteArray *)data kind:(CASMediaStreamKind *)kind direction:(CASMediaStreamDirection *)direction mimeType:(NSString *)mimeType mimeTypeBase:(NSString *)mimeTypeBase codec:(NSString * _Nullable)codec fileName:(NSString *)fileName timestamp:(double)timestamp __attribute__((swift_name("doCopy(data:kind:direction:mimeType:mimeTypeBase:codec:fileName:timestamp:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="codec")
+*/
+@property (readonly) NSString * _Nullable codec __attribute__((swift_name("codec")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="data")
+*/
+@property (readonly) CASKotlinByteArray *data __attribute__((swift_name("data")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="direction")
+*/
+@property (readonly) CASMediaStreamDirection *direction __attribute__((swift_name("direction")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="file_name")
+*/
+@property (readonly) NSString *fileName __attribute__((swift_name("fileName")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="kind")
+*/
+@property (readonly) CASMediaStreamKind *kind __attribute__((swift_name("kind")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="mime_type")
+*/
+@property (readonly) NSString *mimeType __attribute__((swift_name("mimeType")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="mime_type_base")
+*/
+@property (readonly) NSString *mimeTypeBase __attribute__((swift_name("mimeTypeBase")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.SerialName(value="timestamp")
+*/
+@property (readonly) double timestamp __attribute__((swift_name("timestamp")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStream.Builder")))
+@interface CASMediaStreamBuilder : CASBase <CASProguardKeep>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+
+/**
+ * @note This method converts instances of IllegalStateException to errors.
+ * Other uncaught Kotlin exceptions are fatal.
+*/
+- (CASMediaStream * _Nullable)buildAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("build()")));
+- (CASMediaStreamBuilder *)data_:(CASKotlinByteArray *)__ __attribute__((swift_name("data(_:)")));
+- (CASMediaStreamBuilder *)direction_:(CASMediaStreamDirection *)__ __attribute__((swift_name("direction(_:)")));
+- (CASMediaStreamBuilder *)kind_:(CASMediaStreamKind *)__ __attribute__((swift_name("kind(_:)")));
+- (CASMediaStreamBuilder *)mimeType_:(NSString *)__ __attribute__((swift_name("mimeType(_:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("MediaStream.Companion")))
+@interface CASMediaStreamCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASMediaStreamCompanion *shared __attribute__((swift_name("shared")));
 - (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
 @end
 
@@ -722,291 +1133,6 @@ __attribute__((swift_name("BaseMessage.Companion")))
 - (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
 @end
 
-__attribute__((swift_name("KotlinComparable")))
-@protocol CASKotlinComparable
-@required
-- (int32_t)compareToOther:(id _Nullable)other __attribute__((swift_name("compareTo(other:)")));
-@end
-
-__attribute__((swift_name("KotlinEnum")))
-@interface CASKotlinEnum<E> : CASBase <CASKotlinComparable>
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer));
-@property (class, readonly, getter=companion) CASKotlinEnumCompanion *companion __attribute__((swift_name("companion")));
-- (int32_t)compareToOther:(E)other __attribute__((swift_name("compareTo(other:)")));
-- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
-- (NSUInteger)hash __attribute__((swift_name("hash()")));
-- (NSString *)description __attribute__((swift_name("description()")));
-@property (readonly) NSString *name __attribute__((swift_name("name")));
-@property (readonly) int32_t ordinal __attribute__((swift_name("ordinal")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/CallDirectionSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Call")))
-@interface CASCall : CASKotlinEnum<CASCall *> <CASEnumValue>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASCallCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASCall *incoming __attribute__((swift_name("incoming")));
-@property (class, readonly) CASCall *outgoing __attribute__((swift_name("outgoing")));
-@property (class, readonly) CASCall *none __attribute__((swift_name("none")));
-+ (CASKotlinArray<CASCall *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASCall *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Call.Companion")))
-@interface CASCallCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASCallCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MediaDirectionSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Media")))
-@interface CASMedia : CASKotlinEnum<CASMedia *> <CASEnumValue>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASMediaCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASMedia *sendReceive __attribute__((swift_name("sendReceive")));
-@property (class, readonly) CASMedia *receiveOnly __attribute__((swift_name("receiveOnly")));
-@property (class, readonly) CASMedia *sendOnly __attribute__((swift_name("sendOnly")));
-@property (class, readonly) CASMedia *inactive __attribute__((swift_name("inactive")));
-+ (CASKotlinArray<CASMedia *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASMedia *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("Media.Companion")))
-@interface CASMediaCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMediaCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-__attribute__((swift_name("Message")))
-@protocol CASMessage <CASEnumValue>
-@required
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageCompanion")))
-@interface CASMessageCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMessageCompanion *shared __attribute__((swift_name("shared")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/RtcpSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageRtcp")))
-@interface CASMessageRtcp : CASKotlinEnum<CASMessageRtcp *> <CASMessage>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASMessageRtcpCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASMessageRtcp *rtcp __attribute__((swift_name("rtcp")));
-+ (CASKotlinArray<CASMessageRtcp *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASMessageRtcp *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageRtcp.Companion")))
-@interface CASMessageRtcpCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMessageRtcpCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/SdpSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageSdp")))
-@interface CASMessageSdp : CASKotlinEnum<CASMessageSdp *> <CASMessage>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASMessageSdpCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASMessageSdp *outgoing __attribute__((swift_name("outgoing")));
-@property (class, readonly) CASMessageSdp *incoming __attribute__((swift_name("incoming")));
-+ (CASKotlinArray<CASMessageSdp *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASMessageSdp *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageSdp.Companion")))
-@interface CASMessageSdpCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMessageSdpCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/SipSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageSip")))
-@interface CASMessageSip : CASKotlinEnum<CASMessageSip *> <CASMessage>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASMessageSipCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASMessageSip *outgoing __attribute__((swift_name("outgoing")));
-@property (class, readonly) CASMessageSip *incoming __attribute__((swift_name("incoming")));
-+ (CASKotlinArray<CASMessageSip *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASMessageSip *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageSip.Companion")))
-@interface CASMessageSipCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMessageSipCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/StateSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageState")))
-@interface CASMessageState : CASKotlinEnum<CASMessageState *> <CASMessage>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASMessageStateCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASMessageState *create __attribute__((swift_name("create")));
-@property (class, readonly) CASMessageState *register_ __attribute__((swift_name("register_")));
-@property (class, readonly) CASMessageState *registering __attribute__((swift_name("registering")));
-@property (class, readonly) CASMessageState *unregistering __attribute__((swift_name("unregistering")));
-@property (class, readonly) CASMessageState *shutdown __attribute__((swift_name("shutdown")));
-@property (class, readonly) CASMessageState *exit __attribute__((swift_name("exit")));
-@property (class, readonly) CASMessageState *callIncoming __attribute__((swift_name("callIncoming")));
-@property (class, readonly) CASMessageState *callOutgoing __attribute__((swift_name("callOutgoing")));
-@property (class, readonly) CASMessageState *callRinging __attribute__((swift_name("callRinging")));
-@property (class, readonly) CASMessageState *callEstablished __attribute__((swift_name("callEstablished")));
-@property (class, readonly) CASMessageState *callRtpEstablished __attribute__((swift_name("callRtpEstablished")));
-@property (class, readonly) CASMessageState *callEndedLocal __attribute__((swift_name("callEndedLocal")));
-@property (class, readonly) CASMessageState *callEndedRemote __attribute__((swift_name("callEndedRemote")));
-@property (class, readonly) CASMessageState *callRejected __attribute__((swift_name("callRejected")));
-@property (class, readonly) CASMessageState *callFailed __attribute__((swift_name("callFailed")));
-@property (class, readonly) CASMessageState *callClosed __attribute__((swift_name("callClosed")));
-@property (class, readonly) CASMessageState *callInProgress __attribute__((swift_name("callInProgress")));
-+ (CASKotlinArray<CASMessageState *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASMessageState *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MessageState.Companion")))
-@interface CASMessageStateCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMessageStateCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
-__attribute__((swift_name("Kotlinx_serialization_coreSerializationStrategy")))
-@protocol CASKotlinx_serialization_coreSerializationStrategy
-@required
-- (void)serializeEncoder:(id<CASKotlinx_serialization_coreEncoder>)encoder value:(id _Nullable)value __attribute__((swift_name("serialize(encoder:value:)")));
-@property (readonly) id<CASKotlinx_serialization_coreSerialDescriptor> descriptor __attribute__((swift_name("descriptor")));
-@end
-
-__attribute__((swift_name("Kotlinx_serialization_coreDeserializationStrategy")))
-@protocol CASKotlinx_serialization_coreDeserializationStrategy
-@required
-- (id _Nullable)deserializeDecoder:(id<CASKotlinx_serialization_coreDecoder>)decoder __attribute__((swift_name("deserialize(decoder:)")));
-@property (readonly) id<CASKotlinx_serialization_coreSerialDescriptor> descriptor __attribute__((swift_name("descriptor")));
-@end
-
-__attribute__((swift_name("Kotlinx_serialization_coreKSerializer")))
-@protocol CASKotlinx_serialization_coreKSerializer <CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDeserializationStrategy>
-@required
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MaskedStringSerializer")))
-@interface CASMaskedStringSerializer : CASBase <CASKotlinx_serialization_coreKSerializer>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)maskedStringSerializer __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMaskedStringSerializer *shared __attribute__((swift_name("shared")));
-- (CASMaskedString *)deserializeDecoder:(id<CASKotlinx_serialization_coreDecoder>)decoder __attribute__((swift_name("deserialize(decoder:)")));
-- (void)serializeEncoder:(id<CASKotlinx_serialization_coreEncoder>)encoder value:(CASMaskedString *)value __attribute__((swift_name("serialize(encoder:value:)")));
-@property (readonly) id<CASKotlinx_serialization_coreSerialDescriptor> descriptor __attribute__((swift_name("descriptor")));
-@end
-
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MaskedStringSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MaskedString")))
-@interface CASMaskedString : CASBase
-- (instancetype)initWithData:(NSString *)data index:(int32_t)index __attribute__((swift_name("init(data:index:)"))) __attribute__((objc_designated_initializer));
-@property (class, readonly, getter=companion) CASMaskedStringCompanion *companion __attribute__((swift_name("companion")));
-- (NSString *)maskData:(NSString *)data index:(int32_t)index __attribute__((swift_name("mask(data:index:)")));
-- (NSString *)description __attribute__((swift_name("description()")));
-- (NSString *)unmasked __attribute__((swift_name("unmasked()")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MaskedString.Companion")))
-@interface CASMaskedStringCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMaskedStringCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-@end
-
 __attribute__((swift_name("KotlinThrowable")))
 @interface CASKotlinThrowable : CASBase
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
@@ -1072,6 +1198,34 @@ __attribute__((swift_name("Kotlinx_serialization_coreSerializationException")))
 - (instancetype)initWithMessage:(NSString * _Nullable)message cause:(CASKotlinThrowable * _Nullable)cause __attribute__((swift_name("init(message:cause:)"))) __attribute__((objc_designated_initializer));
 @end
 
+__attribute__((swift_name("Kotlinx_serialization_coreSerializationStrategy")))
+@protocol CASKotlinx_serialization_coreSerializationStrategy
+@required
+- (void)serializeEncoder:(id<CASKotlinx_serialization_coreEncoder>)encoder value:(id _Nullable)value __attribute__((swift_name("serialize(encoder:value:)")));
+@property (readonly) id<CASKotlinx_serialization_coreSerialDescriptor> descriptor __attribute__((swift_name("descriptor")));
+@end
+
+__attribute__((swift_name("Kotlinx_serialization_coreDeserializationStrategy")))
+@protocol CASKotlinx_serialization_coreDeserializationStrategy
+@required
+- (id _Nullable)deserializeDecoder:(id<CASKotlinx_serialization_coreDecoder>)decoder __attribute__((swift_name("deserialize(decoder:)")));
+@property (readonly) id<CASKotlinx_serialization_coreSerialDescriptor> descriptor __attribute__((swift_name("descriptor")));
+@end
+
+__attribute__((swift_name("Kotlinx_serialization_coreKSerializer")))
+@protocol CASKotlinx_serialization_coreKSerializer <CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDeserializationStrategy>
+@required
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("KotlinEnumCompanion")))
+@interface CASKotlinEnumCompanion : CASBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)companion __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) CASKotlinEnumCompanion *shared __attribute__((swift_name("shared")));
+@end
+
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("KotlinArray")))
 @interface CASKotlinArray<T> : CASBase
@@ -1085,12 +1239,16 @@ __attribute__((swift_name("KotlinArray")))
 @end
 
 __attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("KotlinEnumCompanion")))
-@interface CASKotlinEnumCompanion : CASBase
+__attribute__((swift_name("KotlinByteArray")))
+@interface CASKotlinByteArray : CASBase
++ (instancetype)arrayWithSize:(int32_t)size __attribute__((swift_name("init(size:)")));
++ (instancetype)arrayWithSize:(int32_t)size init:(CASByte *(^)(CASInt *))init __attribute__((swift_name("init(size:init:)")));
 + (instancetype)alloc __attribute__((unavailable));
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASKotlinEnumCompanion *shared __attribute__((swift_name("shared")));
+- (int8_t)getIndex:(int32_t)index __attribute__((swift_name("get(index:)")));
+- (CASKotlinByteIterator *)iterator __attribute__((swift_name("iterator()")));
+- (void)setIndex:(int32_t)index value:(int8_t)value __attribute__((swift_name("set(index:value:)")));
+@property (readonly) int32_t size __attribute__((swift_name("size")));
 @end
 
 __attribute__((swift_name("Kotlinx_serialization_coreEncoder")))
@@ -1239,6 +1397,14 @@ __attribute__((swift_name("KotlinIterator")))
 @required
 - (BOOL)hasNext __attribute__((swift_name("hasNext()")));
 - (id _Nullable)next __attribute__((swift_name("next()")));
+@end
+
+__attribute__((swift_name("KotlinByteIterator")))
+@interface CASKotlinByteIterator : CASBase <CASKotlinIterator>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (CASByte *)next __attribute__((swift_name("next()")));
+- (int8_t)nextByte __attribute__((swift_name("nextByte()")));
 @end
 
 __attribute__((swift_name("Kotlinx_serialization_coreCompositeEncoder")))

@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'CallAnalyticsSdk'
-    spec.version                  = '1.0.6'
+    spec.version                  = '1.0.7'
     spec.homepage                 = 'https://sipfront.com'
     spec.source                   = { :http=> ''}
     spec.authors                  = { 'Dominik Ridjic' => 'dominik.ridjic@gmail.com' }
