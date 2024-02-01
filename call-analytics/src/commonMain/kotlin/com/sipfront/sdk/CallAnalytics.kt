@@ -8,6 +8,8 @@ import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonParser
 import com.sipfront.sdk.json.config.Config
 import com.sipfront.sdk.json.config.SessionConfig
+import com.sipfront.sdk.json.enums.MessageType
+import com.sipfront.sdk.json.media.MediaStream
 import com.sipfront.sdk.json.message.RtcpMessage
 import com.sipfront.sdk.json.message.SdpMessage
 import com.sipfront.sdk.json.message.SipMessage
@@ -153,7 +155,11 @@ object CallAnalytics : ProguardKeep {
         Log.enableDebugLogs(config.enableDebugLogs)
         Log.debug()
             ?.i(
-                "Starting ${getUserAgent()} initialization with Config: ${JsonParser.toString(config)}"
+                "Starting ${getUserAgent()} initialization with ${Config::class.simpleName}: ${
+                    JsonParser.toString(
+                        config
+                    )
+                }"
             )
 
         if (!isInitialized()) {
@@ -162,14 +168,14 @@ object CallAnalytics : ProguardKeep {
             } catch (exception: Exception) {
                 if (Platform.isDebug() && Constants.DEBUG_FALLBACK_INIT_DATA) {
                     Log.debug()?.w("Initialization failed", exception)
-                    Log.debug()?.i("Creating fallback SessionConfig")
+                    Log.debug()?.i("Creating fallback ${SessionConfig::class.simpleName}")
                     init(sessionConfig = SessionConfig.debugData(), config = config)
                 } else {
                     throw exception
                 }
             }
         } else {
-            throw IllegalStateException("Already previously initialized with SessionConfig: $sessionConfig")
+            throw IllegalStateException("Already previously initialized with ${SessionConfig::class.simpleName}: $sessionConfig")
         }
     }
 
@@ -210,7 +216,7 @@ object CallAnalytics : ProguardKeep {
                 ), config = config
             )
         } else {
-            throw IllegalStateException("Already previously initialized with SessionConfig: $sessionConfig")
+            throw IllegalStateException("Already previously initialized with ${SessionConfig::class.simpleName}: $sessionConfig")
         }
     }
 
@@ -238,7 +244,7 @@ object CallAnalytics : ProguardKeep {
                 this.sessionConfig = sessionConfig
                 this.config = config
                 Log.debug()?.i(
-                    "Successfully initialized ${getUserAgent()} with SessionConfig: $sessionConfig,  config: $config"
+                    "Successfully initialized ${getUserAgent()} with ${SessionConfig::class.simpleName}: $sessionConfig,  config: $config"
                 )
                 if (config.enableLogParser) {
                     logParser = LogParser()
@@ -246,88 +252,117 @@ object CallAnalytics : ProguardKeep {
                 }
                 return true
             } else {
-                throw IllegalStateException("Failed creating Mqtt Client")
+                throw IllegalStateException("Failed creating ${MqttClient::class.simpleName}")
             }
         } else {
-            throw IllegalStateException("Already previously initialized with SessionConfig: $sessionConfig")
+            throw IllegalStateException("Already previously initialized with ${SessionConfig::class.simpleName}: $sessionConfig")
         }
     }
 
     /**
      * Sends [StateMessage] to Sipfront
-     * @param msg [StateMessage]
+     *
+     * @param stateMessage [StateMessage]
      */
     @ObjCName("send")
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun sendState(@ObjCName("state") msg: StateMessage) {
+    fun sendState(@ObjCName("state") stateMessage: StateMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
 
         runCatching { stateCache.last() }.getOrNull()?.let {
-            if (msg.type == it.type) {
+            if (stateMessage.type == it.type) {
                 Log.debug()
-                    ?.i("Not sending CallStateMessage because MessageType is identical with last message: ${it.type}")
+                    ?.i("Not sending ${StateMessage::class.simpleName} because ${MessageType::class.simpleName} is identical with last message: ${it.type}")
                 return
             }
         }
-        stateCache.add(msg)
+        stateCache.add(stateMessage)
 
-        mqttClient?.sendMessage(msg) ?: run {
-            throw IllegalStateException("MqttClient hasn't been created")
+        mqttClient?.sendMessage(message = stateMessage) ?: run {
+            throw IllegalStateException("${MqttClient::class.simpleName} hasn't been created")
         }
     }
 
     /**
      * Sends [RtcpMessage] to Sipfront
-     * @param msg [RtcpMessage]
+     *
+     * @param rtcpMessage [RtcpMessage]
      */
     @Suppress("NON_EXPORTABLE_TYPE")
     @ObjCName("send")
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun sendRtcp(@ObjCName("rtcp") msg: RtcpMessage) {
+    fun sendRtcp(@ObjCName("rtcp") rtcpMessage: RtcpMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
-        rtcpCache.add(msg)
-        mqttClient?.sendMessage(msg) ?: run {
-            throw IllegalStateException("MqttClient hasn't been created")
+        rtcpCache.add(rtcpMessage)
+        mqttClient?.sendMessage(message = rtcpMessage) ?: run {
+            throw IllegalStateException("${MqttClient::class.simpleName} hasn't been created")
         }
     }
 
     /**
      * Sends [SipMessage] to Sipfront
-     * @param msg [SipMessage]
+     *
+     * @param sipMessage [SipMessage]
      */
     @ObjCName("send")
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun sendSip(@ObjCName("sip") msg: SipMessage) {
+    fun sendSip(@ObjCName("sip") sipMessage: SipMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
-        sipCache.add(msg)
-        mqttClient?.sendMessage(msg) ?: run {
-            throw IllegalStateException("MqttClient hasn't been created")
+        sipCache.add(sipMessage)
+        mqttClient?.sendMessage(message = sipMessage) ?: run {
+            throw IllegalStateException("${MqttClient::class.simpleName} hasn't been created")
         }
     }
 
     /**
      * Sends [SdpMessage] to Sipfront
-     * @param msg [SdpMessage]
+     *
+     * @param sdpMessage [SdpMessage]
      */
     @ObjCName("send")
     @JvmStatic
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun sendSdp(@ObjCName("sdp") msg: SdpMessage) {
+    fun sendSdp(@ObjCName("sdp") sdpMessage: SdpMessage) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
-        sdpCache.add(msg)
-        mqttClient?.sendMessage(msg) ?: run {
-            throw IllegalStateException("MqttClient hasn't been created")
+        sdpCache.add(sdpMessage)
+        mqttClient?.sendMessage(message = sdpMessage) ?: run {
+            throw IllegalStateException("${MqttClient::class.simpleName} hasn't been created")
+        }
+    }
+
+    /**
+     * Uploads [MediaStream] to Sipfront
+     *
+     * Uploads a recording of a [MediaStream] to Sipfront for analysis of media quality.
+     * It Can be either an audio or video stream.
+     *
+     * @param mediaStream [MediaStream]
+     */
+    @JvmStatic
+    @ObjCName("upload")
+    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    fun uploadMedia(@ObjCName("audio") mediaStream: MediaStream) {
+        if (!isInitialized()) {
+            throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
+        }
+        // Upload the artifact
+        httpClient?.uploadArtifact(
+            data = mediaStream.data,
+            mimeType = mediaStream.mimeTypeBase,
+            fileName = mediaStream.fileName
+        ) ?: run {
+            throw IllegalStateException("${HttpClient::class.simpleName} hasn't been created")
         }
     }
 
