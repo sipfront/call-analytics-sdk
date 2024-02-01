@@ -10,7 +10,7 @@ import kotlin.js.JsExport
 @Serializable
 @SerialName("ResponseGetUploadArtifactUrl")
 @JsExport
-data class ResponseGetUploadArtifactUrl internal constructor(
+internal data class ResponseGetUploadArtifactUrl internal constructor(
     @SerialName(JsonKeys.Response.status)
     val status: String,
     @SerialName(JsonKeys.Response.UploadArtifact.url)

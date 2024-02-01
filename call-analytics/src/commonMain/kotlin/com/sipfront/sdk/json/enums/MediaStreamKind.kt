@@ -18,7 +18,7 @@ import kotlin.native.ObjCName
  */
 @OptIn(ExperimentalObjCName::class)
 @Serializable(with = MediaStreamKindSerializer::class)
-@ObjCName("MediaStreamDirection")
+@ObjCName("MediaStreamKind")
 enum class MediaStreamKind(override val value: String) : EnumValue {
     /**
      * Represents an audio stream

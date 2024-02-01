@@ -8,9 +8,9 @@ import kotlin.js.JsExport
 
 @OptIn(ExperimentalJsExport::class)
 @Serializable
-@SerialName("ResponseGetUploadArtifactUrl")
+@SerialName("ResponseMqttMessage")
 @JsExport
-data class ResponseMqttMessage internal constructor(
+internal data class ResponseMqttMessage internal constructor(
     @SerialName(JsonKeys.Response.Mqtt.message)
     val message: String,
     @SerialName(JsonKeys.Response.Mqtt.traceId)
