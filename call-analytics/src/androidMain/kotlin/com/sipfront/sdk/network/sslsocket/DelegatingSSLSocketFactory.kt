@@ -1,4 +1,4 @@
-package com.sipfront.sdk.mqtt.sslsocket
+package com.sipfront.sdk.network.sslsocket
 
 import java.io.IOException
 import java.net.InetAddress

@@ -1,4 +1,4 @@
-package com.sipfront.sdk.mqtt
+package com.sipfront.sdk.network.config
 
 import io.ktor.client.engine.*
 import io.ktor.client.engine.darwin.*

@@ -1,4 +1,4 @@
-package com.sipfront.sdk.mqtt.sslsocket
+package com.sipfront.sdk.network.sslsocket
 
 import java.security.KeyStore
 import java.security.cert.X509Certificate

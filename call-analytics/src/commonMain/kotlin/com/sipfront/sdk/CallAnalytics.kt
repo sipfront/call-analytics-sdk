@@ -15,6 +15,7 @@ import com.sipfront.sdk.json.message.StateMessage
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.LogParser
 import com.sipfront.sdk.mqtt.MqttClient
+import com.sipfront.sdk.network.client.MqttClient
 import com.sipfront.sdk.utils.Platform
 import com.sipfront.sdk.utils.getUserAgent
 import kotlinx.atomicfu.AtomicBoolean

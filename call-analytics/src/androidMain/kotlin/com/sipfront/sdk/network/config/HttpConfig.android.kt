@@ -1,6 +1,6 @@
-package com.sipfront.sdk.mqtt
+package com.sipfront.sdk.network.config
 
-import com.sipfront.sdk.mqtt.sslsocket.SSLConfigAndroid
+import com.sipfront.sdk.network.sslsocket.SSLConfigAndroid
 import io.ktor.client.engine.*
 import io.ktor.client.engine.okhttp.*
 

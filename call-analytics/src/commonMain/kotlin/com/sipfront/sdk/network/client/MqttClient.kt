@@ -1,4 +1,4 @@
-package com.sipfront.sdk.mqtt
+package com.sipfront.sdk.network.client
 
 import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.json.JsonParser
@@ -8,7 +8,9 @@ import com.sipfront.sdk.json.message.SdpMessage
 import com.sipfront.sdk.json.message.SipMessage
 import com.sipfront.sdk.json.message.StateMessage
 import com.sipfront.sdk.json.message.base.BaseMessage
+import com.sipfront.sdk.json.response.ResponseMqttMessage
 import com.sipfront.sdk.log.Log
+import com.sipfront.sdk.network.config.getHttpClientEngine
 import com.sipfront.sdk.utils.DispatcherProvider
 import com.sipfront.sdk.utils.KotlinHelper
 import com.sipfront.sdk.utils.getUserAgent
@@ -97,9 +99,14 @@ internal class MqttClient private constructor(
                     setBody(message)
                 }
 
+                val responseString = "${response.status.value}/${response.status.description}"
                 when (response.status) {
-                    HttpStatusCode.OK -> Log.debug()?.d("MQTT response: ${response.bodyAsText()}")
-                    else -> Log.release().e("MQTT response: ${response.bodyAsText()}")
+                    HttpStatusCode.OK -> {
+                        val parsedResponse = JsonParser.toObject<ResponseMqttMessage>(response.bodyAsText())
+                        Log.debug()?.d("MQTT response $responseString - message: ${parsedResponse.message}, traceId: ${parsedResponse.traceId}}")
+                    }
+
+                    else -> Log.release().e("MQTT response $responseString - body: ${response.bodyAsText()}")
                 }
             } catch (e: Exception) {
                 Log.release().e("MQTT Request Error", e)
@@ -121,7 +128,7 @@ internal class MqttClient private constructor(
                     sessionConfig as SessionConfig, trustAllCerts as Boolean
                 )
             }
-            throw IllegalStateException("Invalid configuration for MqttClient")
+            throw IllegalStateException("Invalid configuration for ${MqttClient::class.simpleName}")
         }
     }
 }
