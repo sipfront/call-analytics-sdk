@@ -7,4 +7,8 @@ internal object Constants {
     const val MQTT_TIMEOUT_MS_CONNECTION: Long = 10_000
     const val MQTT_TIMEOUT_MS_REQUEST: Long = 30_000
     const val MQTT_TIMEOUT_MS_SOCKET: Long = 60_000
+    const val HTTP_MAX_RETRIES: Int = 5
+    const val HTTP_TIMEOUT_MS_CONNECTION: Long = 10_000
+    const val HTTP_TIMEOUT_MS_REQUEST: Long = 30_000
+    const val HTTP_TIMEOUT_MS_SOCKET: Long = 60_000
 }

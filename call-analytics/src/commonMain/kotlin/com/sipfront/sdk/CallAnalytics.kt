@@ -14,7 +14,7 @@ import com.sipfront.sdk.json.message.SipMessage
 import com.sipfront.sdk.json.message.StateMessage
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.LogParser
-import com.sipfront.sdk.mqtt.MqttClient
+import com.sipfront.sdk.network.client.HttpClient
 import com.sipfront.sdk.network.client.MqttClient
 import com.sipfront.sdk.utils.Platform
 import com.sipfront.sdk.utils.getUserAgent
@@ -104,6 +104,7 @@ object CallAnalytics : ProguardKeep {
     private var logParser: LogParser? = null
     private var sessionConfig: SessionConfig? = null
     private var mqttClient: MqttClient? = null
+    private var httpClient: HttpClient? = null
     internal val rtcpCache: ConcurrentMutableList<RtcpMessage> = ConcurrentMutableList()
 
     @Suppress("MemberVisibilityCanBePrivate")
@@ -229,7 +230,10 @@ object CallAnalytics : ProguardKeep {
         sessionConfig: SessionConfig, config: Config = Config.Builder().build()
     ): Boolean {
         if (!isInitialized()) {
-            initialised.update { initMqttClient(sessionConfig, config.trustAllCerts) }
+            initialised.update {
+                initMqttClient(sessionConfig = sessionConfig, trustAllCerts = config.trustAllCerts) &&
+                        initSipfrontApiClient(sessionConfig = sessionConfig, trustAllCerts = config.trustAllCerts)
+            }
             if (initialised.value) {
                 this.sessionConfig = sessionConfig
                 this.config = config
@@ -358,10 +362,27 @@ object CallAnalytics : ProguardKeep {
                 .sessionData(sessionConfig = sessionConfig)
                 .trustAllCerts(trustAllCerts = trustAllCerts)
                 .build()
-            Log.debug()?.i("Successfully initialized MqttClient")
+            Log.debug()?.i("Successfully initialized ${MqttClient::class.simpleName}")
             true
         } catch (exception: Exception) {
-            Log.release().e("Failed to initialize MqttClient", exception)
+            Log.release().e("Failed to initialize ${MqttClient::class.simpleName}", exception)
+            false
+        }
+    }
+
+    @JvmStatic
+    private fun initSipfrontApiClient(
+        sessionConfig: SessionConfig, trustAllCerts: Boolean
+    ): Boolean {
+        return try {
+            httpClient = HttpClient.Builder()
+                .sessionData(sessionConfig = sessionConfig)
+                .trustAllCerts(trustAllCerts = trustAllCerts)
+                .build()
+            Log.debug()?.i("Successfully initialized ${HttpClient::class.simpleName}")
+            true
+        } catch (exception: Exception) {
+            Log.release().e("Failed to initialize ${HttpClient::class.simpleName}", exception)
             false
         }
     }

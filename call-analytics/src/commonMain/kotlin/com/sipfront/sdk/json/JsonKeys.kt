@@ -89,6 +89,19 @@ internal object JsonKeys {
         }
     }
 
+    object Response {
+        const val status: String = "status"
+
+        object UploadArtifact {
+            const val url: String = "url"
+        }
+
+        object Mqtt {
+            const val message = "message"
+            const val traceId = "traceId"
+        }
+    }
+
     object Media {
         object Stream {
             const val data = "data"
