@@ -246,6 +246,8 @@ buildkonfig {
     val sipfrontApiUser = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.username") else ""
     val sipfrontApiPass = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.password") else ""
     val sipfrontApiServer = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.server") else ""
+    val sipfrontApiToken = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.token") else ""
+    val sipfrontApiUrl = if (isPublishToMavenLocal) localProperties.getProperty("sipfront.api.url") else ""
 
     defaultConfigs {
         buildConfigField(STRING, "VERSION_CODE", libs.versions.version.get())
@@ -255,6 +257,8 @@ buildkonfig {
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_USER", sipfrontApiUser)
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_PASS", sipfrontApiPass)
         buildConfigField(STRING, "SIPFRONT_API_DEBUG_SERVER", sipfrontApiServer)
+        buildConfigField(STRING, "SIPFRONT_API_DEBUG_TOKEN", sipfrontApiToken)
+        buildConfigField(STRING, "SIPFRONT_API_DEBUG_URL", sipfrontApiUrl)
     }
 }
 

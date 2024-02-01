@@ -17,3 +17,5 @@ ossrh.password=<pass>
 sipfront.api.username=<user>
 sipfront.api.password=<pass>
 sipfront.api.server=<server>
+sipfront.api.token=<token>
+sipfront.api.url=<url>

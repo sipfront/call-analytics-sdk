@@ -64,10 +64,8 @@ internal data class SessionConfig(
             "$BASE_PATH${BuildKonfig.SIPFRONT_API_DEBUG_USER}/$OVERRIDE_INSTANCE_ID/$OVERRIDE_SESSION_ID/caller/rtp?qos=$AMZN_IOT_QOS&$AMZN_IOT_AUTH_NAME=$AMZN_IOT_AUTH"
         private val OVERRIDE_MQTT_SIP_PATH: String =
             "$BASE_PATH${BuildKonfig.SIPFRONT_API_DEBUG_USER}/$OVERRIDE_INSTANCE_ID/$OVERRIDE_SESSION_ID/caller/baresip?qos=$AMZN_IOT_QOS&$AMZN_IOT_AUTH_NAME=$AMZN_IOT_AUTH"
-        private const val OVERRIDE_SIPFRONT_API =
-            "https://api.sipfront.com"
-        private const val OVERRIDE_SIPFRONT_API_TOKEN =
-            "eyJhbGciOiJIUzI1NiJ9.eyJzaWQiOiI3ZTg1MDcwYS00YWQxLTExZWItYWYxMC1kMzAxNThjYTM0ZWYiLCJpYXQiOjE2MDkzNTQ5MTksInVpZCI6IjI2ZTNlZGFjLTBjYjgtNDk2ZS1iNWNmLTE4ZmUxZDA0YWM0ZSIsImV4cCI6MTYwOTQ0MTMxOX0.f9uL3uIyudGUWyDdwYBeA65r7mZ4tGmDlMhZwK56KjQ"
+        private val OVERRIDE_SIPFRONT_API_URL = BuildKonfig.SIPFRONT_API_DEBUG_URL
+        private val OVERRIDE_SIPFRONT_API_TOKEN = BuildKonfig.SIPFRONT_API_DEBUG_TOKEN
         private val OVERRIDE_ROLE = Role.CALLER
 
         /**
@@ -84,7 +82,7 @@ internal data class SessionConfig(
                 server = BuildKonfig.SIPFRONT_API_DEBUG_SERVER,
                 mqttRtcpPath = OVERRIDE_MQTT_RTCP_PATH,
                 mqttSipPath = OVERRIDE_MQTT_SIP_PATH,
-                sipfrontApi = OVERRIDE_SIPFRONT_API,
+                sipfrontApi = OVERRIDE_SIPFRONT_API_URL,
                 sipfrontApiToken = OVERRIDE_SIPFRONT_API_TOKEN,
                 role = OVERRIDE_ROLE
             )
