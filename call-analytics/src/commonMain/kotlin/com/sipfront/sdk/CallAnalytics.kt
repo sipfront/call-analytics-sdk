@@ -352,7 +352,7 @@ object CallAnalytics : ProguardKeep {
     @JvmStatic
     @ObjCName("upload")
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun uploadMedia(@ObjCName("audio") mediaStream: MediaStream) {
+    fun uploadMedia(@ObjCName("mediaStream") mediaStream: MediaStream) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
