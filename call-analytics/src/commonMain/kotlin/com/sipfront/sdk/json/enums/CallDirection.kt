@@ -16,15 +16,17 @@ import kotlin.native.ObjCName
 @OptIn(ExperimentalObjCName::class)
 @Serializable(with = CallDirectionSerializer::class)
 @ObjCName("Call")
-enum class CallDirection(override val value: String): EnumValue {
+enum class CallDirection(override val value: String) : EnumValue {
     /**
      * Represents an incoming call.
      */
     INCOMING(Value.incoming),
+
     /**
      * Represents an outgoing call.
      */
     OUTGOING(Value.outgoing),
+
     /**
      * Represents a call with no specific direction.
      */
@@ -48,5 +50,19 @@ enum class CallDirection(override val value: String): EnumValue {
         INCOMING -> OUTGOING
         OUTGOING -> INCOMING
         NONE -> NONE
+    }
+
+    /**
+     * Converts the [CallDirection] to a [Role].
+     *
+     * For instance, if we converted [CallDirection.OUTGOING] the method would return [Role.CALLER].
+     *
+     * @return The [Role] representing the [CallDirection].
+     */
+    @Suppress("unused")
+    internal fun convert(): Role = when (this) {
+        INCOMING -> Role.CALLEE
+        OUTGOING -> Role.CALLER
+        NONE -> Role.NONE
     }
 }
