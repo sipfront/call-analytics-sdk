@@ -29,6 +29,6 @@ This package contains configuration for CallAnalyticsSdk
 
 This package contains message types that can be sent
 
-# Package com.sipfront.sdk.json.message.enums
+# Package com.sipfront.sdk.json.enums
 
-This package contains enums that describe various message
+This package contains enums that describe various json objects like messages

@@ -74,14 +74,30 @@ internal object JsonKeys {
 
     object SessionConfig {
         const val sessionId: String = "session_id"
+        const val instanceId: String = "instance_id"
         const val server: String = "server"
         const val credentials: String = "credentials"
         const val mqttRtcpPath: String = "mqtt_rtcp_path"
         const val mqttSipPath: String = "mqtt_sip_path"
+        const val sipfrontApi: String = "sipfront_api"
+        const val sipfrontApiToken: String = "sipfront_api_token"
+        const val role: String = "role"
 
         object Credentials {
             const val username: String = "username"
             const val password: String = "password"
+        }
+    }
+
+    object Media {
+        object Stream {
+            const val data = "data"
+            const val kind = "kind"
+            const val direction = "direction"
+            const val mimeType = "mime_type"
+            const val mimeTypeBase = "mime_type_base"
+            const val fileName = "file_name"
+            const val codec = "codec"
         }
     }
 }

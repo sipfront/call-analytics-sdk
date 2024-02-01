@@ -11,8 +11,10 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-internal abstract class EnumValueSerializer<T : EnumValue>(private val enumValues: Array<T>) : KSerializer<T>, ProguardKeep {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(EnumValue::class.simpleName!!, PrimitiveKind.STRING)
+internal abstract class EnumValueSerializer<T : EnumValue>(private val enumValues: Array<T>) : KSerializer<T>,
+    ProguardKeep {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(EnumValue::class.simpleName!!, PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: T) {
         encoder.encodeString(value.value)
@@ -28,6 +30,10 @@ internal abstract class EnumValueSerializer<T : EnumValue>(private val enumValue
 internal class MessageClassSerializer : EnumValueSerializer<MessageClass>(MessageClass.entries.toTypedArray())
 internal class CallDirectionSerializer : EnumValueSerializer<CallDirection>(CallDirection.entries.toTypedArray())
 internal class MediaDirectionSerializer : EnumValueSerializer<MediaDirection>(MediaDirection.entries.toTypedArray())
+internal class MediaStreamDirectionSerializer :
+    EnumValueSerializer<MediaStreamDirection>(MediaStreamDirection.entries.toTypedArray())
+
+internal class MediaStreamKindSerializer : EnumValueSerializer<MediaStreamKind>(MediaStreamKind.entries.toTypedArray())
 internal class RtcpSerializer : EnumValueSerializer<MessageType.Rtcp>(MessageType.Rtcp.entries.toTypedArray())
 internal class SipSerializer : EnumValueSerializer<MessageType.Sip>(MessageType.Sip.entries.toTypedArray())
 internal class SdpSerializer : EnumValueSerializer<MessageType.Sdp>(MessageType.Sdp.entries.toTypedArray())

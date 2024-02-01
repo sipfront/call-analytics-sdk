@@ -83,7 +83,7 @@ internal class LogParser {
             Log.debug()
                 ?.v("$DEBUG_LOG_PREFIX ${parsed.sipPacket}\n\nTo: ${parsed.to}\nFrom: ${parsed.from}\nCall-ID: ${parsed.callId}\nCSeq: ${parsed.commandSequence}\nContent-Length: ${parsed.contentLength}\nMessage-Direction: ${parsed.messageType}")
             CallAnalytics.sendSip(
-                msg = SipMessage.Builder().message(parsed.sipPacket).type(parsed.messageType).build()
+                sipMessage = SipMessage.Builder().message(parsed.sipPacket).type(parsed.messageType).build()
             )
             return true
         }
@@ -99,7 +99,7 @@ internal class LogParser {
             }
             Log.debug()?.v("$DEBUG_LOG_PREFIX ${parsed.sdpPacket}")
             CallAnalytics.sendSdp(
-                msg = SdpMessage.Builder().message(parsed.sdpPacket)
+                sdpMessage = SdpMessage.Builder().message(parsed.sdpPacket)
                     /**
                      * We have no info in SDP packets where they are coming from, therefore to prevent
                      * an Exception when building the SdpMessage we set messageType as OUTGOING
