@@ -67,7 +67,7 @@ data class StateMessage internal constructor(
     override val type: MessageType.State,
     @SerialName(JsonKeys.Message.clazz)
     override val clazz: MessageClass,
-    @SerialName(JsonKeys.Message.timestamp)
+    @SerialName(JsonKeys.timestamp)
     override val timestamp: Double = currentTimeMillisFormatted()
 ) : BaseMessage() {
     /**

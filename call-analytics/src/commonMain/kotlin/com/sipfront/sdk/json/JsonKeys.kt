@@ -2,6 +2,7 @@ package com.sipfront.sdk.json
 
 internal object JsonKeys {
     const val param: String = "param"
+    const val timestamp: String = "timestamp"
 
     object Call {
         const val id: String = "id"
@@ -17,7 +18,6 @@ internal object JsonKeys {
     object Message {
         const val clazz: String = "class"
         const val type: String = "type"
-        const val timestamp: String = "timestamp"
     }
 
     object Rtcp {
