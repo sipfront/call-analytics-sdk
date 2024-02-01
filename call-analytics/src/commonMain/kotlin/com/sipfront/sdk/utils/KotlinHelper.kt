@@ -23,6 +23,8 @@ internal object KotlinHelper {
      * }
      * ```
      *
+     * Warning: Do not pass ByteArrays to this method, data will be erased.
+     * Confirmed on JavaScript
      */
     inline fun <T: Any> multiLet(vararg elements: T?, closure: (List<T>) -> Unit) {
         if (elements.all { it != null }) {
@@ -46,6 +48,9 @@ internal object KotlinHelper {
      * KotlinHelper.guardLet("Hello", null, 9) { return }
      * println("Hello")
      * ```
+     *
+     * Warning: Do not pass ByteArrays to this method, data will be erased.
+     * Confirmed on JavaScript
      */
     inline fun <T: Any> guardLet(vararg elements: T?, closure: () -> Nothing): List<T> {
         return if (elements.all { it != null }) {

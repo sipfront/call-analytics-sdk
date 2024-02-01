@@ -121,14 +121,14 @@ data class MediaStream internal constructor(
                 it.ifEmpty { null }
             }
 
+        private fun getExtension(mimeType: String): String = getBaseMimeType(mimeType).substringAfter(delimiter = "/")
+
         private fun getFileName(mimeType: String, mediaStreamDirection: MediaStreamDirection): String {
             val date = getFormattedTimestamp()
             val direction = mediaStreamDirection.toTypeAbbreviated()
             val extension = getExtension(mimeType)
             return "dump-$date-$direction.$extension"
         }
-
-        private fun getExtension(mimeType: String): String = getBaseMimeType(mimeType).substringAfter(delimiter = "/")
 
         private fun getFormattedTimestamp(): String {
             val current = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
@@ -151,16 +151,20 @@ data class MediaStream internal constructor(
          */
         @Throws(IllegalStateException::class)
         fun build(): MediaStream {
-            KotlinHelper.multiLet(data, kind, direction, mimeType) { (data, kind, direction, mimeType) ->
-                return@build MediaStream(
-                    data = data as ByteArray,
-                    kind = kind as MediaStreamKind,
-                    direction = direction as MediaStreamDirection,
-                    mimeType = mimeType as String,
-                    mimeTypeBase = getBaseMimeType(mimeType = mimeType),
-                    codec = getCodec(mimeType = mimeType),
-                    fileName = getFileName(mimeType = mimeType, mediaStreamDirection = direction)
-                )
+            // Checking data separately because ByteArrays passed to multiLet will become null
+            // This is confirmed when using this lib with JavaScript and probably a Kotlin bug
+            data?.let { data ->
+                KotlinHelper.multiLet(kind, direction, mimeType) { (kind, direction, mimeType) ->
+                    return@build MediaStream(
+                        data = data,
+                        kind = kind as MediaStreamKind,
+                        direction = direction as MediaStreamDirection,
+                        mimeType = mimeType as String,
+                        mimeTypeBase = getBaseMimeType(mimeType = mimeType),
+                        codec = getCodec(mimeType = mimeType),
+                        fileName = getFileName(mimeType = mimeType, mediaStreamDirection = direction)
+                    )
+                }
             }
             throw IllegalStateException("Invalid configuration for MediaStream")
         }
