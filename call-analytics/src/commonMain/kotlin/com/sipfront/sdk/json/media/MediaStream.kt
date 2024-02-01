@@ -32,7 +32,7 @@ import kotlin.native.ObjCName
  *
  * @throws IllegalStateException If [data], [kind], [direction] or [mimeType] is missing before calling [Builder.build]
  *
- * @since 1.0.0
+ * @since 1.0.7
  * @author Dominik Ridjic
  */
 @Suppress("NON_EXPORTABLE_TYPE")
