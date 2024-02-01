@@ -10,6 +10,7 @@ import com.sipfront.sdk.json.enums.MessageClass
 import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.json.message.utils.RtcpMath
 import com.sipfront.sdk.utils.KotlinHelper
+import com.sipfront.sdk.utils.currentTimeMillisFormatted
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -75,7 +76,7 @@ data class RtcpMessage internal constructor(
     @Transient val rtt: Double = 0.0,
     @SerialName(JsonKeys.Message.type) override val type: MessageType.Rtcp = MessageType.Rtcp.RTCP,
     @SerialName(JsonKeys.Message.clazz) override val clazz: MessageClass = MessageClass.CALL,
-    @SerialName(JsonKeys.Message.timestamp) override val timestamp: Double = currentTimeMillisFormatted()
+    @SerialName(JsonKeys.timestamp) override val timestamp: Double = currentTimeMillisFormatted()
 ) : BaseMessage() {
     @SerialName(JsonKeys.Rtcp.interfaces)
     internal val interfaces: List<RtcpInterface> = RtcpMath.createRtcpInterface(this)

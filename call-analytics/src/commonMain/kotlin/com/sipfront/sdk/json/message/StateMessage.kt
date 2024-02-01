@@ -8,7 +8,7 @@ import com.sipfront.sdk.json.enums.MessageClass
 import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.json.message.StateMessage.Builder
 import com.sipfront.sdk.json.message.base.BaseMessage
-import com.sipfront.sdk.json.message.enums.*
+import com.sipfront.sdk.utils.currentTimeMillisFormatted
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.experimental.ExperimentalObjCName
@@ -146,6 +146,7 @@ data class StateMessage internal constructor(
         @ObjCName("audio")
         fun audioDirection(direction: MediaDirection) =
             apply { this.audioDirection = direction }
+
         /**
          * Set the [StateMessage.videoDirection] for the [StateMessage].
          *

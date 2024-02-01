@@ -7,6 +7,7 @@ import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.json.enums.MessageClass
 import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.utils.KotlinHelper
+import com.sipfront.sdk.utils.currentTimeMillisFormatted
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.experimental.ExperimentalObjCName
@@ -40,7 +41,7 @@ data class SipMessage internal constructor(
     override val type: MessageType.Sip,
     @SerialName(JsonKeys.Message.clazz)
     override val clazz: MessageClass,
-    @SerialName(JsonKeys.Message.timestamp)
+    @SerialName(JsonKeys.timestamp)
     override val timestamp: Double = currentTimeMillisFormatted()
 ) : BaseMessage() {
     /**
