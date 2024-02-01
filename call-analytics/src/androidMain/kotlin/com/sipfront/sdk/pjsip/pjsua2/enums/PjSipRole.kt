@@ -1,6 +1,6 @@
 package com.sipfront.sdk.pjsip.pjsua2.enums
 
-import com.sipfront.sdk.json.message.enums.CallDirection
+import com.sipfront.sdk.json.enums.CallDirection
 
 enum class PjSipRole(val value: Int) {
     /**

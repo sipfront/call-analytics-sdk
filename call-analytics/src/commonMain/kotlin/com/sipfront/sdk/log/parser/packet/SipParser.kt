@@ -1,6 +1,6 @@
 package com.sipfront.sdk.log.parser.packet
 
-import com.sipfront.sdk.json.message.enums.MessageType
+import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.message.ParsedSipMessage
 

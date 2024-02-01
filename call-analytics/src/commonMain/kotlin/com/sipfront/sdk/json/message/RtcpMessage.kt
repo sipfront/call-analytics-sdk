@@ -4,10 +4,10 @@ import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonKeys
 import com.sipfront.sdk.json.message.RtcpMessage.Builder
 import com.sipfront.sdk.json.message.base.BaseMessage
-import com.sipfront.sdk.json.message.enums.CallDirection
-import com.sipfront.sdk.json.message.enums.MediaDirection
-import com.sipfront.sdk.json.message.enums.MessageClass
-import com.sipfront.sdk.json.message.enums.MessageType
+import com.sipfront.sdk.json.enums.CallDirection
+import com.sipfront.sdk.json.enums.MediaDirection
+import com.sipfront.sdk.json.enums.MessageClass
+import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.json.message.utils.RtcpMath
 import com.sipfront.sdk.utils.KotlinHelper
 import kotlinx.serialization.SerialName

@@ -2,7 +2,7 @@ package com.sipfront.sdk.pjsip.pjsua2
 
 import com.sipfront.sdk.json.message.RtcpMessage
 import com.sipfront.sdk.json.message.SipMessage
-import com.sipfront.sdk.json.message.enums.MessageType
+import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.pjsip.pjsua2.enums.PjMediaDir
 import com.sipfront.sdk.pjsip.pjsua2.enums.PjMediaType

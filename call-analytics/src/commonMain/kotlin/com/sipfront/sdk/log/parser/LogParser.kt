@@ -3,7 +3,7 @@ package com.sipfront.sdk.log.parser
 import com.sipfront.sdk.CallAnalytics
 import com.sipfront.sdk.json.message.SdpMessage
 import com.sipfront.sdk.json.message.SipMessage
-import com.sipfront.sdk.json.message.enums.MessageType
+import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.message.ParsedSdpMessage
 import com.sipfront.sdk.log.parser.message.ParsedSipMessage

@@ -2,6 +2,8 @@ package com.sipfront.sdk.json.message
 
 import com.sipfront.sdk.json.message.enums.CallDirection
 import com.sipfront.sdk.json.message.enums.MediaDirection
+import com.sipfront.sdk.json.enums.CallDirection
+import com.sipfront.sdk.json.enums.MediaDirection
 
 /**
  * This is a JavaScript wrapper for [RtcpMessage]

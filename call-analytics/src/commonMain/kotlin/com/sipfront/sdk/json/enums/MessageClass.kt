@@ -1,4 +1,4 @@
-package com.sipfront.sdk.json.message.enums
+package com.sipfront.sdk.json.enums
 
 import com.sipfront.sdk.interfaces.EnumValue
 import com.sipfront.sdk.json.serializer.MessageClassSerializer

@@ -1,6 +1,6 @@
 package com.sipfront.sdk.log.parser.message
 
-import com.sipfront.sdk.json.message.enums.MessageType
+import com.sipfront.sdk.json.enums.MessageType
 
 internal data class ParsedSipMessage(
     val sipPacket: String,

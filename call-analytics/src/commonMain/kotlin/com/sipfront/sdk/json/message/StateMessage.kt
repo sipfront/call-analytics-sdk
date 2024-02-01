@@ -2,6 +2,11 @@ package com.sipfront.sdk.json.message
 
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonKeys
+import com.sipfront.sdk.json.enums.CallDirection
+import com.sipfront.sdk.json.enums.MediaDirection
+import com.sipfront.sdk.json.enums.MessageClass
+import com.sipfront.sdk.json.enums.MessageType
+import com.sipfront.sdk.json.message.StateMessage.Builder
 import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.json.message.enums.*
 import kotlinx.serialization.SerialName

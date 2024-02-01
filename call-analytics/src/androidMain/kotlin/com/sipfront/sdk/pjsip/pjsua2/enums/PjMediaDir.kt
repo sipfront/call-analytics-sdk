@@ -1,6 +1,6 @@
 package com.sipfront.sdk.pjsip.pjsua2.enums
 
-import com.sipfront.sdk.json.message.enums.MediaDirection
+import com.sipfront.sdk.json.enums.MediaDirection
 
 enum class PjMediaDir(val value: Int) {
     PJMEDIA_DIR_NONE(0),

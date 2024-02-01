@@ -1,4 +1,4 @@
-package com.sipfront.sdk.json.message.enums
+package com.sipfront.sdk.json.enums
 
 /**
  * This is a JavaScript wrapper for [MessageType]

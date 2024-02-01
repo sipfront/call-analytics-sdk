@@ -4,8 +4,8 @@ import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonKeys
 import com.sipfront.sdk.json.message.SipMessage.Builder
 import com.sipfront.sdk.json.message.base.BaseMessage
-import com.sipfront.sdk.json.message.enums.MessageClass
-import com.sipfront.sdk.json.message.enums.MessageType
+import com.sipfront.sdk.json.enums.MessageClass
+import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.utils.KotlinHelper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

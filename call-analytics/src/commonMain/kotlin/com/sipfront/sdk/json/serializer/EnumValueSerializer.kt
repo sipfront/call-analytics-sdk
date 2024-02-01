@@ -2,7 +2,7 @@ package com.sipfront.sdk.json.serializer
 
 import com.sipfront.sdk.interfaces.EnumValue
 import com.sipfront.sdk.interfaces.ProguardKeep
-import com.sipfront.sdk.json.message.enums.*
+import com.sipfront.sdk.json.enums.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
