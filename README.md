@@ -276,6 +276,7 @@ CallAnalytics.sendState(
         .addressRemote(address = "+4912322222")
         .displayNameRemote(displayName = "John Doe")
         .audioDirection(direction = MediaDirection.SEND_RECEIVE)
+        .build()
 )
 ```
 </details>
@@ -294,6 +295,42 @@ do {
         .video(direction: Media.receiveOnly)
         .call(id: "MyCallId")
         .call(direction: Call.incoming)
+        .build())
+} catch {
+    Logger.notifications.error("CallAnalytics request error: \(error)")
+}
+```
+</details>
+
+#### Uploading media stream (audio or video recordings)
+
+Using CallAnalytics.uploadMedia()
+
+<details open>
+  <summary><b>Android</b></summary>
+
+```kotlin
+CallAnalytics.uploadMedia(
+    MediaStream.Builder()
+        .data(data = myMediaStream)         // Of type ByteArray
+        .kind(kind = MediaStreamKind.AUDIO)
+        .direction(direction = MediaStreamDirection.INCOMING)
+        .mimeType(mimeType = "audio/webm; codecs=opus")
+        .build()
+)
+```
+</details>
+
+<details>
+<summary><b>iOS</b></summary>
+
+```swift
+do {
+    try CallAnalytics.shared.upload(mediaStream: MediaStream.Builder()
+        .data(myMediaStream)            // Of type Data
+        .kind(MediaStreamKind.VIDEO)
+        .direction(MediaStreamDirection.OUTGOING)
+        .mimeType("audio/webm")
         .build())
 } catch {
     Logger.notifications.error("CallAnalytics request error: \(error)")
