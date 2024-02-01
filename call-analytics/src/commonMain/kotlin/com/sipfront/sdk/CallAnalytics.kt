@@ -342,6 +342,13 @@ object CallAnalytics : ProguardKeep {
     @JvmStatic
     internal fun getConfig(): Config = config
 
+    /**
+     * Returns current [Config]
+     * @return[Config]
+     */
+    @JvmStatic
+    internal fun getSessionConfig(): SessionConfig? = sessionConfig
+
     @JvmStatic
     private fun initMqttClient(
         sessionConfig: SessionConfig, trustAllCerts: Boolean

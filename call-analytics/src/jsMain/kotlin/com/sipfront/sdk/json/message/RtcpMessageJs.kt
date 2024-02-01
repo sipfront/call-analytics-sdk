@@ -1,7 +1,6 @@
 package com.sipfront.sdk.json.message
 
-import com.sipfront.sdk.json.message.enums.CallDirection
-import com.sipfront.sdk.json.message.enums.MediaDirection
+import com.sipfront.sdk.CallAnalytics
 import com.sipfront.sdk.json.enums.CallDirection
 import com.sipfront.sdk.json.enums.MediaDirection
 
@@ -28,7 +27,7 @@ class RtcpMessageJs {
     // Creating a default RtcpMessage.Builder with defaults for data which we can't extract from WebRTC
     private val builder: RtcpMessage.Builder =
         RtcpMessage.Builder()
-            .callDirection(CallDirection.NONE)
+            .callDirection(CallAnalytics.getSessionConfig()?.role?.convert() ?: CallDirection.NONE)
 
     /**
      * @see [RtcpMessage.Builder.addressLocal]
