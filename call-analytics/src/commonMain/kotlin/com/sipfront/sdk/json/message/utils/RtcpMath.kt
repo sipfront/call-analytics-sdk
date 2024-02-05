@@ -80,7 +80,7 @@ internal object RtcpMath {
     }
 
     private fun calculateRate(currentVal: Long, previousVal: Long?, elapsedTimeSeconds: Double): Long {
-        if (previousVal == null || elapsedTimeSeconds <= 0 || (currentVal - previousVal) == 0L) return 0L
+        if (previousVal == null || elapsedTimeSeconds <= 0 || (currentVal - previousVal) <= 0L) return 0L
         return validOrNull((currentVal - previousVal) / elapsedTimeSeconds).roundToLong()
     }
 
