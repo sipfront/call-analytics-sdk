@@ -312,8 +312,7 @@ Using CallAnalytics.uploadMedia()
 ```kotlin
 CallAnalytics.uploadMedia(
     MediaStream.Builder()
-        .data(data = myMediaStream)         // Of type ByteArray
-        .kind(kind = MediaStreamKind.AUDIO)
+        .data(data = myMediaStream)     // Of type ByteArray
         .direction(direction = MediaStreamDirection.INCOMING)
         .mimeType(mimeType = "audio/webm; codecs=opus")
         .build()
@@ -328,9 +327,8 @@ CallAnalytics.uploadMedia(
 do {
     try CallAnalytics.shared.upload(mediaStream: MediaStream.Builder()
         .data(myMediaStream)            // Of type Data
-        .kind(MediaStreamKind.VIDEO)
         .direction(MediaStreamDirection.OUTGOING)
-        .mimeType("audio/webm")
+        .mimeType("video/webm; codecs=vp9")
         .build())
 } catch {
     Logger.notifications.error("CallAnalytics request error: \(error)")
