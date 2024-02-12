@@ -5,6 +5,8 @@ import com.sipfront.sdk.json.message.SdpMessage
 import com.sipfront.sdk.json.message.SipMessage
 import com.sipfront.sdk.json.message.StateMessage
 import com.sipfront.sdk.json.message.base.BaseMessage
+import com.sipfront.sdk.utils.OsFamily
+import com.sipfront.sdk.utils.Platform
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
@@ -29,8 +31,9 @@ internal object JsonParser {
         encodeDefaults = true
         explicitNulls = false
         isLenient = true
-        prettyPrint = true
+        prettyPrint = Platform.getOsFamily() != OsFamily.JAVASCRIPT
     }
+
     @Throws(SerializationException::class, IllegalArgumentException::class)
     inline fun <reified T> toString(value: T): String {
         return json.encodeToString(value)

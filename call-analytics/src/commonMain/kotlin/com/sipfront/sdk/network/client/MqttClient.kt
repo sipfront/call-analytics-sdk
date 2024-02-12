@@ -11,8 +11,10 @@ import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.json.response.ResponseMqttMessage
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.network.config.getHttpClientEngine
+import com.sipfront.sdk.utils.*
 import com.sipfront.sdk.utils.DispatcherProvider
 import com.sipfront.sdk.utils.KotlinHelper
+import com.sipfront.sdk.utils.Platform
 import com.sipfront.sdk.utils.getUserAgent
 import io.ktor.client.*
 import io.ktor.client.plugins.*
@@ -89,7 +91,8 @@ internal class MqttClient private constructor(
             is RtcpMessage -> rtcpUrl
             else -> throw IllegalArgumentException("Not supported MQTT message type ${message::class.simpleName}")
         }
-        Log.debug()?.v { "MQTT request to URL: $url\nBody:${JsonParser.toString(message)}" }
+        val separator = if (Platform.getOsFamily() != OsFamily.JAVASCRIPT) "\n" else " "
+        Log.debug()?.v { "MQTT request to URL: ${url}${separator}Body:${separator}${JsonParser.toString(message)}" }
         CoroutineScope(DispatcherProvider.IO).launch {
             try {
                 val response: HttpResponse = httpClient.request {
