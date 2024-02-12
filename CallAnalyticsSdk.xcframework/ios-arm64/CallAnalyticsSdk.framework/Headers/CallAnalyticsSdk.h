@@ -6,7 +6,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@class CASCallAnalytics, CASSessionParams, CASConfig, CASRtcpMessage, CASSdpMessage, CASSipMessage, CASStateMessage, CASMediaStream, CASConfigCompanion, CASConfigBuilder, CASKotlinEnumCompanion, CASKotlinEnum<E>, CASCallCompanion, CASCall, CASKotlinArray<T>, CASMediaCompanion, CASMedia, CASMediaStreamDirectionCompanion, CASMediaStreamDirection, CASMediaStreamKindCompanion, CASMediaStreamKind, CASMessageRtcpCompanion, CASMessageRtcp, CASMessageSdpCompanion, CASMessageSdp, CASMessageSipCompanion, CASMessageSip, CASMessageStateCompanion, CASMessageState, CASRoleCompanion, CASRole, CASMediaStreamCompanion, CASKotlinByteArray, CASMediaStreamBuilder, CASBaseMessageCompanion, CASBaseMessage, CASRtcpMessageCompanion, CASRtcpMessageBuilder, CASSdpMessageCompanion, CASSdpMessageBuilder, CASSipMessageCompanion, CASSipMessageBuilder, CASStateMessageCompanion, CASStateMessageBuilder, CASKotlinThrowable, CASKotlinException, CASKotlinRuntimeException, CASKotlinIllegalArgumentException, CASKotlinByteIterator, CASKotlinx_serialization_coreSerializersModule, CASKotlinx_serialization_coreSerialKind, CASKotlinNothing;
+@class CASCallAnalytics, CASSessionParams, CASConfig, CASRtcpMessage, CASSdpMessage, CASSipMessage, CASStateMessage, CASMediaStream, CASConfigCompanion, CASConfigBuilder, CASKotlinEnumCompanion, CASKotlinEnum<E>, CASCallCompanion, CASCall, CASKotlinArray<T>, CASMediaCompanion, CASMedia, CASMediaStreamDirectionCompanion, CASMediaStreamDirection, CASMessageRtcpCompanion, CASMessageRtcp, CASMessageSdpCompanion, CASMessageSdp, CASMessageSipCompanion, CASMessageSip, CASMessageStateCompanion, CASMessageState, CASRoleCompanion, CASRole, CASMediaStreamCompanion, CASKotlinByteArray, CASMediaStreamBuilder, CASBaseMessageCompanion, CASBaseMessage, CASRtcpMessageCompanion, CASRtcpMessageBuilder, CASSdpMessageCompanion, CASSdpMessageBuilder, CASSipMessageCompanion, CASSipMessageBuilder, CASStateMessageCompanion, CASStateMessageBuilder, CASKotlinThrowable, CASKotlinException, CASKotlinRuntimeException, CASKotlinIllegalArgumentException, CASKotlinByteIterator, CASKotlinx_serialization_coreSerializersModule, CASKotlinx_serialization_coreSerialKind, CASKotlinNothing;
 
 @protocol CASProguardKeep, CASKotlinx_serialization_coreKSerializer, CASKotlinComparable, CASEnumValue, CASMessage, CASKotlinx_serialization_coreEncoder, CASKotlinx_serialization_coreSerialDescriptor, CASKotlinx_serialization_coreSerializationStrategy, CASKotlinx_serialization_coreDecoder, CASKotlinx_serialization_coreDeserializationStrategy, CASKotlinIterator, CASKotlinx_serialization_coreCompositeEncoder, CASKotlinAnnotation, CASKotlinx_serialization_coreCompositeDecoder, CASKotlinx_serialization_coreSerializersModuleCollector, CASKotlinKClass, CASKotlinKDeclarationContainer, CASKotlinKAnnotatedElement, CASKotlinKClassifier;
 
@@ -382,37 +382,6 @@ __attribute__((swift_name("MediaStreamDirection.Companion")))
 - (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
 @end
 
-
-/**
- * @note annotations
- *   kotlinx.serialization.Serializable(with=NormalClass(value=com/sipfront/sdk/json/serializer/MediaStreamKindSerializer))
-*/
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MediaStreamKind")))
-@interface CASMediaStreamKind : CASKotlinEnum<CASMediaStreamKind *> <CASEnumValue>
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-- (instancetype)initWithName:(NSString *)name ordinal:(int32_t)ordinal __attribute__((swift_name("init(name:ordinal:)"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
-@property (class, readonly, getter=companion) CASMediaStreamKindCompanion *companion __attribute__((swift_name("companion")));
-@property (class, readonly) CASMediaStreamKind *audio __attribute__((swift_name("audio")));
-@property (class, readonly) CASMediaStreamKind *video __attribute__((swift_name("video")));
-@property (class, readonly) CASMediaStreamKind *none __attribute__((swift_name("none")));
-+ (CASKotlinArray<CASMediaStreamKind *> *)values __attribute__((swift_name("values()")));
-@property (class, readonly) NSArray<CASMediaStreamKind *> *entries __attribute__((swift_name("entries")));
-@property (readonly) NSString *value __attribute__((swift_name("value")));
-@end
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("MediaStreamKind.Companion")))
-@interface CASMediaStreamKindCompanion : CASBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) CASMediaStreamKindCompanion *shared __attribute__((swift_name("shared")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
-- (id<CASKotlinx_serialization_coreKSerializer>)serializerTypeParamsSerializers:(CASKotlinArray<id<CASKotlinx_serialization_coreKSerializer>> *)typeParamsSerializers __attribute__((swift_name("serializer(typeParamsSerializers:)")));
-@end
-
 __attribute__((swift_name("Message")))
 @protocol CASMessage <CASEnumValue>
 @required
@@ -593,20 +562,14 @@ __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("MediaStream")))
 @interface CASMediaStream : CASBase
 @property (class, readonly, getter=companion) CASMediaStreamCompanion *companion __attribute__((swift_name("companion")));
-- (CASMediaStream *)doCopyData:(CASKotlinByteArray *)data kind:(CASMediaStreamKind *)kind direction:(CASMediaStreamDirection *)direction mimeType:(NSString *)mimeType mimeTypeBase:(NSString *)mimeTypeBase codec:(NSString * _Nullable)codec fileName:(NSString *)fileName timestamp:(double)timestamp __attribute__((swift_name("doCopy(data:kind:direction:mimeType:mimeTypeBase:codec:fileName:timestamp:)")));
+- (CASMediaStream *)doCopyData:(CASKotlinByteArray *)data direction:(CASMediaStreamDirection *)direction mimeType:(id)mimeType fileName:(NSString *)fileName timestamp:(double)timestamp __attribute__((swift_name("doCopy(data:direction:mimeType:fileName:timestamp:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
 
 /**
  * @note annotations
- *   kotlinx.serialization.SerialName(value="codec")
-*/
-@property (readonly) NSString * _Nullable codec __attribute__((swift_name("codec")));
-
-/**
- * @note annotations
- *   kotlinx.serialization.SerialName(value="data")
+ *   kotlinx.serialization.Transient
 */
 @property (readonly) CASKotlinByteArray *data __attribute__((swift_name("data")));
 
@@ -615,36 +578,6 @@ __attribute__((swift_name("MediaStream")))
  *   kotlinx.serialization.SerialName(value="direction")
 */
 @property (readonly) CASMediaStreamDirection *direction __attribute__((swift_name("direction")));
-
-/**
- * @note annotations
- *   kotlinx.serialization.SerialName(value="file_name")
-*/
-@property (readonly) NSString *fileName __attribute__((swift_name("fileName")));
-
-/**
- * @note annotations
- *   kotlinx.serialization.SerialName(value="kind")
-*/
-@property (readonly) CASMediaStreamKind *kind __attribute__((swift_name("kind")));
-
-/**
- * @note annotations
- *   kotlinx.serialization.SerialName(value="mime_type")
-*/
-@property (readonly) NSString *mimeType __attribute__((swift_name("mimeType")));
-
-/**
- * @note annotations
- *   kotlinx.serialization.SerialName(value="mime_type_base")
-*/
-@property (readonly) NSString *mimeTypeBase __attribute__((swift_name("mimeTypeBase")));
-
-/**
- * @note annotations
- *   kotlinx.serialization.SerialName(value="timestamp")
-*/
-@property (readonly) double timestamp __attribute__((swift_name("timestamp")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -660,7 +593,6 @@ __attribute__((swift_name("MediaStream.Builder")))
 - (CASMediaStream * _Nullable)buildAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("build()")));
 - (CASMediaStreamBuilder *)data_:(CASKotlinByteArray *)__ __attribute__((swift_name("data(_:)")));
 - (CASMediaStreamBuilder *)direction_:(CASMediaStreamDirection *)__ __attribute__((swift_name("direction(_:)")));
-- (CASMediaStreamBuilder *)kind_:(CASMediaStreamKind *)__ __attribute__((swift_name("kind(_:)")));
 - (CASMediaStreamBuilder *)mimeType_:(NSString *)__ __attribute__((swift_name("mimeType(_:)")));
 @end
 
