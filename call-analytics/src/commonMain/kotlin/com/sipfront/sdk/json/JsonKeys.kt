@@ -104,13 +104,20 @@ internal object JsonKeys {
 
     object Media {
         object Stream {
-            const val data = "data"
-            const val kind = "kind"
             const val direction = "direction"
             const val mimeType = "mime_type"
-            const val mimeTypeBase = "mime_type_base"
             const val fileName = "file_name"
-            const val codec = "codec"
+
+            object MimeType {
+                const val raw = "raw"
+                const val codec = "codec"
+                const val mediaType = "media_type"
+                const val extension = "extension"
+
+                object Codec {
+                    const val displayName = "display_name"
+                }
+            }
         }
     }
 }

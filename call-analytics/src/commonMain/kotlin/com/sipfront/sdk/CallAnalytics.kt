@@ -153,14 +153,9 @@ object CallAnalytics : ProguardKeep {
         @ObjCName("config") config: Config = Config.Builder().build()
     ): Boolean {
         Log.enableDebugLogs(config.enableDebugLogs)
-        Log.debug()
-            ?.i(
-                "Starting ${getUserAgent()} initialization with ${Config::class.simpleName}: ${
-                    JsonParser.toString(
-                        config
-                    )
-                }"
-            )
+
+        val configString = JsonParser.toString(config)
+        Log.debug()?.i("Starting ${getUserAgent()} initialization with ${Config::class.simpleName}: $configString")
 
         if (!isInitialized()) {
             return try {
@@ -356,10 +351,11 @@ object CallAnalytics : ProguardKeep {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
+        Log.debug()?.i("Uploading ${MediaStream::class.simpleName}: ${JsonParser.toString(mediaStream)}")
         // Upload the artifact
         httpClient?.uploadArtifact(
             data = mediaStream.data,
-            mimeType = mediaStream.mimeTypeBase,
+            mimeType = mediaStream.mimeType.raw,
             fileName = mediaStream.fileName
         ) ?: run {
             throw IllegalStateException("${HttpClient::class.simpleName} hasn't been created")

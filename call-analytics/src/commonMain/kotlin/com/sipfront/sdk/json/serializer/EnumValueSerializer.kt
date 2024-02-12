@@ -33,7 +33,6 @@ internal class MediaDirectionSerializer : EnumValueSerializer<MediaDirection>(Me
 internal class MediaStreamDirectionSerializer :
     EnumValueSerializer<MediaStreamDirection>(MediaStreamDirection.entries.toTypedArray())
 
-internal class MediaStreamKindSerializer : EnumValueSerializer<MediaStreamKind>(MediaStreamKind.entries.toTypedArray())
 internal class RoleSerializer : EnumValueSerializer<Role>(Role.entries.toTypedArray())
 internal class RtcpSerializer : EnumValueSerializer<MessageType.Rtcp>(MessageType.Rtcp.entries.toTypedArray())
 internal class SipSerializer : EnumValueSerializer<MessageType.Sip>(MessageType.Sip.entries.toTypedArray())

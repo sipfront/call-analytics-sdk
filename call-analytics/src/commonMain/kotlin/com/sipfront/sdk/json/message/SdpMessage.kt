@@ -2,10 +2,10 @@ package com.sipfront.sdk.json.message
 
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonKeys
-import com.sipfront.sdk.json.message.SdpMessage.Builder
-import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.json.enums.MessageClass
 import com.sipfront.sdk.json.enums.MessageType
+import com.sipfront.sdk.json.message.SdpMessage.Builder
+import com.sipfront.sdk.json.message.base.BaseMessage
 import com.sipfront.sdk.utils.KotlinHelper
 import com.sipfront.sdk.utils.currentTimeMillisFormatted
 import kotlinx.serialization.SerialName
@@ -51,7 +51,7 @@ data class SdpMessage internal constructor(
         private var type: MessageType.Sdp? = null
 
         /**
-         * Sent or received SDP message, mandatory property
+         * Sent or received an SDP message, mandatory property
          */
         fun message(@ObjCName("_") message: String) = apply { this.message = message }
 

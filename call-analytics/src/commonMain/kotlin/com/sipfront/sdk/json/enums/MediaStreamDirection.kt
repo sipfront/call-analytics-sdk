@@ -47,13 +47,8 @@ enum class MediaStreamDirection(override val value: String) : EnumValue {
         INCOMING -> OUTGOING
     }
 
-    internal fun toType(): String = when (this) {
+    internal fun toMode(): String = when (this) {
         OUTGOING -> "encoding"
         INCOMING -> "decoding"
-    }
-
-    internal fun toTypeAbbreviated(): String = when (this) {
-        OUTGOING -> "enc"
-        INCOMING -> "dec"
     }
 }
