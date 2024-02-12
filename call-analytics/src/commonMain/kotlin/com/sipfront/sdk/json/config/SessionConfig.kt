@@ -48,7 +48,7 @@ internal data class SessionConfig(
     /**
      * The Sipfront API Token required to communicate with the API
      */
-    @SerialName(JsonKeys.SessionConfig.sipfrontApiToken) val sipfrontApiToken: String
+    @SerialName(JsonKeys.SessionConfig.sipfrontApiToken) val sipfrontApiToken: MaskedString
 ) {
     /**
      * The purpose of this block is to provide a static method that will generate debug data
@@ -74,7 +74,7 @@ internal data class SessionConfig(
         internal fun debugData(): SessionConfig {
             return SessionConfig(
                 credentials = Credentials(
-                    username = MaskedString(BuildKonfig.SIPFRONT_API_DEBUG_USER, 3),
+                    username = MaskedString(BuildKonfig.SIPFRONT_API_DEBUG_USER),
                     password = MaskedString(BuildKonfig.SIPFRONT_API_DEBUG_PASS)
                 ),
                 sessionId = OVERRIDE_SESSION_ID,
@@ -83,7 +83,7 @@ internal data class SessionConfig(
                 mqttRtcpPath = OVERRIDE_MQTT_RTCP_PATH,
                 mqttSipPath = OVERRIDE_MQTT_SIP_PATH,
                 sipfrontApi = OVERRIDE_SIPFRONT_API_URL,
-                sipfrontApiToken = OVERRIDE_SIPFRONT_API_TOKEN,
+                sipfrontApiToken = MaskedString(OVERRIDE_SIPFRONT_API_TOKEN),
                 role = OVERRIDE_ROLE
             )
         }

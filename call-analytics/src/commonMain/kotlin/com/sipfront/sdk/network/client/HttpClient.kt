@@ -94,7 +94,7 @@ internal class HttpClient private constructor(
             val response: HttpResponse = httpClient.request {
                 method = HttpMethod.Get
                 url(url)
-                bearerAuth(sessionConfig.sipfrontApiToken)
+                bearerAuth(sessionConfig.sipfrontApiToken.unmasked())
             }
 
             val responseString = "${response.status.value}/${response.status.description}"
@@ -163,7 +163,7 @@ internal class HttpClient private constructor(
             val response: HttpResponse = httpClient.request {
                 method = HttpMethod.Post
                 url(url)
-                bearerAuth(sessionConfig.sipfrontApiToken)
+                bearerAuth(sessionConfig.sipfrontApiToken.unmasked())
             }
             val responseString = "${response.status.value}/${response.status.description}"
             when (response.status) {
