@@ -107,8 +107,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
                 // custom Intent arguments provided to app by Sipfront test
                 SessionParams(intent),
                 // optional configuration
-                Config.Builder()
-                    .enableDebugLogs(enable = true)
+                SdkConfig.Builder()
+                    .debugLogs(enable = true)
+                    .debugHttpLogs(enable = true)
                     .build()
             )
             if(initialized) {
@@ -133,8 +134,9 @@ struct MyApp: SwiftUI.App {
             let initialized = try CallAnalytics.shared.initialize(
                 params: SessionParams(),
                 // optional configuration of Sdk
-                config: Config.Builder()
+                config: SdkConfig.Builder()
                     .enableDebugLogs(true)
+                    .enableDebugHttpLogs(true)
                     .trustAllCerts(true)
                     .build()
             )
@@ -155,8 +157,8 @@ struct MyApp: SwiftUI.App {
 CallAnalytics.init(
     intent,
     Config.Builder()
-        .enableLogParser(true)    // enables automatic parsing of Logs for SIP/SDP messages
-        .enableDebugLogs(true)    // enables debug logging
+        .logParser(true)          // enables automatic parsing of Logs for SIP/SDP messages
+        .debugLogs(true)          // enables debug logging
         .trustAllCerts(true)      // accepts all certs on SDK HTTPs requests if true
         .build()
 )

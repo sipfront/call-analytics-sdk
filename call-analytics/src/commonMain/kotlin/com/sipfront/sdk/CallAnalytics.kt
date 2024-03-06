@@ -6,7 +6,7 @@ import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.constants.Keys
 import com.sipfront.sdk.interfaces.ProguardKeep
 import com.sipfront.sdk.json.JsonParser
-import com.sipfront.sdk.json.config.Config
+import com.sipfront.sdk.json.config.SdkConfig
 import com.sipfront.sdk.json.config.SessionConfig
 import com.sipfront.sdk.json.enums.MessageType
 import com.sipfront.sdk.json.media.MediaStream
@@ -102,7 +102,7 @@ import kotlin.native.ObjCName
 @JsExport
 object CallAnalytics : ProguardKeep {
     private val initialised: AtomicBoolean = atomic(false)
-    private lateinit var config: Config
+    private lateinit var sdkConfig: SdkConfig
     private var logParser: LogParser? = null
     private var sessionConfig: SessionConfig? = null
     private var mqttClient: MqttClient? = null
@@ -141,7 +141,7 @@ object CallAnalytics : ProguardKeep {
      *  **[CallAnalytics] will immediately start parsing app logs for SIP messages and transmit them if found**
      *
      *  @param sessionParams [SessionParams] contains the data required to register on Sipfront
-     *  @param config [Config] optional configuration to use
+     *  @param sdkConfig [SdkConfig] optional configuration to use
      *  @return [Boolean] true if successfully initialized
      */
     @JvmStatic
@@ -150,21 +150,22 @@ object CallAnalytics : ProguardKeep {
     @JsExport.Ignore
     fun init(
         @ObjCName("params") sessionParams: SessionParams,
-        @ObjCName("config") config: Config = Config.Builder().build()
+        @ObjCName("config") sdkConfig: SdkConfig = SdkConfig.Builder().build()
     ): Boolean {
-        Log.enableDebugLogs(config.enableDebugLogs)
+        Log.enableDebugLogs(sdkConfig.debugLogs)
 
-        val configString = JsonParser.toString<Config>(config)
-        Log.debug()?.i("Starting ${getUserAgent()} initialization with ${Config::class.simpleName}: $configString")
+        val sdkConfigString = JsonParser.toString<SdkConfig>(sdkConfig)
+        Log.debug()
+            ?.i("Starting ${getUserAgent()} initialization with ${SdkConfig::class.simpleName}: $sdkConfigString")
 
         if (!isInitialized()) {
             return try {
-                init(sessionConfig = sessionParams.parse(), config = config)
+                init(sessionConfig = sessionParams.parse(), sdkConfig = sdkConfig)
             } catch (exception: Exception) {
                 if (Platform.isDebug() && Constants.DEBUG_FALLBACK_INIT_DATA) {
                     Log.debug()?.w("Initialization failed", exception)
                     Log.debug()?.i("Creating fallback ${SessionConfig::class.simpleName}")
-                    init(sessionConfig = SessionConfig.debugData(), config = config)
+                    init(sessionConfig = SessionConfig.debugData(), sdkConfig = sdkConfig)
                 } else {
                     throw exception
                 }
@@ -193,7 +194,7 @@ object CallAnalytics : ProguardKeep {
      *  **[CallAnalytics] will immediately start parsing app logs for SIP messages and transmit them if found**
      *
      *  @param json [String] contains the data as JSON required for registering on Sipfront
-     *  @param config [Config] optional configuration to use
+     *  @param sdkConfig [SdkConfig] optional configuration to use
      *  @return [Boolean] true if successfully initialized
      */
     @JvmStatic
@@ -201,14 +202,15 @@ object CallAnalytics : ProguardKeep {
     @ObjCName("initialize")
     @JsName("initWithJson")
     fun init(
-        json: String, config: Config = Config.Builder().build()
+        json: String,
+        @ObjCName("config") sdkConfig: SdkConfig = SdkConfig.Builder().build()
     ): Boolean {
-        Log.enableDebugLogs(config.enableDebugLogs)
+        Log.enableDebugLogs(sdkConfig.debugLogs)
         if (!isInitialized()) {
             return init(
                 sessionConfig = JsonParser.toObject<SessionConfig>(
                     json = json
-                ), config = config
+                ), sdkConfig = sdkConfig
             )
         } else {
             throw IllegalStateException("Already previously initialized with ${SessionConfig::class.simpleName}: $sessionConfig")
@@ -221,27 +223,27 @@ object CallAnalytics : ProguardKeep {
      *  **[CallAnalytics] will immediately start parsing app logs for SIP messages and transmit them if found**
      *
      *  @param sessionConfig [SessionConfig] contains the data required to register on Sipfront
-     *  @param config [Config] optional configuration to use
+     *  @param sdkConfig [SdkConfig] optional configuration to use
      *  @return[Boolean] true if successfully initialized
      */
     @JvmStatic
     @Throws(IllegalStateException::class)
     @ObjCName("initialize")
     private fun init(
-        sessionConfig: SessionConfig, config: Config = Config.Builder().build()
+        sessionConfig: SessionConfig, sdkConfig: SdkConfig = SdkConfig.Builder().build()
     ): Boolean {
         if (!isInitialized()) {
             initialised.update {
-                initMqttClient(sessionConfig = sessionConfig, trustAllCerts = config.trustAllCerts) &&
-                        initSipfrontApiClient(sessionConfig = sessionConfig, trustAllCerts = config.trustAllCerts)
+                initMqttClient(sessionConfig = sessionConfig, sdkConfig = sdkConfig) &&
+                        initHttpClient(sessionConfig = sessionConfig, sdkConfig = sdkConfig)
             }
             if (initialised.value) {
                 this.sessionConfig = sessionConfig
-                this.config = config
+                this.sdkConfig = sdkConfig
                 Log.debug()?.i(
-                    "Successfully initialized ${getUserAgent()} with ${SessionConfig::class.simpleName}: $sessionConfig,  config: $config"
+                    "Successfully initialized ${getUserAgent()} with ${SessionConfig::class.simpleName}: $sessionConfig,  config: $sdkConfig"
                 )
-                if (config.enableLogParser) {
+                if (sdkConfig.logParser) {
                     logParser = LogParser()
                     logParser?.start()
                 }
@@ -371,27 +373,27 @@ object CallAnalytics : ProguardKeep {
     fun isInitialized(): Boolean = initialised.value
 
     /**
-     * Returns current [Config]
-     * @return[Config]
+     * Returns current [SdkConfig]
+     * @return[SdkConfig]
      */
     @JvmStatic
-    internal fun getConfig(): Config = config
+    internal fun getSdkConfig(): SdkConfig = sdkConfig
 
     /**
-     * Returns current [Config]
-     * @return[Config]
+     * Returns current [SdkConfig]
+     * @return[SdkConfig]
      */
     @JvmStatic
     internal fun getSessionConfig(): SessionConfig? = sessionConfig
 
     @JvmStatic
     private fun initMqttClient(
-        sessionConfig: SessionConfig, trustAllCerts: Boolean
+        sessionConfig: SessionConfig, sdkConfig: SdkConfig
     ): Boolean {
         return try {
             mqttClient = MqttClient.Builder()
-                .sessionData(sessionConfig = sessionConfig)
-                .trustAllCerts(trustAllCerts = trustAllCerts)
+                .sessionConfig(sessionConfig = sessionConfig)
+                .sdkConfig(sdkConfig = sdkConfig)
                 .build()
             Log.debug()?.i("Successfully initialized ${MqttClient::class.simpleName}")
             true
@@ -402,13 +404,13 @@ object CallAnalytics : ProguardKeep {
     }
 
     @JvmStatic
-    private fun initSipfrontApiClient(
-        sessionConfig: SessionConfig, trustAllCerts: Boolean
+    private fun initHttpClient(
+        sessionConfig: SessionConfig, sdkConfig: SdkConfig
     ): Boolean {
         return try {
             httpClient = HttpClient.Builder()
-                .sessionData(sessionConfig = sessionConfig)
-                .trustAllCerts(trustAllCerts = trustAllCerts)
+                .sessionConfig(sessionConfig = sessionConfig)
+                .sdkConfig(sdkConfig = sdkConfig)
                 .build()
             Log.debug()?.i("Successfully initialized ${HttpClient::class.simpleName}")
             true

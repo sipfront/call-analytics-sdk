@@ -2,6 +2,7 @@ package com.sipfront.sdk.network.client
 
 import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.json.JsonParser
+import com.sipfront.sdk.json.config.SdkConfig
 import com.sipfront.sdk.json.config.SessionConfig
 import com.sipfront.sdk.json.message.RtcpMessage
 import com.sipfront.sdk.json.message.SdpMessage
@@ -30,9 +31,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 internal class MqttClient private constructor(
-    private val sessionConfig: SessionConfig, trustAllCerts: Boolean
+    private val sessionConfig: SessionConfig, sdkConfig: SdkConfig
 ) {
-    private val httpClient = HttpClient(getHttpClientEngine(trustAllCerts)) {
+    private val httpClient = HttpClient(getHttpClientEngine(sdkConfig.trustAllCerts)) {
         install(Auth) {
             basic {
                 credentials {
@@ -62,7 +63,7 @@ internal class MqttClient private constructor(
             agent = getUserAgent()
         }
         install(Logging) {
-            level = LogLevel.ALL
+            level = if (sdkConfig.debugHttpLogs) LogLevel.ALL else LogLevel.INFO
         }
         expectSuccess = true
     }
@@ -106,7 +107,8 @@ internal class MqttClient private constructor(
                 when (response.status) {
                     HttpStatusCode.OK -> {
                         val parsedResponse = JsonParser.toObject<ResponseMqttMessage>(response.bodyAsText())
-                        Log.debug()?.d("MQTT response $responseString - message: ${parsedResponse.message}, traceId: ${parsedResponse.traceId}}")
+                        Log.debug()
+                            ?.d("MQTT response $responseString - message: ${parsedResponse.message}, traceId: ${parsedResponse.traceId}}")
                     }
 
                     else -> Log.release().e("MQTT response $responseString - body: ${response.bodyAsText()}")
@@ -119,16 +121,20 @@ internal class MqttClient private constructor(
 
     internal class Builder {
         private var sessionConfig: SessionConfig? = null
-        private var trustAllCerts: Boolean = false
+        private var sdkConfig: SdkConfig? = null
 
-        fun sessionData(sessionConfig: SessionConfig) = apply { this.sessionConfig = sessionConfig }
+        fun sessionConfig(sessionConfig: SessionConfig) = apply { this.sessionConfig = sessionConfig }
 
-        fun trustAllCerts(trustAllCerts: Boolean) = apply { this.trustAllCerts = trustAllCerts }
+        fun sdkConfig(sdkConfig: SdkConfig) = apply { this.sdkConfig = sdkConfig }
 
         fun build(): MqttClient {
-            KotlinHelper.multiLet(sessionConfig, trustAllCerts) { (sessionConfig, trustAllCerts) ->
+            KotlinHelper.multiLet(
+                sessionConfig,
+                sdkConfig
+            ) { (sessionConfig, sdkConfig) ->
                 return@build MqttClient(
-                    sessionConfig as SessionConfig, trustAllCerts as Boolean
+                    sessionConfig = sessionConfig as SessionConfig,
+                    sdkConfig = sdkConfig as SdkConfig
                 )
             }
             throw IllegalStateException("Invalid configuration for ${MqttClient::class.simpleName}")

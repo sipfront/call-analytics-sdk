@@ -2,6 +2,7 @@ package com.sipfront.sdk.network.client
 
 import com.sipfront.sdk.constants.Constants
 import com.sipfront.sdk.json.JsonParser
+import com.sipfront.sdk.json.config.SdkConfig
 import com.sipfront.sdk.json.config.SessionConfig
 import com.sipfront.sdk.json.response.ResponseGetUploadArtifactUrl
 import com.sipfront.sdk.log.Log
@@ -23,9 +24,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 internal class HttpClient private constructor(
-    private val sessionConfig: SessionConfig, trustAllCerts: Boolean
+    private val sessionConfig: SessionConfig, sdkConfig: SdkConfig
 ) {
-    private val httpClient = HttpClient(getHttpClientEngine(trustAllCerts)) {
+    private val httpClient = HttpClient(getHttpClientEngine(sdkConfig.trustAllCerts)) {
         install(ContentNegotiation) {
             json(JsonParser.json)
         }
@@ -42,7 +43,7 @@ internal class HttpClient private constructor(
             agent = getUserAgent()
         }
         install(Logging) {
-            level = LogLevel.ALL
+            level = if (sdkConfig.debugHttpLogs) LogLevel.ALL else LogLevel.INFO
         }
         expectSuccess = true
     }
@@ -189,17 +190,20 @@ internal class HttpClient private constructor(
 
     internal class Builder {
         private var sessionConfig: SessionConfig? = null
-        private var trustAllCerts: Boolean = false
+        private var sdkConfig: SdkConfig? = null
 
-        fun sessionData(sessionConfig: SessionConfig) = apply { this.sessionConfig = sessionConfig }
+        fun sessionConfig(sessionConfig: SessionConfig) = apply { this.sessionConfig = sessionConfig }
 
-        fun trustAllCerts(trustAllCerts: Boolean) = apply { this.trustAllCerts = trustAllCerts }
+        fun sdkConfig(sdkConfig: SdkConfig) = apply { this.sdkConfig = sdkConfig }
 
         fun build(): HttpClient {
-            KotlinHelper.multiLet(sessionConfig, trustAllCerts) { (sessionConfig, trustAllCerts) ->
+            KotlinHelper.multiLet(
+                sessionConfig,
+                sdkConfig
+            ) { (sessionConfig, sdkConfig) ->
                 return@build HttpClient(
                     sessionConfig = sessionConfig as SessionConfig,
-                    trustAllCerts = trustAllCerts as Boolean
+                    sdkConfig = sdkConfig as SdkConfig
                 )
             }
             throw IllegalStateException("Invalid configuration for ${HttpClient::class.simpleName}")

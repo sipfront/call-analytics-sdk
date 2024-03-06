@@ -16,8 +16,9 @@ import kotlin.native.ObjCName
  *
  * Encapsulates various configuration options such as enabling PJSUA, log parsing, debug logs, and certificate trust settings.
  *
- * @property enableLogParser Indicates if the log parser should be enabled to automatically parse and send SIP/SDP messages from logs
- * @property enableDebugLogs Indicates if debug logging should be enabled.
+ * @property logParser Indicates if the log parser should be enabled to automatically parse and send SIP/SDP messages from logs
+ * @property debugLogs Indicates if debug logging should be enabled.
+ * @property debugHttpLogs Indicates if debug HTTP logging should be enabled.
  * @property trustAllCerts If set to true, the library will trust all certificates in HTTP requests.
  *
  * @since 1.0.0
@@ -27,27 +28,30 @@ import kotlin.native.ObjCName
 @Suppress("DataClassPrivateConstructor")
 @Serializable
 @JsExport
-data class Config private constructor(
+data class SdkConfig private constructor(
     internal val enablePjsua: Boolean,
-    val enableLogParser: Boolean,
-    val enableDebugLogs: Boolean,
+    val logParser: Boolean,
+    val debugLogs: Boolean,
+    val debugHttpLogs: Boolean,
     val trustAllCerts: Boolean
 ) : ProguardKeep {
     /**
-     * Builder class for [Config].
+     * Builder class for [SdkConfig].
      *
-     * Provides a fluent API to set various properties for the [Config] and then build it.
+     * Provides a fluent API to set various properties for the [SdkConfig] and then build it.
      */
     @Suppress("unused")
     @OptIn(ExperimentalObjCRefinement::class)
     class Builder : ProguardKeep {
-        private var enablePjsua: Boolean = false
-        private var enableLogParser: Boolean = false
-        private var enableDebugLogs: Boolean = Platform.isDebug()
+        private var pjsua: Boolean = false
+        private var logParser: Boolean = false
+        private var debugLogs: Boolean = Platform.isDebug()
+        private var debugHttpLogs: Boolean = Platform.isDebug()
         private var trustAllCerts: Boolean = Platform.isDebug()
 
         @HiddenFromObjC
-        private fun enablePjsua(@ObjCName("_") enable: Boolean) = apply { this.enablePjsua = enable }
+        @ObjCName("enablePjsua")
+        private fun pjsua(@ObjCName("_") enable: Boolean) = apply { this.pjsua = enable }
 
         /**
          * Enables the [com.sipfront.sdk.log.parser.LogParser] to automatically parse and SIP/SDP messages from logs.
@@ -55,14 +59,24 @@ data class Config private constructor(
          * @param enable Boolean flag to enable or disable the log parser.
          */
         @HiddenFromObjC
-        fun enableLogParser(@ObjCName("_") enable: Boolean) = apply { this.enableLogParser = enable }
+        @ObjCName("enableLogParser")
+        fun logParser(@ObjCName("_") enable: Boolean) = apply { this.logParser = enable }
 
         /**
          * Enables or disables debug logging.
          *
          * @param enable Boolean flag to enable or disable debug logs.
          */
-        fun enableDebugLogs(@ObjCName("_") enable: Boolean) = apply { this.enableDebugLogs = enable }
+        @ObjCName("enableDebugLogs")
+        fun debugLogs(@ObjCName("_") enable: Boolean) = apply { this.debugLogs = enable }
+
+        /**
+         * Enables or disables HTTP debug logging.
+         *
+         * @param enable Boolean flag to enable or disable HTTP debug logs.
+         */
+        @ObjCName("enableDebugHttpLogs")
+        fun debugHttpLogs(@ObjCName("_") enable: Boolean) = apply { this.debugHttpLogs = enable }
 
         /**
          * Sets the library to trust all certificates in HTTP requests.
@@ -72,12 +86,12 @@ data class Config private constructor(
         fun trustAllCerts(@ObjCName("_") trustAllCerts: Boolean) = apply { this.trustAllCerts = trustAllCerts }
 
         /**
-         * Constructs the [Config] based on the provided properties.
+         * Constructs the [SdkConfig] based on the provided properties.
          *
-         * @return An instance of [Config].
+         * @return An instance of [SdkConfig].
          */
-        fun build(): Config {
-            return Config(enablePjsua, enableLogParser, enableDebugLogs, trustAllCerts)
+        fun build(): SdkConfig {
+            return SdkConfig(pjsua, logParser, debugLogs, debugHttpLogs, trustAllCerts)
         }
     }
 }
