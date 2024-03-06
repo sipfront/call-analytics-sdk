@@ -154,7 +154,7 @@ object CallAnalytics : ProguardKeep {
     ): Boolean {
         Log.enableDebugLogs(config.enableDebugLogs)
 
-        val configString = JsonParser.toString(config)
+        val configString = JsonParser.toString<Config>(config)
         Log.debug()?.i("Starting ${getUserAgent()} initialization with ${Config::class.simpleName}: $configString")
 
         if (!isInitialized()) {
@@ -206,7 +206,7 @@ object CallAnalytics : ProguardKeep {
         Log.enableDebugLogs(config.enableDebugLogs)
         if (!isInitialized()) {
             return init(
-                sessionConfig = JsonParser.toObject(
+                sessionConfig = JsonParser.toObject<SessionConfig>(
                     json = json
                 ), config = config
             )
@@ -351,7 +351,7 @@ object CallAnalytics : ProguardKeep {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
-        Log.debug()?.i("Uploading ${MediaStream::class.simpleName}: ${JsonParser.toString(mediaStream)}")
+        Log.debug()?.i("Uploading ${MediaStream::class.simpleName}: ${JsonParser.toString<MediaStream>(mediaStream)}")
         // Upload the artifact
         httpClient?.uploadArtifact(
             data = mediaStream.data,
