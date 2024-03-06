@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
 @Suppress("SpellCheckingInspection")
 @Serializable(with = MimeTypeSerializer::class)
 @SerialName("MimeType")
-internal enum class MimeType(
+enum class MimeType(
     @SerialName(JsonKeys.Media.Stream.MimeType.raw) val raw: String,
     @SerialName(JsonKeys.Media.Stream.MimeType.mediaType) val mediaType: MediaType,
     @SerialName(JsonKeys.Media.Stream.MimeType.extension) val extension: Extension,
@@ -62,12 +62,12 @@ internal enum class MimeType(
     }
 
     companion object {
-        internal fun parse(input: String): MimeType? = entries.find { it.raw == input }
+        internal fun find(input: String): MimeType? = entries.find { it.raw == input }
     }
 
     @Serializable
     @SerialName("Codec")
-    internal enum class Codec(
+    enum class Codec(
         @Suppress("unused")
         @SerialName(JsonKeys.Media.Stream.MimeType.Codec.displayName) val displayName: String
     ) : ProguardKeep {
@@ -97,13 +97,15 @@ internal enum class MimeType(
     }
 
     @Serializable
-    internal enum class MediaType : ProguardKeep {
+    @SerialName("MediaType")
+    enum class MediaType : ProguardKeep {
         AUDIO,
         VIDEO;
     }
 
     @Serializable
-    internal enum class Extension : ProguardKeep {
+    @SerialName("Extension")
+    enum class Extension : ProguardKeep {
         WEBM,
         MP4;
     }

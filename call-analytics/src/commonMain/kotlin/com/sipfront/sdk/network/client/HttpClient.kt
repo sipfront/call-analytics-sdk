@@ -198,7 +198,8 @@ internal class HttpClient private constructor(
         fun build(): HttpClient {
             KotlinHelper.multiLet(sessionConfig, trustAllCerts) { (sessionConfig, trustAllCerts) ->
                 return@build HttpClient(
-                    sessionConfig as SessionConfig, trustAllCerts as Boolean
+                    sessionConfig = sessionConfig as SessionConfig,
+                    trustAllCerts = trustAllCerts as Boolean
                 )
             }
             throw IllegalStateException("Invalid configuration for ${HttpClient::class.simpleName}")

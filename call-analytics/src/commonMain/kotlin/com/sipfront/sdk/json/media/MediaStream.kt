@@ -5,7 +5,6 @@ import com.sipfront.sdk.json.JsonKeys
 import com.sipfront.sdk.json.enums.MediaStreamDirection
 import com.sipfront.sdk.json.enums.MimeType
 import com.sipfront.sdk.json.media.MediaStream.Builder
-import com.sipfront.sdk.utils.KotlinHelper
 import com.sipfront.sdk.utils.currentTimeMillisFormatted
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
@@ -41,10 +40,10 @@ import kotlin.native.ObjCName
 data class MediaStream internal constructor(
     @Transient val data: ByteArray = ByteArray(0),
     @SerialName(JsonKeys.Media.Stream.direction) val direction: MediaStreamDirection,
-    @SerialName(JsonKeys.Media.Stream.mimeType) internal val mimeType: MimeType,
-    @SerialName(JsonKeys.Media.Stream.fileName) internal val fileName: String,
-    @SerialName(JsonKeys.timestamp) internal val timestamp: Double = currentTimeMillisFormatted()
-) {
+    @SerialName(JsonKeys.Media.Stream.mimeType) val mimeType: MimeType,
+    @SerialName(JsonKeys.Media.Stream.fileName) val fileName: String,
+    @SerialName(JsonKeys.timestamp) val timestamp: Double = currentTimeMillisFormatted()
+) : ProguardKeep {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -93,14 +92,11 @@ data class MediaStream internal constructor(
         fun direction(@ObjCName("_") direction: MediaStreamDirection) = apply { this.direction = direction }
 
         /**
-         * The mime-type
+         * The [MimeType]
          */
-        fun mimeType(@ObjCName("_") mimeType: String) = apply { this.mimeType = MimeType.parse(mimeType) }
+        fun mimeType(@ObjCName("_") mimeType: String) = apply { this.mimeType = MimeType.find(mimeType) }
 
-        private fun getFileName(
-            mimeType: MimeType,
-            mediaStreamDirection: MediaStreamDirection
-        ): String {
+        private fun getFileName(mimeType: MimeType, mediaStreamDirection: MediaStreamDirection): String {
             val date = getFormattedTimestamp()
             val mode = mediaStreamDirection.toMode().substring(0, 3)
             val codec = mimeType.codec?.let { "${it.toString().lowercase()}-" } ?: run { "" }
@@ -131,15 +127,18 @@ data class MediaStream internal constructor(
         @Throws(IllegalStateException::class)
         fun build(): MediaStream {
             // Checking data separately because ByteArrays passed to multiLet will become null
+            // Also MimeType and MediaStreamDirection cause issues when using in muliLet
             // This is confirmed when using this lib with JavaScript and probably a Kotlin bug
             data?.let { data ->
-                KotlinHelper.multiLet(direction, mimeType) { (direction, mimeType) ->
-                    return@build MediaStream(
-                        data = data,
-                        direction = direction as MediaStreamDirection,
-                        mimeType = mimeType as MimeType,
-                        fileName = getFileName(mimeType = mimeType, mediaStreamDirection = direction)
-                    )
+                mimeType?.let { mimeType ->
+                    direction?.let { direction ->
+                        return@build MediaStream(
+                            data = data,
+                            direction = direction,
+                            mimeType = mimeType,
+                            fileName = getFileName(mimeType = mimeType, mediaStreamDirection = direction)
+                        )
+                    }
                 }
             }
             throw IllegalStateException("Invalid configuration for MediaStream")
