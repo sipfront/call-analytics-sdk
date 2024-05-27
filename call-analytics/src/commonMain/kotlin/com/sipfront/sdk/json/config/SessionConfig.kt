@@ -2,7 +2,6 @@ package com.sipfront.sdk.json.config
 
 import com.sipfront.sdk.BuildKonfig
 import com.sipfront.sdk.json.JsonKeys
-import com.sipfront.sdk.json.enums.Role
 import com.sipfront.sdk.utils.MaskedString
 import com.sipfront.sdk.utils.randomUUID
 import kotlinx.serialization.SerialName
@@ -28,7 +27,7 @@ internal data class SessionConfig(
     /**
      * The Sipfront Agents role
      */
-    @SerialName(JsonKeys.SessionConfig.role) val role: Role,
+    @SerialName(JsonKeys.SessionConfig.role) val role: String,
     /**
      * The server address
      */
@@ -54,7 +53,9 @@ internal data class SessionConfig(
      * The purpose of this block is to provide a static method that will generate debug data
      */
     internal companion object {
+        @OptIn(kotlin.js.ExperimentalJsExport::class)
         private val OVERRIDE_SESSION_ID: String = randomUUID()
+        @OptIn(kotlin.js.ExperimentalJsExport::class)
         private val OVERRIDE_INSTANCE_ID: String = randomUUID()
         private const val BASE_PATH: String = "/topics/\$aws/rules/data_rule/dt/agent/"
         private const val AMZN_IOT_QOS: Int = 1
@@ -66,7 +67,7 @@ internal data class SessionConfig(
             "$BASE_PATH${BuildKonfig.SIPFRONT_API_DEBUG_USER}/$OVERRIDE_INSTANCE_ID/$OVERRIDE_SESSION_ID/caller/baresip?qos=$AMZN_IOT_QOS&$AMZN_IOT_AUTH_NAME=$AMZN_IOT_AUTH"
         private val OVERRIDE_SIPFRONT_API_URL = BuildKonfig.SIPFRONT_API_DEBUG_URL
         private val OVERRIDE_SIPFRONT_API_TOKEN = BuildKonfig.SIPFRONT_API_DEBUG_TOKEN
-        private val OVERRIDE_ROLE = Role.CALLER
+        private const val OVERRIDE_ROLE = "caller"
 
         /**
          * Provides [SessionConfig] from hardcoded data for debug purposes

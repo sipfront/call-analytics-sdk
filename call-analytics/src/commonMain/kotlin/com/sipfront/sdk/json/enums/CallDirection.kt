@@ -51,18 +51,4 @@ enum class CallDirection(override val value: String) : EnumValue {
         OUTGOING -> INCOMING
         NONE -> NONE
     }
-
-    /**
-     * Converts the [CallDirection] to a [Role].
-     *
-     * For instance, if we converted [CallDirection.OUTGOING] the method would return [Role.CALLER].
-     *
-     * @return The [Role] representing the [CallDirection].
-     */
-    @Suppress("unused")
-    internal fun convert(): Role = when (this) {
-        INCOMING -> Role.CALLEE
-        OUTGOING -> Role.CALLER
-        NONE -> Role.NONE
-    }
 }

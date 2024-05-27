@@ -88,7 +88,7 @@ internal class HttpClient private constructor(
         try {
             val url: Url = sipfrontApiUrl.clone().apply {
                 encodedPath = with(sessionConfig) {
-                    "internal/sessions/$sessionId/s3url?name=${fileName}&role=${role.value}&instance_id=$instanceId"
+                    "internal/sessions/$sessionId/s3url?name=$fileName&role=$role&instance_id=$instanceId"
                 }
             }.build()
             Log.debug()?.v { "Trying to get upload url, HTTP GET to URL: $url" }
@@ -158,7 +158,7 @@ internal class HttpClient private constructor(
         try {
             val url: Url = sipfrontApiUrl.clone().apply {
                 encodedPath = with(sessionConfig) {
-                    "internal/sessions/$sessionId/artifacts/confirm?name=${fileName}&role=${role.value}&instance_id=$instanceId"
+                    "internal/sessions/$sessionId/artifacts/confirm?name=$fileName&role=$role&instance_id=$instanceId"
                 }
             }.build()
             val response: HttpResponse = httpClient.request {

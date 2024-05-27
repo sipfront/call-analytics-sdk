@@ -25,9 +25,8 @@ class RtcpMessageJs {
     }
 
     // Creating a default RtcpMessage.Builder with defaults for data which we can't extract from WebRTC
-    private val builder: RtcpMessage.Builder =
-        RtcpMessage.Builder()
-            .callDirection(CallAnalytics.getSessionConfig()?.role?.convert() ?: CallDirection.NONE)
+    private val builder: RtcpMessage.Builder = RtcpMessage.Builder()
+        .callDirection(CallDirection.NONE)
 
     /**
      * @see [RtcpMessage.Builder.addressLocal]
