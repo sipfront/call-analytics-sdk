@@ -27,3 +27,8 @@ After this a Github release workflow should start that generates API documentati
 * Run Validation: ```pod spec lint CallAnalyticsSdk.podspec```
 * Push to CocoaPods ```pod trunk push CallAnalyticsSdk.podspec```
 * You should get a confirmation email that a new version of CallAnalyticsSdk has been released
+
+### Build locally
+
+* Javascript Web Apps: Run Gradle task root/Tasks/build/jsBrowserProductionWebPack or jsBrowserDevelopmentWebPack
+* Maven Local: Run Gradle task root/Tasks/publishing/publishToMavenLocal
