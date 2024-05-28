@@ -3,8 +3,9 @@
 ### Github
 
 * Bump version property in gradle/libs.version.toml file
-* Run Gradle task buildkonfig/generateBuildKonfig
-* Run Gradle task cocoapods/podPublishReleaseXCFramework
+* Run Gradle task root/Tasks/buildkonfig/generateBuildKonfig
+* Run Gradle task root/Tasks/cocoapods/podPublishReleaseXCFramework
+* Run Gradle task root/call-analytics/Tasks/cocoapods/podPublishReleasePodspec
 * Commit changed files (gradle/libs.version.toml, CallAnalyticsSdk.xcframework, CallAnalyticsSdk.podspec and call-analytics/CallAnalyticsSdk.podspec)
 * Create a new Git Tag in format *.*.* on HEAD (last commit)
 * Push commit and tag to Github
@@ -14,7 +15,7 @@ After this a Github release workflow should start that generates API documentati
 ### Maven Central
 
 * Make sure secring.gpg and correctly configured local.properties is present in project root
-* Run Gradle task publishing/publishAllPublicationsToSonatypeRepository
+* Run Gradle task root/Tasks/publishing/publishAllPublicationsToSonatypeRepository
 * Login to Nexus Repository Manager at https://s01.oss.sonatype.org/#stagingRepositories
 * Close new repository entry
 * Once the release has been closed, release it with the option to automatically drop enabled
