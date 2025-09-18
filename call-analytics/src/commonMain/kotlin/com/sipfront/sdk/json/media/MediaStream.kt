@@ -80,6 +80,7 @@ data class MediaStream internal constructor(
         private var data: ByteArray? = null
         private var direction: MediaStreamDirection? = null
         private var mimeType: MimeType? = null
+        private var fileName: String? = null
 
         /**
          * The audio or video data of the [MediaStream] as [ByteArray]
@@ -96,27 +97,10 @@ data class MediaStream internal constructor(
          */
         fun mimeType(@ObjCName("_") mimeType: String) = apply { this.mimeType = MimeType.find(mimeType) }
 
-        private fun getFileName(mimeType: MimeType, mediaStreamDirection: MediaStreamDirection): String {
-            val date = getFormattedTimestamp()
-            val mode = mediaStreamDirection.toMode().substring(0, 3)
-            val codec = mimeType.codec?.let { "${it.toString().lowercase()}-" } ?: run { "" }
-            val extension = mimeType.extension.toString().lowercase()
-            val mediaType = mimeType.mediaType.toString().lowercase()
-            return "dump-$date-$mediaType-$codec$mode.$extension"
-        }
-
-        private fun getFormattedTimestamp(): String {
-            val current = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            return current.toFormattedString()
-        }
-
-        private fun LocalDateTime.toFormattedString(): String {
-            return "${this.year}-${this.monthNumber.toString().padStart(2, '0')}-${
-                this.dayOfMonth.toString().padStart(2, '0')
-            }-${this.hour.toString().padStart(2, '0')}-${this.minute.toString().padStart(2, '0')}-${
-                this.second.toString().padStart(2, '0')
-            }"
-        }
+        /**
+         * The file name for this media stream.
+         */
+        fun fileName(@ObjCName("_") fileName: String) = apply { this.fileName = fileName }
 
         /**
          * Constructs the [MediaStream] based on the provided properties.
@@ -132,12 +116,14 @@ data class MediaStream internal constructor(
             data?.let { data ->
                 mimeType?.let { mimeType ->
                     direction?.let { direction ->
-                        return@build MediaStream(
-                            data = data,
-                            direction = direction,
-                            mimeType = mimeType,
-                            fileName = getFileName(mimeType = mimeType, mediaStreamDirection = direction)
-                        )
+                        fileName?.let { fileName ->
+                            return@build MediaStream(
+                                data = data,
+                                direction = direction,
+                                mimeType = mimeType,
+                                fileName = fileName
+                            )
+                        }
                     }
                 }
             }
