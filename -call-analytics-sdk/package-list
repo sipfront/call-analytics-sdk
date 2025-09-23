@@ -173,6 +173,7 @@ $dokka.location:com.sipfront.sdk.json.media/MediaStream.Builder/Builder/#/Pointi
 $dokka.location:com.sipfront.sdk.json.media/MediaStream.Builder/build/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/-builder/build.html
 $dokka.location:com.sipfront.sdk.json.media/MediaStream.Builder/data/#kotlin.ByteArray/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/-builder/data.html
 $dokka.location:com.sipfront.sdk.json.media/MediaStream.Builder/direction/#com.sipfront.sdk.json.enums.MediaStreamDirection/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/-builder/direction.html
+$dokka.location:com.sipfront.sdk.json.media/MediaStream.Builder/fileName/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/-builder/file-name.html
 $dokka.location:com.sipfront.sdk.json.media/MediaStream.Builder/mimeType/#kotlin.String/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/-builder/mime-type.html
 $dokka.location:com.sipfront.sdk.json.media/MediaStream///PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/index.html
 $dokka.location:com.sipfront.sdk.json.media/MediaStream/data/#/PointingToDeclaration/-call-analytics-sdk/com.sipfront.sdk.json.media/-media-stream/data.html
