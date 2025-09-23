@@ -51,8 +51,8 @@ fun getExtraString(name: String) = ext[name]?.toString()
 publishing {
     repositories {
         maven {
-            name = "sonatype"
-            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            name = "ossrhStagingApi"
+            setUrl("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
             credentials {
                 username = getExtraString("ossrh.username")
                 password = getExtraString("ossrh.password")
