@@ -753,6 +753,7 @@ __attribute__((swift_name("MediaStream.Builder")))
 - (CASMediaStream * _Nullable)buildAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("build()")));
 - (CASMediaStreamBuilder *)data_:(CASKotlinByteArray *)__ __attribute__((swift_name("data(_:)")));
 - (CASMediaStreamBuilder *)direction_:(CASMediaStreamDirection *)__ __attribute__((swift_name("direction(_:)")));
+- (CASMediaStreamBuilder *)fileName_:(NSString *)__ __attribute__((swift_name("fileName(_:)")));
 - (CASMediaStreamBuilder *)mimeType_:(NSString *)__ __attribute__((swift_name("mimeType(_:)")));
 @end
 
