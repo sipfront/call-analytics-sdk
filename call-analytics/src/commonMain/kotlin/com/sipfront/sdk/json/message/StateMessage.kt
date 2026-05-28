@@ -167,16 +167,7 @@ data class StateMessage internal constructor(
             type?.let { type ->
                 return@build StateMessage(
                     type = type,
-                    clazz = when (type) {
-                        MessageType.State.CALL_RTP_ESTABLISHED -> MessageClass.OTHER
-                        MessageType.State.CREATE -> MessageClass.CREATE
-                        MessageType.State.REGISTER -> MessageClass.REGISTER
-                        MessageType.State.REGISTERING -> MessageClass.REGISTERING
-                        MessageType.State.UNREGISTERING -> MessageClass.UNREGISTERING
-                        MessageType.State.SHUTDOWN -> MessageClass.SHUTDOWN
-                        MessageType.State.EXIT -> MessageClass.EXIT
-                        else -> MessageClass.CALL
-                    },
+                    clazz = type.toMessageClass(),
                     callId = callId,
                     addressLocal = addressLocal,
                     addressRemote = addressRemote,
@@ -188,5 +179,119 @@ data class StateMessage internal constructor(
             }
             throw IllegalStateException("Invalid configuration for StateMessage")
         }
+
+        private fun MessageType.State.toMessageClass(): MessageClass =
+            when (this) {
+                MessageType.State.CREATE,
+                MessageType.State.SHUTDOWN,
+                MessageType.State.EXIT -> MessageClass.APPLICATION
+
+                MessageType.State.REGISTER,
+                MessageType.State.REGISTER_FAILED,
+                MessageType.State.FALLBACK_OK,
+                MessageType.State.FALLBACK_FAILED,
+                MessageType.State.REGISTERING,
+                MessageType.State.UNREGISTERING -> MessageClass.REGISTER
+
+                MessageType.State.MWI_NOTIFY -> MessageClass.MWI
+                MessageType.State.VU_TX,
+                MessageType.State.VU_RX -> MessageClass.VU_REPORT
+                MessageType.State.AUDIO_LATENCY_OUTGOING,
+                MessageType.State.AUDIO_LATENCY_INCOMING -> MessageClass.AUDIO_LATENCY
+                MessageType.State.FAX_SUCCESS,
+                MessageType.State.FAX_FAILED,
+                MessageType.State.FAXMODE_AUDIO,
+                MessageType.State.FAXMODE_T38 -> MessageClass.ASTERISK_FAX
+
+                MessageType.State.SIP_SESSION_CONNECTED,
+                MessageType.State.PHONE_ATTACHED,
+                MessageType.State.PHONE_DETACHED,
+                MessageType.State.PHONE_SELECTED,
+                MessageType.State.PHONE_PROPERTY_CHANGED,
+                MessageType.State.HANDSFREE_PROPERTY_CHANGED,
+                MessageType.State.CALLVOLUME_CHANGED,
+                MessageType.State.CALLMANAGER_PROPERTY_CHANGED,
+                MessageType.State.CALLMANAGER_BARRING_ACTIVE,
+                MessageType.State.CALLMANAGER_FORWARDED -> MessageClass.OTHER
+
+                MessageType.State.CALL_POST_DIAL_DELAY,
+                MessageType.State.CALL_INCOMING,
+                MessageType.State.CALL_OUTGOING,
+                MessageType.State.CALL_RINGING,
+                MessageType.State.CALL_PROGRESS,
+                MessageType.State.CALL_ANSWERED,
+                MessageType.State.CALL_ANSWERING,
+                MessageType.State.CALL_ANSWER_DELAY,
+                MessageType.State.CALL_ESTABLISHED,
+                MessageType.State.CALL_RTP_ESTABLISHED,
+                MessageType.State.CALL_LOCAL_SDP,
+                MessageType.State.CALL_REMOTE_SDP,
+                MessageType.State.CALL_ENDED_LOCAL,
+                MessageType.State.CALL_ENDED_REMOTE,
+                MessageType.State.CALL_REJECTED,
+                MessageType.State.CALL_FAILED,
+                MessageType.State.CALL_BUSY_HERE,
+                MessageType.State.CALL_TEMPORARILY_UNAVAILABLE,
+                MessageType.State.CALL_FORBIDDEN,
+                MessageType.State.CALL_NOT_ACCEPTABLE,
+                MessageType.State.CALL_NOT_FOUND,
+                MessageType.State.CALL_DECLINE,
+                MessageType.State.CALL_CANCEL,
+                MessageType.State.CALL_UNAUTHORIZED,
+                MessageType.State.CALL_PROXY_AUTHENTICATION_REQUIRED,
+                MessageType.State.CALL_CLOSED,
+                MessageType.State.CALL_IN_PROGRESS,
+                MessageType.State.CALL_HOLD,
+                MessageType.State.CALL_RESUME,
+                MessageType.State.CALL_HOLD_LOCAL,
+                MessageType.State.CALL_RESUME_LOCAL,
+                MessageType.State.CALL_TRANSFER,
+                MessageType.State.CALL_TRANSFER_FAILED,
+                MessageType.State.CALL_REDIRECT,
+                MessageType.State.CALL_DTMF_START,
+                MessageType.State.CALL_DTMF_0,
+                MessageType.State.CALL_DTMF_1,
+                MessageType.State.CALL_DTMF_2,
+                MessageType.State.CALL_DTMF_3,
+                MessageType.State.CALL_DTMF_4,
+                MessageType.State.CALL_DTMF_5,
+                MessageType.State.CALL_DTMF_6,
+                MessageType.State.CALL_DTMF_7,
+                MessageType.State.CALL_DTMF_8,
+                MessageType.State.CALL_DTMF_9,
+                MessageType.State.CALL_DTMF_A,
+                MessageType.State.CALL_DTMF_B,
+                MessageType.State.CALL_DTMF_C,
+                MessageType.State.CALL_DTMF_D,
+                MessageType.State.CALL_DTMF_ASTERISK,
+                MessageType.State.CALL_DTMF_POUND,
+                MessageType.State.CALL_DTMF_END,
+                MessageType.State.CALL_SEND_DTMF_START,
+                MessageType.State.CALL_SEND_DTMF_0,
+                MessageType.State.CALL_SEND_DTMF_1,
+                MessageType.State.CALL_SEND_DTMF_2,
+                MessageType.State.CALL_SEND_DTMF_3,
+                MessageType.State.CALL_SEND_DTMF_4,
+                MessageType.State.CALL_SEND_DTMF_5,
+                MessageType.State.CALL_SEND_DTMF_6,
+                MessageType.State.CALL_SEND_DTMF_7,
+                MessageType.State.CALL_SEND_DTMF_8,
+                MessageType.State.CALL_SEND_DTMF_9,
+                MessageType.State.CALL_SEND_DTMF_A,
+                MessageType.State.CALL_SEND_DTMF_B,
+                MessageType.State.CALL_SEND_DTMF_C,
+                MessageType.State.CALL_SEND_DTMF_D,
+                MessageType.State.CALL_SEND_DTMF_ASTERISK,
+                MessageType.State.CALL_SEND_DTMF_POUND,
+                MessageType.State.CALL_SEND_DTMF_END,
+                MessageType.State.CALL_MENC,
+                MessageType.State.AUDIO_ERROR,
+                MessageType.State.CALL_REMOVED,
+                MessageType.State.CALL_HELD,
+                MessageType.State.CALL_WAITING,
+                MessageType.State.CALL_STATE_CHANGED,
+                MessageType.State.CALL_PROPERTY_CHANGED,
+                MessageType.State.CALL_DISCONNECTED -> MessageClass.CALL
+            }
     }
 }
