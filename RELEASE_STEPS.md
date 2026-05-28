@@ -15,8 +15,9 @@ After this a Github release workflow should start that generates API documentati
 ### Maven Central
 
 * Make sure secring.gpg and correctly configured local.properties is present in project root
-* Run Gradle task root/Tasks/publishing/publishAllPublicationsToSonatypeRepository
-* Login to Nexus Repository Manager at https://central.sonatype.com/publishing
+* Run Gradle task root/Tasks/publishing/publishAllPublicationsToCentralPortal
+* If the OSSRH staging upload was already completed, run root/Tasks/publishing/uploadOssrhStagingRepositoryToCentralPortal instead
+* Login to Central Portal at https://central.sonatype.com/publishing/deployments
 * Check if the new version is present and click the "Publish" button if everything is fine, if not, click "Drop"
 
 ### CocoaPods
