@@ -61,6 +61,14 @@ class RtcpMessageJs {
     }
 
     /**
+     * @see [RtcpMessage.Builder.txLost]
+     */
+    fun txLost(lost: String) = apply {
+        builder.txLost(lost.toLong())
+        return@apply
+    }
+
+    /**
      * @see [RtcpMessage.Builder.txBytes]
      */
     fun txBytes(bytes: String) = apply {

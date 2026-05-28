@@ -41,11 +41,13 @@ internal object JsonKeys {
             object Ingress {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
+                const val packetsLost: String = "packets_lost"
             }
 
             object Egress {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
+                const val packetsLost: String = "packets_lost"
             }
 
             object IngressRate {

@@ -39,6 +39,7 @@ import kotlin.native.ObjCName
  * @property rxAudioLevel The audio level of incoming media.
  * @property rxTotalAudioEnergy The total audio energy of incoming media over the lifetime of the call.
  * @property txPackets The total number of sent RTP packets.
+ * @property txLost The total number of RTP packets lost during transmission.
  * @property txBytes The total number of sent RTP bytes.
  * @property txAudioLevel The audio level of outgoing media.
  * @property txTotalAudioEnergy The total audio energy of outgoing media over the lifetime of the call.
@@ -70,6 +71,7 @@ data class RtcpMessage internal constructor(
     @Transient val rxAudioLevel: Double = 0.0,
     @Transient val rxTotalAudioEnergy: Double = 0.0,
     @Transient val txPackets: Long = 0L,
+    @Transient val txLost: Long = 0L,
     @Transient val txBytes: Long = 0L,
     @Transient val txAudioLevel: Double = 0.0,
     @Transient val txTotalAudioEnergy: Double = 0.0,
@@ -103,6 +105,7 @@ data class RtcpMessage internal constructor(
         private var rxAudioLevel: Double = 0.0
         private var rxTotalAudioEnergy: Double = 0.0
         private var txPackets: Long = 0L
+        private var txLost: Long = 0L
         private var txBytes: Long = 0L
         private var txAudioLevel: Double = 0.0
         private var txTotalAudioEnergy: Double = 0.0
@@ -156,6 +159,12 @@ data class RtcpMessage internal constructor(
          */
         @ObjCName("tx")
         fun txPackets(packets: Long) = apply { this.txPackets = packets }
+
+        /**
+         * Total number of TX (transmitted) RTP packets lost
+         */
+        @ObjCName("tx")
+        fun txLost(lost: Long) = apply { this.txLost = lost }
 
         /**
          * Total number of TX (transmitted) RTP bytes
@@ -260,6 +269,7 @@ data class RtcpMessage internal constructor(
                     rxAudioLevel = rxAudioLevel,
                     rxTotalAudioEnergy = rxTotalAudioEnergy,
                     txPackets = txPackets,
+                    txLost = txLost,
                     txBytes = txBytes,
                     txAudioLevel = txAudioLevel,
                     txTotalAudioEnergy = txTotalAudioEnergy,

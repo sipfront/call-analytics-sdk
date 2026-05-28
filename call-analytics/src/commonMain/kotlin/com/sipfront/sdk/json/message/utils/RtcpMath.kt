@@ -29,6 +29,7 @@ internal object RtcpMath {
         val bytesRxPerSecond: Long = calculateRate(currentMsg.rxBytes, previousMsg?.rxBytes, elapsedTimeSeconds)
         val bytesTxPerSecond: Long = calculateRate(currentMsg.txBytes, previousMsg?.txBytes, elapsedTimeSeconds)
         val lostRxPerSecond: Long = calculateRate(currentMsg.rxLost, previousMsg?.rxLost, elapsedTimeSeconds)
+        val lostTxPerSecond: Long = calculateRate(currentMsg.txLost, previousMsg?.txLost, elapsedTimeSeconds)
         val mos: Double = calculateMeanOpinionScore(currentMsg)
 
         /**
@@ -42,11 +43,13 @@ internal object RtcpMath {
                 ),
                 ingress = Ingress(
                     packets = currentMsg.rxPackets,
-                    bytes = currentMsg.rxBytes
+                    bytes = currentMsg.rxBytes,
+                    packetsLost = lostRxPerSecond
                 ),
                 egress = Egress(
                     packets = currentMsg.txPackets,
-                    bytes = currentMsg.txBytes
+                    bytes = currentMsg.txBytes,
+                    packetsLost = lostTxPerSecond
                 ),
                 ingressRate = IngressRate(
                     packets = packetsRxPerSecond,

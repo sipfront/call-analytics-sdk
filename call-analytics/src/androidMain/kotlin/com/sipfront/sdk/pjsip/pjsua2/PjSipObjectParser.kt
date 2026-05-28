@@ -85,8 +85,10 @@ internal object PjSipObjectParser {
 
                     val txRtcpStreamStat = RtcpStat.getTxStat(rtcpStat)
                     val txSent: Long = RtcpStreamStat.getPkt(txRtcpStreamStat)
+                    val txLost: Long = RtcpStreamStat.getLoss(txRtcpStreamStat)
 
                     builder.txPackets(packets = txSent)
+                    builder.txLost(lost = txLost)
 
                     val rttStat = RtcpStat.getRttUsec(rtcpStat)
                     val rtt: Long = MathStat.getLast(rttStat)
