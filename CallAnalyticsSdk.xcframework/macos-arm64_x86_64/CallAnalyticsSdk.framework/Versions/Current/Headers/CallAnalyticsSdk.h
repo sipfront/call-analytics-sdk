@@ -492,21 +492,110 @@ __attribute__((swift_name("MessageState")))
 @property (class, readonly, getter=companion) CASMessageStateCompanion *companion __attribute__((swift_name("companion")));
 @property (class, readonly) CASMessageState *create __attribute__((swift_name("create")));
 @property (class, readonly) CASMessageState *register_ __attribute__((swift_name("register_")));
+@property (class, readonly) CASMessageState *registerFailed __attribute__((swift_name("registerFailed")));
 @property (class, readonly) CASMessageState *registering __attribute__((swift_name("registering")));
 @property (class, readonly) CASMessageState *unregistering __attribute__((swift_name("unregistering")));
+@property (class, readonly) CASMessageState *fallbackOk __attribute__((swift_name("fallbackOk")));
+@property (class, readonly) CASMessageState *fallbackFailed __attribute__((swift_name("fallbackFailed")));
+@property (class, readonly) CASMessageState *mwiNotify __attribute__((swift_name("mwiNotify")));
 @property (class, readonly) CASMessageState *shutdown __attribute__((swift_name("shutdown")));
 @property (class, readonly) CASMessageState *exit __attribute__((swift_name("exit")));
+@property (class, readonly) CASMessageState *sipSessionConnected __attribute__((swift_name("sipSessionConnected")));
+@property (class, readonly) CASMessageState *callPostDialDelay __attribute__((swift_name("callPostDialDelay")));
 @property (class, readonly) CASMessageState *callIncoming __attribute__((swift_name("callIncoming")));
 @property (class, readonly) CASMessageState *callOutgoing __attribute__((swift_name("callOutgoing")));
 @property (class, readonly) CASMessageState *callRinging __attribute__((swift_name("callRinging")));
+@property (class, readonly) CASMessageState *callProgress __attribute__((swift_name("callProgress")));
+@property (class, readonly) CASMessageState *callAnswered __attribute__((swift_name("callAnswered")));
+@property (class, readonly) CASMessageState *callAnswering __attribute__((swift_name("callAnswering")));
+@property (class, readonly) CASMessageState *callAnswerDelay __attribute__((swift_name("callAnswerDelay")));
 @property (class, readonly) CASMessageState *callEstablished __attribute__((swift_name("callEstablished")));
 @property (class, readonly) CASMessageState *callRtpEstablished __attribute__((swift_name("callRtpEstablished")));
+@property (class, readonly) CASMessageState *callLocalSdp __attribute__((swift_name("callLocalSdp")));
+@property (class, readonly) CASMessageState *callRemoteSdp __attribute__((swift_name("callRemoteSdp")));
 @property (class, readonly) CASMessageState *callEndedLocal __attribute__((swift_name("callEndedLocal")));
 @property (class, readonly) CASMessageState *callEndedRemote __attribute__((swift_name("callEndedRemote")));
 @property (class, readonly) CASMessageState *callRejected __attribute__((swift_name("callRejected")));
 @property (class, readonly) CASMessageState *callFailed __attribute__((swift_name("callFailed")));
+@property (class, readonly) CASMessageState *callBusyHere __attribute__((swift_name("callBusyHere")));
+@property (class, readonly) CASMessageState *callTemporarilyUnavailable __attribute__((swift_name("callTemporarilyUnavailable")));
+@property (class, readonly) CASMessageState *callForbidden __attribute__((swift_name("callForbidden")));
+@property (class, readonly) CASMessageState *callNotAcceptable __attribute__((swift_name("callNotAcceptable")));
+@property (class, readonly) CASMessageState *callNotFound __attribute__((swift_name("callNotFound")));
+@property (class, readonly) CASMessageState *callDecline __attribute__((swift_name("callDecline")));
+@property (class, readonly) CASMessageState *callCancel __attribute__((swift_name("callCancel")));
+@property (class, readonly) CASMessageState *callUnauthorized __attribute__((swift_name("callUnauthorized")));
+@property (class, readonly) CASMessageState *callProxyAuthenticationRequired __attribute__((swift_name("callProxyAuthenticationRequired")));
 @property (class, readonly) CASMessageState *callClosed __attribute__((swift_name("callClosed")));
 @property (class, readonly) CASMessageState *callInProgress __attribute__((swift_name("callInProgress")));
+@property (class, readonly) CASMessageState *callHold __attribute__((swift_name("callHold")));
+@property (class, readonly) CASMessageState *callResume __attribute__((swift_name("callResume")));
+@property (class, readonly) CASMessageState *callHoldLocal __attribute__((swift_name("callHoldLocal")));
+@property (class, readonly) CASMessageState *callResumeLocal __attribute__((swift_name("callResumeLocal")));
+@property (class, readonly) CASMessageState *callTransfer __attribute__((swift_name("callTransfer")));
+@property (class, readonly) CASMessageState *callTransferFailed __attribute__((swift_name("callTransferFailed")));
+@property (class, readonly) CASMessageState *callRedirect __attribute__((swift_name("callRedirect")));
+@property (class, readonly) CASMessageState *callDtmfStart __attribute__((swift_name("callDtmfStart")));
+@property (class, readonly) CASMessageState *callDtmf0 __attribute__((swift_name("callDtmf0")));
+@property (class, readonly) CASMessageState *callDtmf1 __attribute__((swift_name("callDtmf1")));
+@property (class, readonly) CASMessageState *callDtmf2 __attribute__((swift_name("callDtmf2")));
+@property (class, readonly) CASMessageState *callDtmf3 __attribute__((swift_name("callDtmf3")));
+@property (class, readonly) CASMessageState *callDtmf4 __attribute__((swift_name("callDtmf4")));
+@property (class, readonly) CASMessageState *callDtmf5 __attribute__((swift_name("callDtmf5")));
+@property (class, readonly) CASMessageState *callDtmf6 __attribute__((swift_name("callDtmf6")));
+@property (class, readonly) CASMessageState *callDtmf7 __attribute__((swift_name("callDtmf7")));
+@property (class, readonly) CASMessageState *callDtmf8 __attribute__((swift_name("callDtmf8")));
+@property (class, readonly) CASMessageState *callDtmf9 __attribute__((swift_name("callDtmf9")));
+@property (class, readonly) CASMessageState *callDtmfA __attribute__((swift_name("callDtmfA")));
+@property (class, readonly) CASMessageState *callDtmfB __attribute__((swift_name("callDtmfB")));
+@property (class, readonly) CASMessageState *callDtmfC __attribute__((swift_name("callDtmfC")));
+@property (class, readonly) CASMessageState *callDtmfD __attribute__((swift_name("callDtmfD")));
+@property (class, readonly) CASMessageState *callDtmfAsterisk __attribute__((swift_name("callDtmfAsterisk")));
+@property (class, readonly) CASMessageState *callDtmfPound __attribute__((swift_name("callDtmfPound")));
+@property (class, readonly) CASMessageState *callDtmfEnd __attribute__((swift_name("callDtmfEnd")));
+@property (class, readonly) CASMessageState *callSendDtmfStart __attribute__((swift_name("callSendDtmfStart")));
+@property (class, readonly) CASMessageState *callSendDtmf0 __attribute__((swift_name("callSendDtmf0")));
+@property (class, readonly) CASMessageState *callSendDtmf1 __attribute__((swift_name("callSendDtmf1")));
+@property (class, readonly) CASMessageState *callSendDtmf2 __attribute__((swift_name("callSendDtmf2")));
+@property (class, readonly) CASMessageState *callSendDtmf3 __attribute__((swift_name("callSendDtmf3")));
+@property (class, readonly) CASMessageState *callSendDtmf4 __attribute__((swift_name("callSendDtmf4")));
+@property (class, readonly) CASMessageState *callSendDtmf5 __attribute__((swift_name("callSendDtmf5")));
+@property (class, readonly) CASMessageState *callSendDtmf6 __attribute__((swift_name("callSendDtmf6")));
+@property (class, readonly) CASMessageState *callSendDtmf7 __attribute__((swift_name("callSendDtmf7")));
+@property (class, readonly) CASMessageState *callSendDtmf8 __attribute__((swift_name("callSendDtmf8")));
+@property (class, readonly) CASMessageState *callSendDtmf9 __attribute__((swift_name("callSendDtmf9")));
+@property (class, readonly) CASMessageState *callSendDtmfA __attribute__((swift_name("callSendDtmfA")));
+@property (class, readonly) CASMessageState *callSendDtmfB __attribute__((swift_name("callSendDtmfB")));
+@property (class, readonly) CASMessageState *callSendDtmfC __attribute__((swift_name("callSendDtmfC")));
+@property (class, readonly) CASMessageState *callSendDtmfD __attribute__((swift_name("callSendDtmfD")));
+@property (class, readonly) CASMessageState *callSendDtmfAsterisk __attribute__((swift_name("callSendDtmfAsterisk")));
+@property (class, readonly) CASMessageState *callSendDtmfPound __attribute__((swift_name("callSendDtmfPound")));
+@property (class, readonly) CASMessageState *callSendDtmfEnd __attribute__((swift_name("callSendDtmfEnd")));
+@property (class, readonly) CASMessageState *callMenc __attribute__((swift_name("callMenc")));
+@property (class, readonly) CASMessageState *vuTx __attribute__((swift_name("vuTx")));
+@property (class, readonly) CASMessageState *vuRx __attribute__((swift_name("vuRx")));
+@property (class, readonly) CASMessageState *audioError __attribute__((swift_name("audioError")));
+@property (class, readonly) CASMessageState *audioLatencyOutgoing __attribute__((swift_name("audioLatencyOutgoing")));
+@property (class, readonly) CASMessageState *audioLatencyIncoming __attribute__((swift_name("audioLatencyIncoming")));
+@property (class, readonly) CASMessageState *faxSuccess __attribute__((swift_name("faxSuccess")));
+@property (class, readonly) CASMessageState *faxFailed __attribute__((swift_name("faxFailed")));
+@property (class, readonly) CASMessageState *faxmodeAudio __attribute__((swift_name("faxmodeAudio")));
+@property (class, readonly) CASMessageState *faxmodeT38 __attribute__((swift_name("faxmodeT38")));
+@property (class, readonly) CASMessageState *phoneAttached __attribute__((swift_name("phoneAttached")));
+@property (class, readonly) CASMessageState *phoneDetached __attribute__((swift_name("phoneDetached")));
+@property (class, readonly) CASMessageState *phoneSelected __attribute__((swift_name("phoneSelected")));
+@property (class, readonly) CASMessageState *phonePropertyChanged __attribute__((swift_name("phonePropertyChanged")));
+@property (class, readonly) CASMessageState *handsfreePropertyChanged __attribute__((swift_name("handsfreePropertyChanged")));
+@property (class, readonly) CASMessageState *callvolumeChanged __attribute__((swift_name("callvolumeChanged")));
+@property (class, readonly) CASMessageState *callRemoved __attribute__((swift_name("callRemoved")));
+@property (class, readonly) CASMessageState *callHeld __attribute__((swift_name("callHeld")));
+@property (class, readonly) CASMessageState *callWaiting __attribute__((swift_name("callWaiting")));
+@property (class, readonly) CASMessageState *callStateChanged __attribute__((swift_name("callStateChanged")));
+@property (class, readonly) CASMessageState *callPropertyChanged __attribute__((swift_name("callPropertyChanged")));
+@property (class, readonly) CASMessageState *callDisconnected __attribute__((swift_name("callDisconnected")));
+@property (class, readonly) CASMessageState *callmanagerPropertyChanged __attribute__((swift_name("callmanagerPropertyChanged")));
+@property (class, readonly) CASMessageState *callmanagerBarringActive __attribute__((swift_name("callmanagerBarringActive")));
+@property (class, readonly) CASMessageState *callmanagerForwarded __attribute__((swift_name("callmanagerForwarded")));
 + (CASKotlinArray<CASMessageState *> *)values __attribute__((swift_name("values()")));
 @property (class, readonly) NSArray<CASMessageState *> *entries __attribute__((swift_name("entries")));
 @property (readonly) NSString *value __attribute__((swift_name("value")));
@@ -793,7 +882,7 @@ __attribute__((swift_name("RtcpMessage")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
 + (instancetype)new __attribute__((unavailable));
 @property (class, readonly, getter=companion) CASRtcpMessageCompanion *companion __attribute__((swift_name("companion")));
-- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
+- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txLost:(int64_t)txLost txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txLost:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
@@ -910,6 +999,12 @@ __attribute__((swift_name("RtcpMessage")))
  * @note annotations
  *   kotlinx.serialization.Transient
 */
+@property (readonly) int64_t txLost __attribute__((swift_name("txLost")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Transient
+*/
 @property (readonly) int64_t txPackets __attribute__((swift_name("txPackets")));
 
 /**
@@ -963,6 +1058,7 @@ __attribute__((swift_name("RtcpMessage.Builder")))
 - (CASRtcpMessageBuilder *)rxTotalAudioEnergy:(double)totalAudioEnergy __attribute__((swift_name("rx(totalAudioEnergy:)")));
 - (CASRtcpMessageBuilder *)txAudioLevel:(double)audioLevel __attribute__((swift_name("tx(audioLevel:)")));
 - (CASRtcpMessageBuilder *)txBytes:(int64_t)bytes __attribute__((swift_name("tx(bytes:)")));
+- (CASRtcpMessageBuilder *)txLost:(int64_t)lost __attribute__((swift_name("tx(lost:)")));
 - (CASRtcpMessageBuilder *)txPackets:(int64_t)packets __attribute__((swift_name("tx(packets:)")));
 - (CASRtcpMessageBuilder *)txTotalAudioEnergy:(double)totalAudioEnergy __attribute__((swift_name("tx(totalAudioEnergy:)")));
 - (CASRtcpMessageBuilder *)videoDirection:(CASMedia *)direction __attribute__((swift_name("video(direction:)")));
