@@ -29,5 +29,5 @@ After this a Github release workflow should start that generates API documentati
 
 ### Build locally
 
-* Javascript Web Apps: Run Gradle task root/Tasks/build/jsBrowserProductionWebPack or jsBrowserDevelopmentWebPack
+* Javascript Web Apps: Run Gradle task root/Tasks/kotlin browser/jsBrowserProductionWebPack or jsBrowserDevelopmentWebPack
 * Maven Local: Run Gradle task root/Tasks/publishing/publishToMavenLocal
