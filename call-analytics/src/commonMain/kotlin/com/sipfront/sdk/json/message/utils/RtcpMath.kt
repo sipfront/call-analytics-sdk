@@ -44,20 +44,22 @@ internal object RtcpMath {
                 ingress = Ingress(
                     packets = currentMsg.rxPackets,
                     bytes = currentMsg.rxBytes,
-                    packetsLost = lostRxPerSecond
+                    packetsLost = currentMsg.rxLost
                 ),
                 egress = Egress(
                     packets = currentMsg.txPackets,
                     bytes = currentMsg.txBytes,
-                    packetsLost = lostTxPerSecond
+                    packetsLost = currentMsg.txLost
                 ),
                 ingressRate = IngressRate(
                     packets = packetsRxPerSecond,
-                    bytes = bytesRxPerSecond
+                    bytes = bytesRxPerSecond,
+                    packetsLost = lostRxPerSecond
                 ),
                 egressRate = EgressRate(
                     packets = packetsTxPerSecond,
-                    bytes = bytesTxPerSecond
+                    bytes = bytesTxPerSecond,
+                    packetsLost = lostTxPerSecond
                 ),
                 mediaOutbound = MediaStats(
                     audioLevel = validOrNull(currentMsg.txAudioLevel),

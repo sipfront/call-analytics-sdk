@@ -53,11 +53,13 @@ internal object JsonKeys {
             object IngressRate {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
+                const val packetsLost: String = "packets_lost"
             }
 
             object EgressRate {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
+                const val packetsLost: String = "packets_lost"
             }
 
             object VoipMetrics {

@@ -36,7 +36,7 @@ internal data class Ingress(
      */
     @SerialName(JsonKeys.Rtcp.Interface.Ingress.bytes) val bytes: Long,
     /**
-     * Packets per second lost on ingress since the last measurement interval
+     * Total number of packets lost on ingress
      */
     @SerialName(JsonKeys.Rtcp.Interface.Ingress.packetsLost) val packetsLost: Long,
 )
@@ -52,7 +52,7 @@ internal data class Egress(
      */
     @SerialName(JsonKeys.Rtcp.Interface.Egress.bytes) val bytes: Long,
     /**
-     * Packets per second lost on egress since the last measurement interval
+     * Total number of packets lost on egress
      */
     @SerialName(JsonKeys.Rtcp.Interface.Egress.packetsLost) val packetsLost: Long,
 )
@@ -67,6 +67,10 @@ internal data class IngressRate(
      * Bytes per second received since the last measurement interval
      */
     @SerialName(JsonKeys.Rtcp.Interface.IngressRate.bytes) val bytes: Long,
+    /**
+     * Packets per second lost on ingress since the last measurement interval
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.IngressRate.packetsLost) val packetsLost: Long,
 )
 
 @Serializable
@@ -79,6 +83,10 @@ internal data class EgressRate(
      * Bytes per second sent since the last measurement interval
      */
     @SerialName(JsonKeys.Rtcp.Interface.EgressRate.bytes) val bytes: Long,
+    /**
+     * Packets per second lost on egress since the last measurement interval
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.packetsLost) val packetsLost: Long,
 )
 
 @Serializable
