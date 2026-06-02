@@ -1,6 +1,6 @@
 [versions]
 # App
-version = "1.0.11"
+version = "1.0.12"
 
 # Android
 minSdk = "21"
