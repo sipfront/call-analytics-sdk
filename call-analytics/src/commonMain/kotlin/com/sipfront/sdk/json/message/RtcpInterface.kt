@@ -39,6 +39,10 @@ internal data class Ingress(
      * Total number of packets lost on ingress
      */
     @SerialName(JsonKeys.Rtcp.Interface.Ingress.packetsLost) val packetsLost: Long,
+    /**
+     * Locally measured jitter of received RTP packets in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.Ingress.jitter) val jitter: Double,
 )
 
 @Serializable
@@ -55,6 +59,10 @@ internal data class Egress(
      * Total number of packets lost on egress
      */
     @SerialName(JsonKeys.Rtcp.Interface.Egress.packetsLost) val packetsLost: Long,
+    /**
+     * Jitter measured by the remote endpoint for RTP packets sent locally, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.Egress.jitter) val jitter: Double,
 )
 
 @Serializable
@@ -96,9 +104,13 @@ internal data class VoipMetrics(
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.mosAverage) val mosAverage: Double,
     /**
-     * Measures jitter average in milliseconds. (positive number starting at 0.0)
+     * Measures remotely reported egress jitter in milliseconds. (positive number starting at 0.0)
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.jitterAverage) val jitterAverage: Double,
+    /**
+     * Measures locally observed ingress jitter in milliseconds. (positive number starting at 0.0)
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.jitterMeasuredAverage) val jitterMeasuredAverage: Double,
     /**
      * Measures current (last) packet round-trip-time (RTT) in microseconds (positive number starting at 0.0)
      * Note: Mobile SDK API accepts this value in milliseconds and will thus be converted before stored here

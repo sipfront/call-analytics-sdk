@@ -84,9 +84,12 @@ internal object PjSipObjectParser {
                     builder.rxPackets(packets = rxReceived)
 
                     val txRtcpStreamStat = RtcpStat.getTxStat(rtcpStat)
+                    val txJitterStat = RtcpStreamStat.getJitterUsec(txRtcpStreamStat)
+                    val txJitter: Long = MathStat.getLast(txJitterStat)
                     val txSent: Long = RtcpStreamStat.getPkt(txRtcpStreamStat)
                     val txLost: Long = RtcpStreamStat.getLoss(txRtcpStreamStat)
 
+                    builder.txJitter(jitter = txJitter.toDouble() / 1000)
                     builder.txPackets(packets = txSent)
                     builder.txLost(lost = txLost)
 

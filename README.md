@@ -215,7 +215,8 @@ CallAnalytics.sendRtcp(
         .displayNameRemote("John Doe")
         .audioDirection(MediaDirection.SEND_RECEIVE)
         .rtt(rtt)                   //round trip time in milliseconds
-        .rxJitter(jitter)           //jitter in milliseconds
+        .rxJitter(rxJitter)         //locally measured ingress jitter in milliseconds
+        .txJitter(txJitter)         //remotely reported egress jitter in milliseconds
         .rxLost(lost)               //lost packets total
         .rxBytes(bytes)             //bytes received total
         .rxPackets(packets)         //packets received total
@@ -245,7 +246,8 @@ do {
         .call(direction: Call.incoming)
         .rtt(1.0)                   //round trip time in milliseconds
         .rx(lost: 0)                //lost packets total
-        .rx(jitter: 9)              //jitter in milliseconds
+        .rx(jitter: 9)              //locally measured ingress jitter in milliseconds
+        .tx(jitter: 8)              //remotely reported egress jitter in milliseconds
         .rx(packets: 9)             //packets received total
         .rx(bytes: 99)              //bytes received total
         .rx(audioLevel: 0.1)        //incoming audio level

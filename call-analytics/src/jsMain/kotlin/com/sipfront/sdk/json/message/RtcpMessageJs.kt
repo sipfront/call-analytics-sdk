@@ -117,6 +117,14 @@ class RtcpMessageJs {
     }
 
     /**
+     * @see [RtcpMessage.Builder.txJitter]
+     */
+    fun txJitter(jitter: Double) = apply {
+        builder.txJitter(jitter)
+        return@apply
+    }
+
+    /**
      * @see [RtcpMessage.Builder.rxJitter]
      */
     fun rxJitter(jitter: Double) = apply {
