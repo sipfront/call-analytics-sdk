@@ -44,12 +44,14 @@ internal object RtcpMath {
                 ingress = Ingress(
                     packets = currentMsg.rxPackets,
                     bytes = currentMsg.rxBytes,
-                    packetsLost = currentMsg.rxLost
+                    packetsLost = currentMsg.rxLost,
+                    jitter = validOrNull(currentMsg.rxJitter)
                 ),
                 egress = Egress(
                     packets = currentMsg.txPackets,
                     bytes = currentMsg.txBytes,
-                    packetsLost = currentMsg.txLost
+                    packetsLost = currentMsg.txLost,
+                    jitter = validOrNull(currentMsg.txJitter)
                 ),
                 ingressRate = IngressRate(
                     packets = packetsRxPerSecond,
@@ -71,7 +73,8 @@ internal object RtcpMath {
                 ),
                 voipMetrics = VoipMetrics(
                     mosAverage = validOrNull(mos),
-                    jitterAverage = validOrNull(currentMsg.rxJitter),
+                    jitterAverage = validOrNull(currentMsg.txJitter),
+                    jitterMeasuredAverage = validOrNull(currentMsg.rxJitter),
                     /**
                      * converting round-trip-time (rtt) to microsecond because that's what Sipfront Web API
                      * currently expects, but still keeping Sipfront Mobile SDK consistent by expecting

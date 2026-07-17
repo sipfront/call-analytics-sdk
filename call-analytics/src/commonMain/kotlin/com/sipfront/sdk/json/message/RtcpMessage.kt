@@ -33,6 +33,7 @@ import kotlin.native.ObjCName
  * @property audioRemoteDirection The remote direction of the audio media.
  * @property videoRemoteDirection The remote direction of the video media.
  * @property rxJitter The jitter in milliseconds for received data.
+ * @property txJitter The remotely reported jitter in milliseconds for transmitted data.
  * @property rxPackets The total number of received RTP packets.
  * @property rxLost The total number of RTP packets lost during reception.
  * @property rxBytes The total number of received RTP bytes.
@@ -65,6 +66,7 @@ data class RtcpMessage internal constructor(
     @SerialName(MediaDirection.Type.remotevideodir) val videoRemoteDirection: MediaDirection = videoDirection.toRemote(),
     @SerialName(JsonKeys.param) val param: String = "audio",
     @Transient val rxJitter: Double = 0.0,
+    @Transient val txJitter: Double = 0.0,
     @Transient val rxPackets: Long = 0L,
     @Transient val rxLost: Long = 0L,
     @Transient val rxBytes: Long = 0L,
@@ -99,6 +101,7 @@ data class RtcpMessage internal constructor(
         private var audioDirection: MediaDirection = MediaDirection.INACTIVE
         private var videoDirection: MediaDirection = MediaDirection.INACTIVE
         private var rxJitter: Double = 0.0
+        private var txJitter: Double = 0.0
         private var rxPackets: Long = 0L
         private var rxLost: Long = 0L
         private var rxBytes: Long = 0L
@@ -171,6 +174,12 @@ data class RtcpMessage internal constructor(
          */
         @ObjCName("tx")
         fun txBytes(bytes: Long) = apply { this.txBytes = bytes }
+
+        /**
+         * Jitter in milliseconds measured by the remote endpoint for transmitted RTP packets.
+         */
+        @ObjCName("tx")
+        fun txJitter(jitter: Double) = apply { this.txJitter = jitter }
 
         /**
          * This WebRTC property represents the audio level of the media source (outgoing).
@@ -263,6 +272,7 @@ data class RtcpMessage internal constructor(
                     audioDirection = audioDirection,
                     videoDirection = videoDirection,
                     rxJitter = rxJitter,
+                    txJitter = txJitter,
                     rxPackets = rxPackets,
                     rxLost = rxLost,
                     rxBytes = rxBytes,
