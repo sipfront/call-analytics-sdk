@@ -32,8 +32,10 @@ import kotlin.native.ObjCName
  * @property videoDirection The direction of the video media.
  * @property audioRemoteDirection The remote direction of the audio media.
  * @property videoRemoteDirection The remote direction of the video media.
- * @property rxJitter The jitter in milliseconds for received data.
- * @property txJitter The remotely reported jitter in milliseconds for transmitted data.
+ * @property rxJitter Current locally measured RFC 3550 interarrival jitter for RTP packets received by the local
+ * endpoint during this reporting interval, in milliseconds.
+ * @property txJitter Latest jitter reported by the remote endpoint for RTP packets transmitted by the local endpoint,
+ * normally obtained from an RTCP receiver report, in milliseconds.
  * @property rxPackets The total number of received RTP packets.
  * @property rxLost The total number of RTP packets lost during reception.
  * @property rxBytes The total number of received RTP bytes.
@@ -176,7 +178,9 @@ data class RtcpMessage internal constructor(
         fun txBytes(bytes: Long) = apply { this.txBytes = bytes }
 
         /**
-         * Jitter in milliseconds measured by the remote endpoint for transmitted RTP packets.
+         * Sets the latest jitter reported by the remote endpoint for RTP packets transmitted by the local endpoint.
+         *
+         * @param jitter latest non-negative, finite RTCP-reported egress jitter, in milliseconds
          */
         @ObjCName("tx")
         fun txJitter(jitter: Double) = apply { this.txJitter = jitter }
@@ -215,7 +219,10 @@ data class RtcpMessage internal constructor(
         fun rxBytes(bytes: Long) = apply { this.rxBytes = bytes }
 
         /**
-         * Jitter in milliseconds
+         * Sets the current locally measured RFC 3550 interarrival jitter for received RTP packets.
+         *
+         * @param jitter current non-negative, finite locally measured ingress jitter for this reporting interval, in
+         * milliseconds
          */
         @ObjCName("rx")
         fun rxJitter(jitter: Double) = apply { this.rxJitter = jitter }

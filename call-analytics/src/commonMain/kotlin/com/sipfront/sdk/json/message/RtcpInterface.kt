@@ -13,6 +13,7 @@ internal data class RtcpInterface(
     @SerialName(JsonKeys.Rtcp.Interface.ingressRate) val ingressRate: IngressRate?,
     @SerialName(JsonKeys.Rtcp.Interface.egressRate) val egressRate: EgressRate?,
     @SerialName(JsonKeys.Rtcp.Interface.voipMetrics) val voipMetrics: VoipMetrics,
+    @SerialName(JsonKeys.Rtcp.Interface.voipMetricsInterval) val voipMetricsInterval: VoipMetricsInterval,
     @SerialName(JsonKeys.Rtcp.Interface.mediaOutbound) val mediaOutbound: MediaStats,
     @SerialName(JsonKeys.Rtcp.Interface.mediaInbound) val mediaInbound: MediaStats,
 )
@@ -104,11 +105,11 @@ internal data class VoipMetrics(
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.mosAverage) val mosAverage: Double,
     /**
-     * Measures remotely reported egress jitter in milliseconds. (positive number starting at 0.0)
+     * Cumulative average of all valid remotely reported egress jitter samples, in milliseconds.
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.jitterAverage) val jitterAverage: Double,
     /**
-     * Measures locally observed ingress jitter in milliseconds. (positive number starting at 0.0)
+     * Cumulative average of all valid locally measured ingress jitter samples, in milliseconds.
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.jitterMeasuredAverage) val jitterMeasuredAverage: Double,
     /**
@@ -120,6 +121,18 @@ internal data class VoipMetrics(
      * Total number of lost packets (positive number starting at 0)
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.packetLossTotal) val packetLossTotal: Long,
+)
+
+@Serializable
+internal data class VoipMetricsInterval(
+    /**
+     * Remotely reported egress jitter for the current reporting interval, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.VoipMetricsInterval.jitter) val jitter: Double,
+    /**
+     * Locally measured ingress jitter for the current reporting interval, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.VoipMetricsInterval.jitterMeasured) val jitterMeasured: Double,
 )
 
 @Serializable
