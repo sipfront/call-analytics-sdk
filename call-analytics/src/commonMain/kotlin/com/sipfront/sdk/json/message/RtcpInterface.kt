@@ -1,8 +1,15 @@
 package com.sipfront.sdk.json.message
 
+import com.sipfront.sdk.BuildKonfig
 import com.sipfront.sdk.json.JsonKeys
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+@Serializable
+internal data class RtcpProducer(
+    @SerialName(JsonKeys.Rtcp.Producer.name) val name: String = "call-analytics-sdk",
+    @SerialName(JsonKeys.Rtcp.Producer.version) val version: String = BuildKonfig.VERSION_CODE,
+)
 
 @Serializable
 internal data class RtcpInterface(
