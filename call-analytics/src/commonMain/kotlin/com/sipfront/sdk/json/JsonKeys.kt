@@ -22,6 +22,7 @@ internal object JsonKeys {
 
     object Rtcp {
         const val interfaces: String = "interfaces"
+        const val localJitterEnabled: String = "local_jitter_enabled"
 
         object Interface {
             const val name: String = "name"
