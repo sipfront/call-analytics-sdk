@@ -882,7 +882,7 @@ __attribute__((swift_name("RtcpMessage")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
 + (instancetype)new __attribute__((unavailable));
 @property (class, readonly, getter=companion) CASRtcpMessageCompanion *companion __attribute__((swift_name("companion")));
-- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txLost:(int64_t)txLost txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txLost:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
+- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter txJitter:(double)txJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txLost:(int64_t)txLost txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:txJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txLost:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
@@ -999,6 +999,12 @@ __attribute__((swift_name("RtcpMessage")))
  * @note annotations
  *   kotlinx.serialization.Transient
 */
+@property (readonly) double txJitter __attribute__((swift_name("txJitter")));
+
+/**
+ * @note annotations
+ *   kotlinx.serialization.Transient
+*/
 @property (readonly) int64_t txLost __attribute__((swift_name("txLost")));
 
 /**
@@ -1058,6 +1064,7 @@ __attribute__((swift_name("RtcpMessage.Builder")))
 - (CASRtcpMessageBuilder *)rxTotalAudioEnergy:(double)totalAudioEnergy __attribute__((swift_name("rx(totalAudioEnergy:)")));
 - (CASRtcpMessageBuilder *)txAudioLevel:(double)audioLevel __attribute__((swift_name("tx(audioLevel:)")));
 - (CASRtcpMessageBuilder *)txBytes:(int64_t)bytes __attribute__((swift_name("tx(bytes:)")));
+- (CASRtcpMessageBuilder *)txJitter:(double)jitter __attribute__((swift_name("tx(jitter:)")));
 - (CASRtcpMessageBuilder *)txLost:(int64_t)lost __attribute__((swift_name("tx(lost:)")));
 - (CASRtcpMessageBuilder *)txPackets:(int64_t)packets __attribute__((swift_name("tx(packets:)")));
 - (CASRtcpMessageBuilder *)txTotalAudioEnergy:(double)totalAudioEnergy __attribute__((swift_name("tx(totalAudioEnergy:)")));
