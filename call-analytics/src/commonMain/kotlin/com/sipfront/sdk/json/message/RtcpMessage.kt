@@ -68,6 +68,7 @@ data class RtcpMessage internal constructor(
     @SerialName(MediaDirection.Type.remotevideodir) val videoRemoteDirection: MediaDirection = videoDirection.toRemote(),
     @SerialName(JsonKeys.param) val param: String = "audio",
     @SerialName(JsonKeys.Rtcp.localJitterEnabled) val localJitterEnabled: Boolean = true,
+    @SerialName(JsonKeys.Rtcp.producer) internal val producer: RtcpProducer = RtcpProducer(),
     @Transient val rxJitter: Double = 0.0,
     @Transient val txJitter: Double = 0.0,
     @Transient val rxPackets: Long = 0L,
