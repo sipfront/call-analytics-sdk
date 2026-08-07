@@ -1,6 +1,6 @@
 package com.sipfront.sdk.json.message.utils
 
-import com.sipfront.sdk.CallAnalytics
+import co.touchlab.stately.collections.ConcurrentMutableMap
 import com.sipfront.sdk.json.message.*
 import com.sipfront.sdk.log.Log
 import kotlin.math.roundToLong
@@ -23,52 +23,93 @@ internal object RtcpMath {
         val samples: Long,
     )
 
+    private data class MeasurementAccumulator(
+        val sum: Double = 0.0,
+        val samples: Long = 0L,
+    )
+
+    private data class PreviousRtcpMeasurement(
+        val timestamp: Double,
+        val rxPackets: Long,
+        val txPackets: Long,
+        val rxBytes: Long,
+        val txBytes: Long,
+        val rxLost: Long,
+        val txLost: Long,
+    )
+
+    private data class RtcpCallState(
+        val previousMeasurement: PreviousRtcpMeasurement? = null,
+        val txJitter: MeasurementAccumulator = MeasurementAccumulator(),
+        val rxJitter: MeasurementAccumulator = MeasurementAccumulator(),
+        val rtt: MeasurementAccumulator = MeasurementAccumulator(),
+    )
+
+    private val callStates = ConcurrentMutableMap<String, RtcpCallState>()
+
     /**
      * Creates the interface statistics exported with an RTCP message.
      *
      * @param currentMsg current RTCP measurement used to populate interval values and calculate cumulative values
      * @return a list containing the interface statistics derived from [currentMsg]
-     */
-    @Throws(NoSuchElementException::class)
+    */
     internal fun createRtcpInterface(currentMsg: RtcpMessage): List<RtcpInterface> {
-        // we need the previous RtcpMessage in order to calculate averages if we cannot find any we return null
-        val previousMsg = runCatching { CallAnalytics.rtcpCache.last() }.getOrNull()
-        val elapsedTimeSeconds: Double = previousMsg?.let { (currentMsg.timestamp - previousMsg.timestamp) } ?: 0.0
+        val callState = callStates[currentMsg.callId] ?: RtcpCallState()
+        val previousMeasurement = callState.previousMeasurement
+        val elapsedTimeSeconds: Double = previousMeasurement?.let {
+            currentMsg.timestamp - it.timestamp
+        } ?: 0.0
 
-        val packetsRxPerSecond: Long = calculateRate(currentMsg.rxPackets, previousMsg?.rxPackets, elapsedTimeSeconds)
-        val packetsTxPerSecond: Long = calculateRate(currentMsg.txPackets, previousMsg?.txPackets, elapsedTimeSeconds)
-        val bytesRxPerSecond: Long = calculateRate(currentMsg.rxBytes, previousMsg?.rxBytes, elapsedTimeSeconds)
-        val bytesTxPerSecond: Long = calculateRate(currentMsg.txBytes, previousMsg?.txBytes, elapsedTimeSeconds)
-        val lostRxPerSecond: Long = calculateRate(currentMsg.rxLost, previousMsg?.rxLost, elapsedTimeSeconds)
+        val packetsRxPerSecond: Long = calculateRate(
+            currentMsg.rxPackets,
+            previousMeasurement?.rxPackets,
+            elapsedTimeSeconds
+        )
+        val packetsTxPerSecond: Long = calculateRate(
+            currentMsg.txPackets,
+            previousMeasurement?.txPackets,
+            elapsedTimeSeconds
+        )
+        val bytesRxPerSecond: Long = calculateRate(
+            currentMsg.rxBytes,
+            previousMeasurement?.rxBytes,
+            elapsedTimeSeconds
+        )
+        val bytesTxPerSecond: Long = calculateRate(
+            currentMsg.txBytes,
+            previousMeasurement?.txBytes,
+            elapsedTimeSeconds
+        )
+        val lostRxPerSecond: Long = calculateRate(
+            currentMsg.rxLost,
+            previousMeasurement?.rxLost,
+            elapsedTimeSeconds
+        )
         val lostTxPerSecond: Double = calculateFractionalRate(
             currentMsg.txLost,
-            previousMsg?.txLost,
+            previousMeasurement?.txLost,
             elapsedTimeSeconds
         )
         val mos: Double = calculateMeanOpinionScore(currentMsg)
         val txJitter: Double = validOrNull(currentMsg.txJitter)
         val rxJitter: Double = validOrNull(currentMsg.rxJitter)
         val rtt: Double = validOrNull(currentMsg.rtt)
-        val txJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.txJitter) { it.txJitter }
-        val rxJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rxJitter) { it.rxJitter }
-        val rttSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rtt) { it.rtt }
+        val txJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.txJitter, callState.txJitter)
+        val rxJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rxJitter, callState.rxJitter)
+        val rttSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rtt, callState.rtt)
         val txJitterSamples: Long = if (isValid(currentMsg.txJitter)) 1L else 0L
         val rxJitterSamples: Long = if (isValid(currentMsg.rxJitter)) 1L else 0L
         val rttSamples: Long = if (isValid(currentMsg.rtt)) 1L else 0L
         val txPacketLossSamples: Long = if (
-            previousMsg != null &&
+            previousMeasurement != null &&
             elapsedTimeSeconds > 0.0 &&
-            currentMsg.txLost >= previousMsg.txLost
+            currentMsg.txLost >= previousMeasurement.txLost
         ) {
             1L
         } else {
             0L
         }
 
-        /**
-         * Some elements require a previous RtcpMessage to be available from whom to calculate averages.
-         * These elements may be null in which case they are not encoded in the JSON
-         */
         return listOf(
             RtcpInterface(
                 rate = Rate(
@@ -136,35 +177,66 @@ internal object RtcpMath {
     }
 
     /**
-     * Calculates the cumulative average of the current value and all valid matching values in the RTCP cache.
+     * Records one sent RTCP measurement in the running state for its call.
+     *
+     * @param message sent RTCP message whose counters become the rate baseline and whose finite measurements are
+     * added to the cumulative aggregates
+     * @return Unit after the state for [message]'s call has been updated
+     */
+    internal fun recordRtcpMessage(message: RtcpMessage) {
+        callStates.block { states ->
+            val currentState = states[message.callId] ?: RtcpCallState()
+            states[message.callId] = currentState.copy(
+                previousMeasurement = PreviousRtcpMeasurement(
+                    timestamp = message.timestamp,
+                    rxPackets = message.rxPackets,
+                    txPackets = message.txPackets,
+                    rxBytes = message.rxBytes,
+                    txBytes = message.txBytes,
+                    rxLost = message.rxLost,
+                    txLost = message.txLost
+                ),
+                txJitter = accumulateMeasurement(currentState.txJitter, message.txJitter),
+                rxJitter = accumulateMeasurement(currentState.rxJitter, message.rxJitter),
+                rtt = accumulateMeasurement(currentState.rtt, message.rtt)
+            )
+        }
+    }
+
+    /**
+     * Calculates a cumulative summary by adding the current value to a call's existing aggregate.
      *
      * @param currentValue value from the current RTCP measurement
-     * @param valueSelector selects the value to average from a cached RTCP measurement
-     * @return the cumulative average and number of valid samples; the average is `0.0` when no samples are available
+     * @param accumulator running sum and sample count from previously sent messages for the same call
+     * @return cumulative average and sample count including [currentValue] when it is finite
      */
     private fun calculateCumulativeMeasurement(
         currentValue: Double,
-        valueSelector: (RtcpMessage) -> Double
+        accumulator: MeasurementAccumulator
     ): MeasurementSummary {
-        var sum = 0.0
-        var count = 0L
-
-        if (isValid(currentValue)) {
-            sum += currentValue
-            count++
-        }
-
-        CallAnalytics.rtcpCache.forEach { message ->
-            val value = valueSelector(message)
-            if (isValid(value)) {
-                sum += value
-                count++
-            }
-        }
+        val accumulated = accumulateMeasurement(accumulator, currentValue)
 
         return MeasurementSummary(
-            average = if (count > 0L) sum / count else 0.0,
-            samples = count
+            average = if (accumulated.samples > 0L) accumulated.sum / accumulated.samples else 0.0,
+            samples = accumulated.samples
+        )
+    }
+
+    /**
+     * Adds one finite measurement to an immutable running accumulator.
+     *
+     * @param accumulator running sum and sample count to update
+     * @param value measurement to add when finite
+     * @return an updated accumulator, or [accumulator] unchanged when [value] is not finite
+     */
+    private fun accumulateMeasurement(
+        accumulator: MeasurementAccumulator,
+        value: Double
+    ): MeasurementAccumulator {
+        if (!isValid(value)) return accumulator
+        return MeasurementAccumulator(
+            sum = accumulator.sum + value,
+            samples = accumulator.samples + 1L
         )
     }
 
