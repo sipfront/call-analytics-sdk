@@ -48,9 +48,13 @@ internal data class Ingress(
      */
     @SerialName(JsonKeys.Rtcp.Interface.Ingress.packetsLost) val packetsLost: Long,
     /**
-     * Locally measured jitter of received RTP packets in milliseconds.
+     * Cumulative average of locally measured jitter for received RTP packets, in milliseconds.
      */
-    @SerialName(JsonKeys.Rtcp.Interface.Ingress.jitter) val jitter: Double,
+    @SerialName(JsonKeys.Rtcp.Interface.Ingress.jitterAverageMs) val jitterAverageMs: Double,
+    /**
+     * Total number of locally measured ingress jitter samples included in [jitterAverageMs].
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.Ingress.jitterSamples) val jitterSamples: Long,
 )
 
 @Serializable
@@ -68,9 +72,21 @@ internal data class Egress(
      */
     @SerialName(JsonKeys.Rtcp.Interface.Egress.packetsLost) val packetsLost: Long,
     /**
-     * Jitter measured by the remote endpoint for RTP packets sent locally, in milliseconds.
+     * Cumulative average of remotely reported jitter for RTP packets sent locally, in milliseconds.
      */
-    @SerialName(JsonKeys.Rtcp.Interface.Egress.jitter) val jitter: Double,
+    @SerialName(JsonKeys.Rtcp.Interface.Egress.jitterAverageMs) val jitterAverageMs: Double,
+    /**
+     * Total number of remotely reported egress jitter samples included in [jitterAverageMs].
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.Egress.jitterSamples) val jitterSamples: Long,
+    /**
+     * Cumulative average of remotely measured round-trip-time samples, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.Egress.rttAverageMs) val rttAverageMs: Double,
+    /**
+     * Total number of egress round-trip-time samples included in [rttAverageMs].
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.Egress.rttSamples) val rttSamples: Long,
 )
 
 @Serializable
@@ -87,6 +103,14 @@ internal data class IngressRate(
      * Packets per second lost on ingress since the last measurement interval
      */
     @SerialName(JsonKeys.Rtcp.Interface.IngressRate.packetsLost) val packetsLost: Long,
+    /**
+     * Locally measured ingress jitter during the current reporting interval, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.IngressRate.jitterMs) val jitterMs: Double,
+    /**
+     * Number of locally measured ingress jitter samples in the current reporting interval.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.IngressRate.jitterSamples) val jitterSamples: Long,
 )
 
 @Serializable
@@ -102,7 +126,27 @@ internal data class EgressRate(
     /**
      * Packets per second lost on egress since the last measurement interval
      */
-    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.packetsLost) val packetsLost: Long,
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.packetsLost) val packetsLost: Double,
+    /**
+     * Number of remotely reported egress packet-loss samples in the current reporting interval.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.packetsLostSamples) val packetsLostSamples: Long,
+    /**
+     * Remotely reported egress jitter during the current reporting interval, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.jitterMs) val jitterMs: Double,
+    /**
+     * Number of remotely reported egress jitter samples in the current reporting interval.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.jitterSamples) val jitterSamples: Long,
+    /**
+     * Remotely measured egress round-trip time during the current reporting interval, in milliseconds.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.rttMs) val rttMs: Double,
+    /**
+     * Number of remotely measured egress round-trip-time samples in the current reporting interval.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.EgressRate.rttSamples) val rttSamples: Long,
 )
 
 @Serializable

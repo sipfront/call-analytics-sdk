@@ -50,26 +50,37 @@ internal object JsonKeys {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
                 const val packetsLost: String = "packets_lost"
-                const val jitter: String = "jitter"
+                const val jitterAverageMs: String = "jitter_average_ms"
+                const val jitterSamples: String = "jitter_samples"
             }
 
             object Egress {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
                 const val packetsLost: String = "packets_lost"
-                const val jitter: String = "jitter"
+                const val jitterAverageMs: String = "jitter_average_ms"
+                const val jitterSamples: String = "jitter_samples"
+                const val rttAverageMs: String = "rtt_average_ms"
+                const val rttSamples: String = "rtt_samples"
             }
 
             object IngressRate {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
                 const val packetsLost: String = "packets_lost"
+                const val jitterMs: String = "jitter_ms"
+                const val jitterSamples: String = "jitter_samples"
             }
 
             object EgressRate {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
                 const val packetsLost: String = "packets_lost"
+                const val packetsLostSamples: String = "packets_lost_samples"
+                const val jitterMs: String = "jitter_ms"
+                const val jitterSamples: String = "jitter_samples"
+                const val rttMs: String = "rtt_ms"
+                const val rttSamples: String = "rtt_samples"
             }
 
             object VoipMetrics {
