@@ -14,6 +14,7 @@ import com.sipfront.sdk.json.message.RtcpMessage
 import com.sipfront.sdk.json.message.SdpMessage
 import com.sipfront.sdk.json.message.SipMessage
 import com.sipfront.sdk.json.message.StateMessage
+import com.sipfront.sdk.json.message.utils.RtcpMath
 import com.sipfront.sdk.log.Log
 import com.sipfront.sdk.log.parser.LogParser
 import com.sipfront.sdk.network.client.HttpClient
@@ -107,8 +108,6 @@ object CallAnalytics : ProguardKeep {
     private var sessionConfig: SessionConfig? = null
     private var mqttClient: MqttClient? = null
     private var httpClient: HttpClient? = null
-    internal val rtcpCache: ConcurrentMutableList<RtcpMessage> = ConcurrentMutableList()
-
     @Suppress("MemberVisibilityCanBePrivate")
     internal val stateCache: ConcurrentMutableList<StateMessage> = ConcurrentMutableList()
 
@@ -287,6 +286,7 @@ object CallAnalytics : ProguardKeep {
      * Sends [RtcpMessage] to Sipfront
      *
      * @param rtcpMessage [RtcpMessage]
+     * @return Unit after [rtcpMessage] has been recorded and passed to the MQTT client
      */
     @Suppress("NON_EXPORTABLE_TYPE")
     @ObjCName("send")
@@ -296,7 +296,7 @@ object CallAnalytics : ProguardKeep {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
-        rtcpCache.add(rtcpMessage)
+        RtcpMath.recordRtcpMessage(rtcpMessage)
         mqttClient?.sendMessage(message = rtcpMessage) ?: run {
             throw IllegalStateException("${MqttClient::class.simpleName} hasn't been created")
         }
@@ -420,4 +420,3 @@ object CallAnalytics : ProguardKeep {
         }
     }
 }
-

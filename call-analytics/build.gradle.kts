@@ -124,6 +124,11 @@ version = if (isPublishToMavenLocal) "${libs.versions.version.get()}-local" else
                 implementation(libs.kermit)
             }
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
         val androidAndJvmMain by getting {
             dependsOn(commonMain)
             dependencies {

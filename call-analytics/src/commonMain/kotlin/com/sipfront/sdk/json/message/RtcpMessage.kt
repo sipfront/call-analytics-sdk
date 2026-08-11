@@ -33,20 +33,22 @@ import kotlin.native.ObjCName
  * @property audioRemoteDirection The remote direction of the audio media.
  * @property videoRemoteDirection The remote direction of the video media.
  * @property rxJitter Current locally measured RFC 3550 interarrival jitter for RTP packets received by the local
- * endpoint during this reporting interval, in milliseconds.
+ * endpoint during this reporting interval, in milliseconds, or `null` when no new measurement is available.
  * @property txJitter Latest jitter reported by the remote endpoint for RTP packets transmitted by the local endpoint,
- * normally obtained from an RTCP receiver report, in milliseconds.
+ * normally obtained from an RTCP receiver report, in milliseconds, or `null` when no new report is available.
  * @property rxPackets The total number of received RTP packets.
- * @property rxLost The total number of RTP packets lost during reception.
+ * @property rxLost The total number of RTP packets lost during reception, or `null` when no new measurement is
+ * available.
  * @property rxBytes The total number of received RTP bytes.
  * @property rxAudioLevel The audio level of incoming media.
  * @property rxTotalAudioEnergy The total audio energy of incoming media over the lifetime of the call.
  * @property txPackets The total number of sent RTP packets.
- * @property txLost The total number of RTP packets lost during transmission.
+ * @property txLost The total number of RTP packets lost during transmission according to the remote endpoint, or
+ * `null` when no new RTCP report is available.
  * @property txBytes The total number of sent RTP bytes.
  * @property txAudioLevel The audio level of outgoing media.
  * @property txTotalAudioEnergy The total audio energy of outgoing media over the lifetime of the call.
- * @property rtt The current round trip time in milliseconds.
+ * @property rtt The current RTCP round trip time in milliseconds, or `null` when no new measurement is available.
  *
  * @throws IllegalStateException If [callId], [addressLocal], [addressRemote], [addressRemoteDisplayName] or [callDirection]
  * is missing before calling [Builder.build]
@@ -69,19 +71,19 @@ data class RtcpMessage internal constructor(
     @SerialName(JsonKeys.param) val param: String = "audio",
     @SerialName(JsonKeys.Rtcp.localJitterEnabled) val localJitterEnabled: Boolean = true,
     @SerialName(JsonKeys.Rtcp.producer) internal val producer: RtcpProducer = RtcpProducer(),
-    @Transient val rxJitter: Double = 0.0,
-    @Transient val txJitter: Double = 0.0,
+    @Transient val rxJitter: Double? = null,
+    @Transient val txJitter: Double? = null,
     @Transient val rxPackets: Long = 0L,
-    @Transient val rxLost: Long = 0L,
+    @Transient val rxLost: Long? = null,
     @Transient val rxBytes: Long = 0L,
     @Transient val rxAudioLevel: Double = 0.0,
     @Transient val rxTotalAudioEnergy: Double = 0.0,
     @Transient val txPackets: Long = 0L,
-    @Transient val txLost: Long = 0L,
+    @Transient val txLost: Long? = null,
     @Transient val txBytes: Long = 0L,
     @Transient val txAudioLevel: Double = 0.0,
     @Transient val txTotalAudioEnergy: Double = 0.0,
-    @Transient val rtt: Double = 0.0,
+    @Transient val rtt: Double? = null,
     @SerialName(JsonKeys.Message.type) override val type: MessageType.Rtcp = MessageType.Rtcp.RTCP,
     @SerialName(JsonKeys.Message.clazz) override val clazz: MessageClass = MessageClass.CALL,
     @SerialName(JsonKeys.timestamp) override val timestamp: Double = currentTimeMillisFormatted()
@@ -104,19 +106,19 @@ data class RtcpMessage internal constructor(
         private var callDirection: CallDirection? = null
         private var audioDirection: MediaDirection = MediaDirection.INACTIVE
         private var videoDirection: MediaDirection = MediaDirection.INACTIVE
-        private var rxJitter: Double = 0.0
-        private var txJitter: Double = 0.0
+        private var rxJitter: Double? = null
+        private var txJitter: Double? = null
         private var rxPackets: Long = 0L
-        private var rxLost: Long = 0L
+        private var rxLost: Long? = null
         private var rxBytes: Long = 0L
         private var rxAudioLevel: Double = 0.0
         private var rxTotalAudioEnergy: Double = 0.0
         private var txPackets: Long = 0L
-        private var txLost: Long = 0L
+        private var txLost: Long? = null
         private var txBytes: Long = 0L
         private var txAudioLevel: Double = 0.0
         private var txTotalAudioEnergy: Double = 0.0
-        private var rtt: Double = 0.0
+        private var rtt: Double? = null
 
         /**
          * The Call-Id of a call, mandatory property
@@ -168,7 +170,10 @@ data class RtcpMessage internal constructor(
         fun txPackets(packets: Long) = apply { this.txPackets = packets }
 
         /**
-         * Total number of TX (transmitted) RTP packets lost
+         * Sets the cumulative number of transmitted RTP packets reported lost by the remote endpoint.
+         *
+         * @param lost cumulative remotely reported egress packet-loss counter; zero is a valid measurement
+         * @return this builder after storing [lost]
          */
         @ObjCName("tx")
         fun txLost(lost: Long) = apply { this.txLost = lost }
@@ -183,6 +188,7 @@ data class RtcpMessage internal constructor(
          * Sets the latest jitter reported by the remote endpoint for RTP packets transmitted by the local endpoint.
          *
          * @param jitter latest non-negative, finite RTCP-reported egress jitter, in milliseconds
+         * @return this builder after storing [jitter]
          */
         @ObjCName("tx")
         fun txJitter(jitter: Double) = apply { this.txJitter = jitter }
@@ -225,12 +231,16 @@ data class RtcpMessage internal constructor(
          *
          * @param jitter current non-negative, finite locally measured ingress jitter for this reporting interval, in
          * milliseconds
+         * @return this builder after storing [jitter]
          */
         @ObjCName("rx")
         fun rxJitter(jitter: Double) = apply { this.rxJitter = jitter }
 
         /**
-         * Total number RTP packets lost
+         * Sets the cumulative number of RTP packets lost during local reception.
+         *
+         * @param lost cumulative locally measured ingress packet-loss counter; zero is a valid measurement
+         * @return this builder after storing [lost]
          */
         @ObjCName("rx")
         fun rxLost(lost: Long) = apply { this.rxLost = lost }
@@ -257,7 +267,10 @@ data class RtcpMessage internal constructor(
             apply { this.rxTotalAudioEnergy = totalAudioEnergy }
 
         /**
-         * Current round trip time in milliseconds
+         * Sets the current RTCP round-trip time.
+         *
+         * @param rtt current non-negative, finite RTCP round-trip time in milliseconds; zero is a valid measurement
+         * @return this builder after storing [rtt]
          */
         fun rtt(@ObjCName("_") rtt: Double) = apply { this.rtt = rtt }
 
