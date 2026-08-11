@@ -1,11 +1,16 @@
 package com.sipfront.sdk.json.message.utils
 
+import com.sipfront.sdk.json.JsonParser
 import com.sipfront.sdk.json.enums.CallDirection
 import com.sipfront.sdk.json.enums.MediaDirection
 import com.sipfront.sdk.json.message.RtcpMessage
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class RtcpMathTest {
     /**
@@ -106,10 +111,163 @@ class RtcpMathTest {
         assertEquals(7.0, secondCallInterface.egress.rttAverageMs)
         assertEquals(1L, secondCallInterface.egress.rttSamples)
         assertEquals(0L, ingressRate.packets)
-        assertEquals(0L, ingressRate.packetsLost)
+        assertNull(ingressRate.packetsLost)
         assertEquals(0L, egressRate.packets)
+        assertNull(egressRate.packetsLost)
+        assertNull(egressRate.packetsLostSamples)
+    }
+
+    /**
+     * Verifies that unavailable RTP quality measurements are omitted instead of serialized as placeholder zeroes.
+     *
+     * @return Unit after all unavailable directional and legacy measurements have been verified
+     */
+    @Test
+    fun omitsUnavailableQualityMeasurements() {
+        val message = createMessage(
+            callId = "unavailable-measurements",
+            timestamp = 3_000.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+        )
+        val iface = message.interfaces.single()
+
+        assertNull(iface.ingress.packetsLost)
+        assertNull(iface.ingress.jitterAverageMs)
+        assertNull(iface.egress.packetsLost)
+        assertNull(iface.egress.jitterAverageMs)
+        assertNull(iface.egress.rttAverageMs)
+        assertNull(iface.ingressRate?.packetsLost)
+        assertNull(iface.ingressRate?.jitterMs)
+        assertNull(iface.egressRate?.packetsLost)
+        assertNull(iface.egressRate?.jitterMs)
+        assertNull(iface.egressRate?.rttMs)
+        assertNull(iface.voipMetrics.mosAverage)
+
+        val interfaceJson = JsonParser.json.parseToJsonElement(JsonParser.toString(message))
+            .jsonObject.getValue("interfaces").jsonArray.single().jsonObject
+        val ingressJson = interfaceJson.getValue("ingress").jsonObject
+        val egressRateJson = interfaceJson.getValue("egress_rate").jsonObject
+        val voipMetricsJson = interfaceJson.getValue("voip_metrics").jsonObject
+
+        assertFalse("packets_lost" in ingressJson)
+        assertFalse("jitter_average_ms" in ingressJson)
+        assertFalse("packets_lost" in egressRateJson)
+        assertFalse("packets_lost_samples" in egressRateJson)
+        assertFalse("jitter_ms" in egressRateJson)
+        assertFalse("jitter_samples" in egressRateJson)
+        assertFalse("rtt_ms" in egressRateJson)
+        assertFalse("rtt_samples" in egressRateJson)
+        assertFalse("mos_average" in voipMetricsJson)
+    }
+
+    /**
+     * Verifies that MOS requires and uses only the complete remotely reported egress RTCP measurements.
+     *
+     * @return Unit after egress-only MOS input selection and missing-input handling have been verified
+     */
+    @Test
+    fun calculatesMosOnlyFromCompleteEgressRtcpMeasurements() {
+        val firstMos = createMessage(
+            callId = "mos-egress-first",
+            timestamp = 4_000.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+            rxLost = 999L,
+            txLost = 3L,
+            rxJitter = 999.0,
+            txJitter = 20.0,
+            rtt = 40.0,
+        ).interfaces.single().voipMetrics.mosAverage
+        val secondMos = createMessage(
+            callId = "mos-egress-second",
+            timestamp = 4_000.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+            rxLost = 0L,
+            txLost = 3L,
+            rxJitter = 0.0,
+            txJitter = 20.0,
+            rtt = 40.0,
+        ).interfaces.single().voipMetrics.mosAverage
+        val missingEgressJitterMos = createMessage(
+            callId = "mos-missing-egress-jitter",
+            timestamp = 4_000.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+            txLost = 3L,
+            rtt = 40.0,
+        ).interfaces.single().voipMetrics.mosAverage
+        val zeroMosInputs = createMessage(
+            callId = "mos-zero-inputs",
+            timestamp = 4_000.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+            txLost = 0L,
+            txJitter = 0.0,
+            rtt = 0.0,
+        ).interfaces.single().voipMetrics.mosAverage
+
+        assertNotNull(firstMos)
+        assertEquals(firstMos, secondMos)
+        assertNull(missingEgressJitterMos)
+        assertNotNull(zeroMosInputs)
+    }
+
+    /**
+     * Verifies that a repeated zero loss counter is a valid new sample even after an unavailable interval.
+     *
+     * @return Unit after the zero loss rate and its sample marker have been verified
+     */
+    @Test
+    fun treatsRepeatedZeroPacketLossAsAValidSample() {
+        val firstMessage = createMessage(
+            callId = "zero-packet-loss",
+            timestamp = 5_000.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+            rxLost = 0L,
+            txLost = 0L,
+        )
+        RtcpMath.recordRtcpMessage(firstMessage)
+
+        val unavailableMessage = createMessage(
+            callId = "zero-packet-loss",
+            timestamp = 5_001.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+        )
+        RtcpMath.recordRtcpMessage(unavailableMessage)
+
+        val egressRate = assertNotNull(
+            createMessage(
+                callId = "zero-packet-loss",
+                timestamp = 5_002.0,
+                rxPackets = 0L,
+                txPackets = 0L,
+                rxBytes = 0L,
+                txBytes = 0L,
+                rxLost = 0L,
+                txLost = 0L,
+            ).interfaces.single().egressRate
+        )
+
         assertEquals(0.0, egressRate.packetsLost)
-        assertEquals(0L, egressRate.packetsLostSamples)
+        assertEquals(1L, egressRate.packetsLostSamples)
     }
 
     /**
@@ -121,11 +279,11 @@ class RtcpMathTest {
      * @param txPackets cumulative sent packet count
      * @param rxBytes cumulative received byte count
      * @param txBytes cumulative sent byte count
-     * @param rxLost cumulative locally measured ingress packet-loss count
-     * @param txLost cumulative remotely reported egress packet-loss count
-     * @param rxJitter locally measured ingress jitter in milliseconds
-     * @param txJitter remotely reported egress jitter in milliseconds
-     * @param rtt remotely measured round-trip time in milliseconds
+     * @param rxLost cumulative locally measured ingress packet-loss count, or `null` when unavailable
+     * @param txLost cumulative remotely reported egress packet-loss count, or `null` when unavailable
+     * @param rxJitter locally measured ingress jitter in milliseconds, or `null` when unavailable
+     * @param txJitter remotely reported egress jitter in milliseconds, or `null` when unavailable
+     * @param rtt remotely measured round-trip time in milliseconds, or `null` when unavailable
      * @return an RTCP message whose directional interface values are calculated from the supplied measurements
      */
     private fun createMessage(
@@ -135,11 +293,11 @@ class RtcpMathTest {
         txPackets: Long,
         rxBytes: Long,
         txBytes: Long,
-        rxLost: Long,
-        txLost: Long,
-        rxJitter: Double,
-        txJitter: Double,
-        rtt: Double,
+        rxLost: Long? = null,
+        txLost: Long? = null,
+        rxJitter: Double? = null,
+        txJitter: Double? = null,
+        rtt: Double? = null,
     ): RtcpMessage {
         return RtcpMessage(
             callId = callId,

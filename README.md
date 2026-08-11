@@ -202,6 +202,14 @@ Alternatively SDK supports parsing from app logs (can be enabled with SipfrontSd
 
 Using CallAnalytics.sendRtcp()
 
+RTP quality measurements are optional. Do not call a measurement setter when no new value is available; the SDK will
+omit that field instead of publishing a placeholder zero. Calling a setter with `0` publishes a valid zero measurement.
+
+- `rxJitter` and `rxLost` contain locally measured ingress values.
+- `txJitter`, `txLost`, and `rtt` contain values from a new remote RTCP report for the egress stream.
+- RTP MOS is emitted only when `txJitter`, `txLost`, and `rtt` are all supplied in the same message.
+- Packet and byte counters remain present in every message and default to `0`.
+
 <details open>
   <summary><b>Android</b></summary>
 
@@ -214,10 +222,11 @@ CallAnalytics.sendRtcp(
         .addressRemote("+4912322222")
         .displayNameRemote("John Doe")
         .audioDirection(MediaDirection.SEND_RECEIVE)
-        .rtt(rtt)                   //round trip time in milliseconds
         .rxJitter(rxJitter)         //locally measured ingress jitter in milliseconds
+        .rxLost(rxLost)             //locally measured ingress lost-packet total
         .txJitter(txJitter)         //remotely reported egress jitter in milliseconds
-        .rxLost(lost)               //lost packets total
+        .txLost(txLost)             //remotely reported egress lost-packet total
+        .rtt(rtt)                   //RTCP round-trip time in milliseconds
         .rxBytes(bytes)             //bytes received total
         .rxPackets(packets)         //packets received total
         .rxAudioLevel(level)        //incoming audio level
@@ -244,10 +253,11 @@ do {
         .video(direction: Media.receiveOnly)
         .call(id: "MyCallId")
         .call(direction: Call.incoming)
-        .rtt(1.0)                   //round trip time in milliseconds
-        .rx(lost: 0)                //lost packets total
         .rx(jitter: 9)              //locally measured ingress jitter in milliseconds
+        .rx(lost: 0)                //locally measured ingress lost-packet total
         .tx(jitter: 8)              //remotely reported egress jitter in milliseconds
+        .tx(lost: 0)                //remotely reported egress lost-packet total
+        .rtt(1.0)                   //RTCP round-trip time in milliseconds
         .rx(packets: 9)             //packets received total
         .rx(bytes: 99)              //bytes received total
         .rx(audioLevel: 0.1)        //incoming audio level

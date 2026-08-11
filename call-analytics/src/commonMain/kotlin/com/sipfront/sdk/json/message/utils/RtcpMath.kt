@@ -19,8 +19,8 @@ internal object RtcpMath {
     private const val JITTER_IMPACT_FACTOR = 0.11
 
     private data class MeasurementSummary(
-        val average: Double,
-        val samples: Long,
+        val average: Double?,
+        val samples: Long?,
     )
 
     private data class MeasurementAccumulator(
@@ -34,8 +34,13 @@ internal object RtcpMath {
         val txPackets: Long,
         val rxBytes: Long,
         val txBytes: Long,
-        val rxLost: Long,
-        val txLost: Long,
+        val rxLost: CounterMeasurement?,
+        val txLost: CounterMeasurement?,
+    )
+
+    private data class CounterMeasurement(
+        val timestamp: Double,
+        val value: Long,
     )
 
     private data class RtcpCallState(
@@ -80,35 +85,29 @@ internal object RtcpMath {
             previousMeasurement?.txBytes,
             elapsedTimeSeconds
         )
-        val lostRxPerSecond: Long = calculateRate(
+        val lostRxPerSecond: Long? = calculateCounterRate(
             currentMsg.rxLost,
             previousMeasurement?.rxLost,
-            elapsedTimeSeconds
-        )
-        val lostTxPerSecond: Double = calculateFractionalRate(
+            currentMsg.timestamp
+        )?.roundToLong()
+        val lostTxPerSecond: Double? = calculateCounterRate(
             currentMsg.txLost,
             previousMeasurement?.txLost,
-            elapsedTimeSeconds
+            currentMsg.timestamp
         )
-        val mos: Double = calculateMeanOpinionScore(currentMsg)
-        val txJitter: Double = validOrNull(currentMsg.txJitter)
-        val rxJitter: Double = validOrNull(currentMsg.rxJitter)
-        val rtt: Double = validOrNull(currentMsg.rtt)
+        val mos: Double? = calculateMeanOpinionScore(currentMsg)
+        val txJitter: Double? = finiteOrNull(currentMsg.txJitter)
+        val rxJitter: Double? = finiteOrNull(currentMsg.rxJitter)
+        val rtt: Double? = finiteOrNull(currentMsg.rtt)
         val txJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.txJitter, callState.txJitter)
         val rxJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rxJitter, callState.rxJitter)
         val rttSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rtt, callState.rtt)
-        val txJitterSamples: Long = if (isValid(currentMsg.txJitter)) 1L else 0L
-        val rxJitterSamples: Long = if (isValid(currentMsg.rxJitter)) 1L else 0L
-        val rttSamples: Long = if (isValid(currentMsg.rtt)) 1L else 0L
-        val txPacketLossSamples: Long = if (
-            previousMeasurement != null &&
-            elapsedTimeSeconds > 0.0 &&
-            currentMsg.txLost >= previousMeasurement.txLost
-        ) {
-            1L
-        } else {
-            0L
-        }
+        val txJitterSamples: Long? = txJitter?.let { 1L }
+        val rxJitterSamples: Long? = rxJitter?.let { 1L }
+        val rttSamples: Long? = rtt?.let { 1L }
+        val txPacketLossSamples: Long? = lostTxPerSecond?.let { 1L }
+        val ingressPacketsLost = currentMsg.rxLost ?: previousMeasurement?.rxLost?.value
+        val egressPacketsLost = currentMsg.txLost ?: previousMeasurement?.txLost?.value
 
         return listOf(
             RtcpInterface(
@@ -118,14 +117,14 @@ internal object RtcpMath {
                 ingress = Ingress(
                     packets = currentMsg.rxPackets,
                     bytes = currentMsg.rxBytes,
-                    packetsLost = currentMsg.rxLost,
+                    packetsLost = ingressPacketsLost,
                     jitterAverageMs = rxJitterSummary.average,
                     jitterSamples = rxJitterSummary.samples
                 ),
                 egress = Egress(
                     packets = currentMsg.txPackets,
                     bytes = currentMsg.txBytes,
-                    packetsLost = currentMsg.txLost,
+                    packetsLost = egressPacketsLost,
                     jitterAverageMs = txJitterSummary.average,
                     jitterSamples = txJitterSummary.samples,
                     rttAverageMs = rttSummary.average,
@@ -149,15 +148,15 @@ internal object RtcpMath {
                     rttSamples = rttSamples
                 ),
                 mediaOutbound = MediaStats(
-                    audioLevel = validOrNull(currentMsg.txAudioLevel),
-                    totalAudioEnergy = validOrNull(currentMsg.txTotalAudioEnergy)
+                    audioLevel = finiteOrZero(currentMsg.txAudioLevel),
+                    totalAudioEnergy = finiteOrZero(currentMsg.txTotalAudioEnergy)
                 ),
                 mediaInbound = MediaStats(
-                    audioLevel = validOrNull(currentMsg.rxAudioLevel),
-                    totalAudioEnergy = validOrNull(currentMsg.rxTotalAudioEnergy)
+                    audioLevel = finiteOrZero(currentMsg.rxAudioLevel),
+                    totalAudioEnergy = finiteOrZero(currentMsg.rxTotalAudioEnergy)
                 ),
                 voipMetrics = VoipMetrics(
-                    mosAverage = validOrNull(mos),
+                    mosAverage = mos,
                     jitterAverage = txJitterSummary.average,
                     jitterMeasuredAverage = rxJitterSummary.average,
                     /**
@@ -165,8 +164,8 @@ internal object RtcpMath {
                      * currently expects, but still keeping Sipfront Mobile SDK consistent by expecting
                      * millisecond across all values
                      */
-                    rttDscAverage = validOrNull(currentMsg.rtt * 1000),
-                    packetLossTotal = currentMsg.rxLost
+                    rttDscAverage = rtt?.times(1000),
+                    packetLossTotal = ingressPacketsLost
                 ),
                 voipMetricsInterval = VoipMetricsInterval(
                     jitter = txJitter,
@@ -186,6 +185,7 @@ internal object RtcpMath {
     internal fun recordRtcpMessage(message: RtcpMessage) {
         callStates.block { states ->
             val currentState = states[message.callId] ?: RtcpCallState()
+            val previousMeasurement = currentState.previousMeasurement
             states[message.callId] = currentState.copy(
                 previousMeasurement = PreviousRtcpMeasurement(
                     timestamp = message.timestamp,
@@ -193,8 +193,12 @@ internal object RtcpMath {
                     txPackets = message.txPackets,
                     rxBytes = message.rxBytes,
                     txBytes = message.txBytes,
-                    rxLost = message.rxLost,
-                    txLost = message.txLost
+                    rxLost = message.rxLost?.let {
+                        CounterMeasurement(timestamp = message.timestamp, value = it)
+                    } ?: previousMeasurement?.rxLost,
+                    txLost = message.txLost?.let {
+                        CounterMeasurement(timestamp = message.timestamp, value = it)
+                    } ?: previousMeasurement?.txLost
                 ),
                 txJitter = accumulateMeasurement(currentState.txJitter, message.txJitter),
                 rxJitter = accumulateMeasurement(currentState.rxJitter, message.rxJitter),
@@ -211,14 +215,14 @@ internal object RtcpMath {
      * @return cumulative average and sample count including [currentValue] when it is finite
      */
     private fun calculateCumulativeMeasurement(
-        currentValue: Double,
+        currentValue: Double?,
         accumulator: MeasurementAccumulator
     ): MeasurementSummary {
         val accumulated = accumulateMeasurement(accumulator, currentValue)
 
         return MeasurementSummary(
-            average = if (accumulated.samples > 0L) accumulated.sum / accumulated.samples else 0.0,
-            samples = accumulated.samples
+            average = if (accumulated.samples > 0L) accumulated.sum / accumulated.samples else null,
+            samples = accumulated.samples.takeIf { it > 0L }
         )
     }
 
@@ -231,13 +235,33 @@ internal object RtcpMath {
      */
     private fun accumulateMeasurement(
         accumulator: MeasurementAccumulator,
-        value: Double
+        value: Double?
     ): MeasurementAccumulator {
-        if (!isValid(value)) return accumulator
+        val finiteValue = finiteOrNull(value) ?: return accumulator
         return MeasurementAccumulator(
-            sum = accumulator.sum + value,
+            sum = accumulator.sum + finiteValue,
             samples = accumulator.samples + 1L
         )
+    }
+
+    /**
+     * Calculates a per-second rate between two available samples of the same cumulative counter.
+     *
+     * @param currentValue current cumulative counter value, or `null` when no new sample is available
+     * @param previousMeasurement previous non-null counter value and its timestamp, or `null` without a baseline
+     * @param currentTimestamp timestamp of [currentValue], in seconds
+     * @return the per-second counter increase, including `0.0` for a valid zero delta, or `null` when unavailable
+     */
+    private fun calculateCounterRate(
+        currentValue: Long?,
+        previousMeasurement: CounterMeasurement?,
+        currentTimestamp: Double,
+    ): Double? {
+        if (currentValue == null || previousMeasurement == null) return null
+        val elapsedTimeSeconds = currentTimestamp - previousMeasurement.timestamp
+        val delta = currentValue - previousMeasurement.value
+        if (elapsedTimeSeconds <= 0.0 || delta < 0L) return null
+        return finiteOrNull(delta / elapsedTimeSeconds)
     }
 
     /**
@@ -266,41 +290,63 @@ internal object RtcpMath {
         elapsedTimeSeconds: Double
     ): Double {
         if (previousVal == null || elapsedTimeSeconds <= 0 || (currentVal - previousVal) <= 0L) return 0.0
-        return validOrNull((currentVal - previousVal) / elapsedTimeSeconds)
+        return finiteOrZero((currentVal - previousVal) / elapsedTimeSeconds)
     }
 
     /**
      * Calculates the estimated mean opinion score from the supplied RTCP measurement.
      *
-     * @param rtcp RTCP measurement containing RTT, packet loss, and locally measured jitter
-     * @return the calculated mean opinion score, or `0.0` when an unexpected calculation error occurs
+     * @param rtcp RTCP measurement containing remotely reported egress jitter and packet loss plus RTCP RTT
+     * @return the calculated mean opinion score, or `null` when any required value is unavailable or invalid
      */
-    private fun calculateMeanOpinionScore(rtcp: RtcpMessage): Double {
+    private fun calculateMeanOpinionScore(rtcp: RtcpMessage): Double? {
+        val jitter = finiteOrNull(rtcp.txJitter) ?: return null
+        val packetsLost = rtcp.txLost ?: return null
+        val rtt = finiteOrNull(rtcp.rtt) ?: return null
+
         return try {
+            val jitterWeightDenominator = rtt + packetsLost
+            val jitterImpact = if (jitterWeightDenominator == 0.0) {
+                0.0
+            } else {
+                JITTER_IMPACT_FACTOR * (rtt / jitterWeightDenominator) * jitter
+            }
             val rFactor =
-                R_FACTOR_BASE - (DELAY_IMPACT_FACTOR * rtcp.rtt) - (JITTER_IMPACT_FACTOR * (rtcp.rtt / (rtcp.rtt + rtcp.rxLost)) * rtcp.rxJitter)
-            MOS_FACTOR_BASE + (R_FACTOR_IMPACT_IN_MOS) * rFactor + (R_FACTOR_IMPACT_ON_QUALITY) * rFactor * (rFactor - R_FACTOR_LOWER_BOUND) * (R_FACTOR_UPPER_BOUND - rFactor)
+                R_FACTOR_BASE - (DELAY_IMPACT_FACTOR * rtt) - jitterImpact
+            finiteOrNull(
+                MOS_FACTOR_BASE + (R_FACTOR_IMPACT_IN_MOS) * rFactor +
+                    (R_FACTOR_IMPACT_ON_QUALITY) * rFactor * (rFactor - R_FACTOR_LOWER_BOUND) *
+                    (R_FACTOR_UPPER_BOUND - rFactor)
+            )
         } catch (e: ArithmeticException) {
             throw ArithmeticException("Could not calculate MOS due to ArithmeticException")
         } catch (e: Exception) {
             Log.release().e("Failed to calculate MOS", e)
-            0.0
+            null
         }
     }
 
     /**
      * Determines whether a floating-point measurement is finite.
      *
-     * @param value measurement to validate
-     * @return `true` when [value] is neither `NaN` nor infinite, otherwise `false`
+     * @param value measurement to validate, or `null` when it is unavailable
+     * @return `true` when [value] is non-null and neither `NaN` nor infinite, otherwise `false`
      */
-    private fun isValid(value: Double): Boolean = !value.isNaN() && !value.isInfinite()
+    private fun isValid(value: Double?): Boolean = value != null && !value.isNaN() && !value.isInfinite()
 
     /**
-     * Replaces a non-finite floating-point measurement with zero.
+     * Returns a finite floating-point measurement and rejects missing or non-finite values.
      *
-     * @param value measurement to validate
+     * @param value measurement to validate, or `null` when it is unavailable
+     * @return [value] when it is non-null and finite, otherwise `null`
+     */
+    private fun finiteOrNull(value: Double?): Double? = value?.takeIf { isValid(it) }
+
+    /**
+     * Returns a finite floating-point value and replaces a non-finite value with zero.
+     *
+     * @param value value to validate
      * @return [value] when it is finite, otherwise `0.0`
      */
-    private fun validOrNull(value: Double): Double = if (isValid(value)) value else 0.0
+    private fun finiteOrZero(value: Double): Double = finiteOrNull(value) ?: 0.0
 }
