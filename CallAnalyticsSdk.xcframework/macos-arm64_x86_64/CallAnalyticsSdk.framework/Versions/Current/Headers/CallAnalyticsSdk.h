@@ -882,7 +882,7 @@ __attribute__((swift_name("RtcpMessage")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer)) __attribute__((unavailable));
 + (instancetype)new __attribute__((unavailable));
 @property (class, readonly, getter=companion) CASRtcpMessageCompanion *companion __attribute__((swift_name("companion")));
-- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param rxJitter:(double)rxJitter txJitter:(double)txJitter rxPackets:(int64_t)rxPackets rxLost:(int64_t)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txLost:(int64_t)txLost txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(double)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:rxJitter:txJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txLost:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
+- (CASRtcpMessage *)doCopyCallId:(NSString *)callId addressLocal:(NSString *)addressLocal addressRemote:(NSString *)addressRemote addressRemoteDisplayName:(NSString *)addressRemoteDisplayName callDirection:(CASCall *)callDirection audioDirection:(CASMedia *)audioDirection videoDirection:(CASMedia *)videoDirection audioRemoteDirection:(CASMedia *)audioRemoteDirection videoRemoteDirection:(CASMedia *)videoRemoteDirection param:(NSString *)param localJitterEnabled:(BOOL)localJitterEnabled producer:(id)producer rxJitter:(CASDouble * _Nullable)rxJitter txJitter:(CASDouble * _Nullable)txJitter rxPackets:(int64_t)rxPackets rxLost:(CASLong * _Nullable)rxLost rxBytes:(int64_t)rxBytes rxAudioLevel:(double)rxAudioLevel rxTotalAudioEnergy:(double)rxTotalAudioEnergy txPackets:(int64_t)txPackets txLost:(CASLong * _Nullable)txLost txBytes:(int64_t)txBytes txAudioLevel:(double)txAudioLevel txTotalAudioEnergy:(double)txTotalAudioEnergy rtt:(CASDouble * _Nullable)rtt type:(CASMessageRtcp *)type clazz:(id)clazz timestamp:(double)timestamp __attribute__((swift_name("doCopy(callId:addressLocal:addressRemote:addressRemoteDisplayName:callDirection:audioDirection:videoDirection:audioRemoteDirection:videoRemoteDirection:param:localJitterEnabled:producer:rxJitter:txJitter:rxPackets:rxLost:rxBytes:rxAudioLevel:rxTotalAudioEnergy:txPackets:txLost:txBytes:txAudioLevel:txTotalAudioEnergy:rtt:type:clazz:timestamp:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
@@ -931,6 +931,12 @@ __attribute__((swift_name("RtcpMessage")))
 
 /**
  * @note annotations
+ *   kotlinx.serialization.SerialName(value="local_jitter_enabled")
+*/
+@property (readonly) BOOL localJitterEnabled __attribute__((swift_name("localJitterEnabled")));
+
+/**
+ * @note annotations
  *   kotlinx.serialization.SerialName(value="param")
 */
 @property (readonly) NSString *param __attribute__((swift_name("param")));
@@ -939,7 +945,7 @@ __attribute__((swift_name("RtcpMessage")))
  * @note annotations
  *   kotlinx.serialization.Transient
 */
-@property (readonly) double rtt __attribute__((swift_name("rtt")));
+@property (readonly) CASDouble * _Nullable rtt __attribute__((swift_name("rtt")));
 
 /**
  * @note annotations
@@ -957,13 +963,13 @@ __attribute__((swift_name("RtcpMessage")))
  * @note annotations
  *   kotlinx.serialization.Transient
 */
-@property (readonly) double rxJitter __attribute__((swift_name("rxJitter")));
+@property (readonly) CASDouble * _Nullable rxJitter __attribute__((swift_name("rxJitter")));
 
 /**
  * @note annotations
  *   kotlinx.serialization.Transient
 */
-@property (readonly) int64_t rxLost __attribute__((swift_name("rxLost")));
+@property (readonly) CASLong * _Nullable rxLost __attribute__((swift_name("rxLost")));
 
 /**
  * @note annotations
@@ -999,13 +1005,13 @@ __attribute__((swift_name("RtcpMessage")))
  * @note annotations
  *   kotlinx.serialization.Transient
 */
-@property (readonly) double txJitter __attribute__((swift_name("txJitter")));
+@property (readonly) CASDouble * _Nullable txJitter __attribute__((swift_name("txJitter")));
 
 /**
  * @note annotations
  *   kotlinx.serialization.Transient
 */
-@property (readonly) int64_t txLost __attribute__((swift_name("txLost")));
+@property (readonly) CASLong * _Nullable txLost __attribute__((swift_name("txLost")));
 
 /**
  * @note annotations
