@@ -92,6 +92,8 @@ internal object JsonKeys {
             }
 
             object VoipMetricsInterval {
+                const val mos: String = "mos"
+                const val mosSamples: String = "mos_samples"
                 const val jitter: String = "jitter"
                 const val jitterMeasured: String = "jitter_measured"
             }

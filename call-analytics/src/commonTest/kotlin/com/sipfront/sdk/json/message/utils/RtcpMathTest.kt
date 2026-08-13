@@ -35,7 +35,7 @@ class RtcpMathTest {
         )
         RtcpMath.recordRtcpMessage(firstMessage)
 
-        val secondInterface = createMessage(
+        val secondMessage = createMessage(
             callId = "running-aggregates",
             timestamp = 1_002.0,
             rxPackets = 140L,
@@ -47,9 +47,11 @@ class RtcpMathTest {
             rxJitter = 14.0,
             txJitter = 24.0,
             rtt = 34.0
-        ).interfaces.single()
+        )
+        val secondInterface = secondMessage.interfaces.single()
         val ingressRate = assertNotNull(secondInterface.ingressRate)
         val egressRate = assertNotNull(secondInterface.egressRate)
+        val secondMos = assertNotNull(secondInterface.voipMetricsInterval.mos)
 
         assertEquals(12.0, secondInterface.ingress.jitterAverageMs)
         assertEquals(2L, secondInterface.ingress.jitterSamples)
@@ -64,6 +66,26 @@ class RtcpMathTest {
         assertEquals(500L, egressRate.bytes)
         assertEquals(1.0, egressRate.packetsLost)
         assertEquals(1L, egressRate.packetsLostSamples)
+        assertNull(firstMessage.interfaces.single().voipMetricsInterval.mos)
+        assertEquals(secondMos, secondInterface.voipMetrics.mosAverage)
+
+        RtcpMath.recordRtcpMessage(secondMessage)
+        val thirdInterface = createMessage(
+            callId = "running-aggregates",
+            timestamp = 1_004.0,
+            rxPackets = 180L,
+            txPackets = 300L,
+            rxBytes = 2_600L,
+            txBytes = 4_000L,
+            rxLost = 7L,
+            txLost = 10L,
+            rxJitter = 18.0,
+            txJitter = 30.0,
+            rtt = 40.0
+        ).interfaces.single()
+        val thirdMos = assertNotNull(thirdInterface.voipMetricsInterval.mos)
+
+        assertEquals((secondMos + thirdMos) / 2.0, thirdInterface.voipMetrics.mosAverage)
     }
 
     /**
@@ -145,12 +167,15 @@ class RtcpMathTest {
         assertNull(iface.egressRate?.jitterMs)
         assertNull(iface.egressRate?.rttMs)
         assertNull(iface.voipMetrics.mosAverage)
+        assertNull(iface.voipMetricsInterval.mos)
+        assertNull(iface.voipMetricsInterval.mosSamples)
 
         val interfaceJson = JsonParser.json.parseToJsonElement(JsonParser.toString(message))
             .jsonObject.getValue("interfaces").jsonArray.single().jsonObject
         val ingressJson = interfaceJson.getValue("ingress").jsonObject
         val egressRateJson = interfaceJson.getValue("egress_rate").jsonObject
         val voipMetricsJson = interfaceJson.getValue("voip_metrics").jsonObject
+        val voipMetricsIntervalJson = interfaceJson.getValue("voip_metrics_interval").jsonObject
 
         assertFalse("packets_lost" in ingressJson)
         assertFalse("jitter_average_ms" in ingressJson)
@@ -161,6 +186,8 @@ class RtcpMathTest {
         assertFalse("rtt_ms" in egressRateJson)
         assertFalse("rtt_samples" in egressRateJson)
         assertFalse("mos_average" in voipMetricsJson)
+        assertFalse("mos" in voipMetricsIntervalJson)
+        assertFalse("mos_samples" in voipMetricsIntervalJson)
     }
 
     /**
@@ -170,58 +197,85 @@ class RtcpMathTest {
      */
     @Test
     fun calculatesMosOnlyFromCompleteEgressRtcpMeasurements() {
-        val firstMos = createMessage(
+        listOf(
+            "mos-egress-first",
+            "mos-egress-second",
+            "mos-missing-egress-jitter",
+            "mos-zero-inputs",
+        ).forEach { callId ->
+            RtcpMath.recordRtcpMessage(
+                createMessage(
+                    callId = callId,
+                    timestamp = 3_999.0,
+                    rxPackets = 100L,
+                    txPackets = 100L,
+                    rxBytes = 1_000L,
+                    txBytes = 1_000L,
+                    txLost = 0L,
+                )
+            )
+        }
+
+        val firstInterface = createMessage(
             callId = "mos-egress-first",
             timestamp = 4_000.0,
-            rxPackets = 0L,
-            txPackets = 0L,
-            rxBytes = 0L,
-            txBytes = 0L,
+            rxPackets = 200L,
+            txPackets = 200L,
+            rxBytes = 2_000L,
+            txBytes = 2_000L,
             rxLost = 999L,
             txLost = 3L,
             rxJitter = 999.0,
             txJitter = 20.0,
             rtt = 40.0,
-        ).interfaces.single().voipMetrics.mosAverage
-        val secondMos = createMessage(
+        ).interfaces.single()
+        val secondInterface = createMessage(
             callId = "mos-egress-second",
             timestamp = 4_000.0,
-            rxPackets = 0L,
-            txPackets = 0L,
-            rxBytes = 0L,
-            txBytes = 0L,
+            rxPackets = 200L,
+            txPackets = 300L,
+            rxBytes = 2_000L,
+            txBytes = 3_000L,
             rxLost = 0L,
-            txLost = 3L,
+            txLost = 6L,
             rxJitter = 0.0,
             txJitter = 20.0,
             rtt = 40.0,
-        ).interfaces.single().voipMetrics.mosAverage
-        val missingEgressJitterMos = createMessage(
+        ).interfaces.single()
+        val missingEgressJitterInterface = createMessage(
             callId = "mos-missing-egress-jitter",
             timestamp = 4_000.0,
-            rxPackets = 0L,
-            txPackets = 0L,
-            rxBytes = 0L,
-            txBytes = 0L,
+            rxPackets = 200L,
+            txPackets = 200L,
+            rxBytes = 2_000L,
+            txBytes = 2_000L,
             txLost = 3L,
             rtt = 40.0,
-        ).interfaces.single().voipMetrics.mosAverage
-        val zeroMosInputs = createMessage(
+        ).interfaces.single()
+        val zeroMosInputsInterface = createMessage(
             callId = "mos-zero-inputs",
             timestamp = 4_000.0,
-            rxPackets = 0L,
-            txPackets = 0L,
-            rxBytes = 0L,
-            txBytes = 0L,
+            rxPackets = 200L,
+            txPackets = 200L,
+            rxBytes = 2_000L,
+            txBytes = 2_000L,
             txLost = 0L,
             txJitter = 0.0,
             rtt = 0.0,
-        ).interfaces.single().voipMetrics.mosAverage
+        ).interfaces.single()
 
-        assertNotNull(firstMos)
-        assertEquals(firstMos, secondMos)
-        assertNull(missingEgressJitterMos)
-        assertNotNull(zeroMosInputs)
+        val firstMos = assertNotNull(firstInterface.voipMetrics.mosAverage)
+        assertEquals(firstMos, firstInterface.voipMetricsInterval.mos)
+        assertEquals(1L, firstInterface.voipMetricsInterval.mosSamples)
+        assertEquals(firstMos, secondInterface.voipMetrics.mosAverage)
+        assertEquals(firstMos, secondInterface.voipMetricsInterval.mos)
+        assertEquals(1L, secondInterface.voipMetricsInterval.mosSamples)
+        assertNull(missingEgressJitterInterface.voipMetrics.mosAverage)
+        assertNull(missingEgressJitterInterface.voipMetricsInterval.mos)
+        assertNull(missingEgressJitterInterface.voipMetricsInterval.mosSamples)
+        assertNotNull(zeroMosInputsInterface.voipMetrics.mosAverage)
+        assertNotNull(zeroMosInputsInterface.voipMetricsInterval.mos)
+        assertEquals(1L, zeroMosInputsInterface.voipMetricsInterval.mosSamples)
     }
 
     /**

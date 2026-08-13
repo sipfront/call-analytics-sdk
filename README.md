@@ -207,7 +207,10 @@ omit that field instead of publishing a placeholder zero. Calling a setter with 
 
 - `rxJitter` and `rxLost` contain locally measured ingress values.
 - `txJitter`, `txLost`, and `rtt` contain values from a new remote RTCP report for the egress stream.
-- RTP MOS is emitted only when `txJitter`, `txLost`, and `rtt` are all supplied in the same message.
+- Interval RTP MOS and `mos_samples: 1` are emitted when a new `txLost` sample can be compared with the preceding
+  loss sample and current `txJitter` and `rtt` values are available. MOS uses the lost- and sent-packet rates over
+  that same RTCP interval to derive packet-loss percentage. Both interval fields are omitted when MOS cannot be
+  calculated. `voip_metrics.mos_average` contains the cumulative average of all valid MOS measurements for the call.
 - Packet and byte counters remain present in every message and default to `0`.
 
 <details open>

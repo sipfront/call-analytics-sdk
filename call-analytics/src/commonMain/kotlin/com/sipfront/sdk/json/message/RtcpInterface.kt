@@ -152,7 +152,7 @@ internal data class EgressRate(
 @Serializable
 internal data class VoipMetrics(
     /**
-     * Measures audio quality with a value between 1.0 and 5.0, where 1 is the lowest and 5 the highest quality
+     * Cumulative average of all valid MOS measurements for the call, where 1 is the lowest and 5 the highest quality.
      */
     @SerialName(JsonKeys.Rtcp.Interface.VoipMetrics.mosAverage) val mosAverage: Double?,
     /**
@@ -176,6 +176,14 @@ internal data class VoipMetrics(
 
 @Serializable
 internal data class VoipMetricsInterval(
+    /**
+     * Estimated egress MOS for the current reporting interval, or `null` when its required inputs are unavailable.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.VoipMetricsInterval.mos) val mos: Double?,
+    /**
+     * Number of MOS measurements in the current reporting interval, or `null` when no MOS was calculated.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.VoipMetricsInterval.mosSamples) val mosSamples: Long?,
     /**
      * Remotely reported egress jitter for the current reporting interval, in milliseconds.
      */
