@@ -41,6 +41,7 @@ internal object RtcpMath {
     private data class CounterMeasurement(
         val timestamp: Double,
         val value: Long,
+        val packets: Long,
     )
 
     private data class RtcpCallState(
@@ -48,6 +49,7 @@ internal object RtcpMath {
         val txJitter: MeasurementAccumulator = MeasurementAccumulator(),
         val rxJitter: MeasurementAccumulator = MeasurementAccumulator(),
         val rtt: MeasurementAccumulator = MeasurementAccumulator(),
+        val mos: MeasurementAccumulator = MeasurementAccumulator(),
     )
 
     private val callStates = ConcurrentMutableMap<String, RtcpCallState>()
@@ -95,17 +97,33 @@ internal object RtcpMath {
             previousMeasurement?.txLost,
             currentMsg.timestamp
         )
-        val mos: Double? = calculateMeanOpinionScore(currentMsg)
+        val packetsTxPerSecondForLossInterval: Double? = calculatePacketRateForCounterInterval(
+            currentMsg.txLost,
+            currentMsg.txPackets,
+            previousMeasurement?.txLost,
+            currentMsg.timestamp
+        )
+        val packetLossPercentage: Double? = calculatePacketLossPercentage(
+            lostTxPerSecond,
+            packetsTxPerSecondForLossInterval
+        )
+        val mos: Double? = calculateMeanOpinionScore(
+            currentMsg.txJitter,
+            packetLossPercentage,
+            currentMsg.rtt
+        )
         val txJitter: Double? = finiteOrNull(currentMsg.txJitter)
         val rxJitter: Double? = finiteOrNull(currentMsg.rxJitter)
         val rtt: Double? = finiteOrNull(currentMsg.rtt)
         val txJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.txJitter, callState.txJitter)
         val rxJitterSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rxJitter, callState.rxJitter)
         val rttSummary: MeasurementSummary = calculateCumulativeMeasurement(currentMsg.rtt, callState.rtt)
+        val mosSummary: MeasurementSummary = calculateCumulativeMeasurement(mos, callState.mos)
         val txJitterSamples: Long? = txJitter?.let { 1L }
         val rxJitterSamples: Long? = rxJitter?.let { 1L }
         val rttSamples: Long? = rtt?.let { 1L }
         val txPacketLossSamples: Long? = lostTxPerSecond?.let { 1L }
+        val mosSamples: Long? = mos?.let { 1L }
         val ingressPacketsLost = currentMsg.rxLost ?: previousMeasurement?.rxLost?.value
         val egressPacketsLost = currentMsg.txLost ?: previousMeasurement?.txLost?.value
 
@@ -156,7 +174,7 @@ internal object RtcpMath {
                     totalAudioEnergy = finiteOrZero(currentMsg.rxTotalAudioEnergy)
                 ),
                 voipMetrics = VoipMetrics(
-                    mosAverage = mos,
+                    mosAverage = mosSummary.average,
                     jitterAverage = txJitterSummary.average,
                     jitterMeasuredAverage = rxJitterSummary.average,
                     /**
@@ -168,6 +186,8 @@ internal object RtcpMath {
                     packetLossTotal = ingressPacketsLost
                 ),
                 voipMetricsInterval = VoipMetricsInterval(
+                    mos = mos,
+                    mosSamples = mosSamples,
                     jitter = txJitter,
                     jitterMeasured = rxJitter
                 ),
@@ -194,15 +214,16 @@ internal object RtcpMath {
                     rxBytes = message.rxBytes,
                     txBytes = message.txBytes,
                     rxLost = message.rxLost?.let {
-                        CounterMeasurement(timestamp = message.timestamp, value = it)
+                        CounterMeasurement(timestamp = message.timestamp, value = it, packets = message.rxPackets)
                     } ?: previousMeasurement?.rxLost,
                     txLost = message.txLost?.let {
-                        CounterMeasurement(timestamp = message.timestamp, value = it)
+                        CounterMeasurement(timestamp = message.timestamp, value = it, packets = message.txPackets)
                     } ?: previousMeasurement?.txLost
                 ),
                 txJitter = accumulateMeasurement(currentState.txJitter, message.txJitter),
                 rxJitter = accumulateMeasurement(currentState.rxJitter, message.rxJitter),
-                rtt = accumulateMeasurement(currentState.rtt, message.rtt)
+                rtt = accumulateMeasurement(currentState.rtt, message.rtt),
+                mos = accumulateMeasurement(currentState.mos, message.interfaces.firstOrNull()?.voipMetricsInterval?.mos)
             )
         }
     }
@@ -265,6 +286,47 @@ internal object RtcpMath {
     }
 
     /**
+     * Calculates a packet rate over the same interval as a cumulative loss-counter measurement.
+     *
+     * @param currentCounterValue current cumulative loss-counter value, or `null` when no new report is available
+     * @param currentPackets current cumulative packet count
+     * @param previousMeasurement previous loss-counter measurement with its corresponding cumulative packet count
+     * @param currentTimestamp timestamp of the current values, in seconds
+     * @return packets per second over the loss-report interval, or `null` when the rate cannot be calculated
+     */
+    private fun calculatePacketRateForCounterInterval(
+        currentCounterValue: Long?,
+        currentPackets: Long,
+        previousMeasurement: CounterMeasurement?,
+        currentTimestamp: Double,
+    ): Double? {
+        if (currentCounterValue == null || previousMeasurement == null) return null
+        val elapsedTimeSeconds = currentTimestamp - previousMeasurement.timestamp
+        val packetDelta = currentPackets - previousMeasurement.packets
+        if (elapsedTimeSeconds <= 0.0 || packetDelta <= 0L) return null
+        return finiteOrNull(packetDelta / elapsedTimeSeconds)
+    }
+
+    /**
+     * Calculates packet-loss percentage from loss and packet rates covering the same interval.
+     *
+     * @param packetsLostPerSecond lost packets per second during the interval
+     * @param packetsSentPerSecond sent packets per second during the same interval
+     * @return packet-loss percentage from 0 to 100, or `null` when either rate is unavailable or invalid
+     */
+    private fun calculatePacketLossPercentage(
+        packetsLostPerSecond: Double?,
+        packetsSentPerSecond: Double?,
+    ): Double? {
+        if (packetsLostPerSecond == null || packetsSentPerSecond == null ||
+            packetsLostPerSecond < 0.0 || packetsSentPerSecond <= 0.0
+        ) {
+            return null
+        }
+        return finiteOrNull((packetsLostPerSecond / packetsSentPerSecond) * 100.0)?.coerceIn(0.0, 100.0)
+    }
+
+    /**
      * Calculates a per-second rate from two cumulative counter values.
      *
      * @param currentVal current cumulative counter value
@@ -294,25 +356,31 @@ internal object RtcpMath {
     }
 
     /**
-     * Calculates the estimated mean opinion score from the supplied RTCP measurement.
+     * Calculates the estimated mean opinion score from interval RTCP measurements.
      *
-     * @param rtcp RTCP measurement containing remotely reported egress jitter and packet loss plus RTCP RTT
+     * @param jitter remotely reported egress jitter in milliseconds
+     * @param packetLossPercentage remotely reported egress packet loss during the same interval, as a percentage
+     * @param rtt round-trip time in milliseconds
      * @return the calculated mean opinion score, or `null` when any required value is unavailable or invalid
      */
-    private fun calculateMeanOpinionScore(rtcp: RtcpMessage): Double? {
-        val jitter = finiteOrNull(rtcp.txJitter) ?: return null
-        val packetsLost = rtcp.txLost ?: return null
-        val rtt = finiteOrNull(rtcp.rtt) ?: return null
+    private fun calculateMeanOpinionScore(
+        jitter: Double?,
+        packetLossPercentage: Double?,
+        rtt: Double?,
+    ): Double? {
+        val validJitter = finiteOrNull(jitter) ?: return null
+        val validPacketLossPercentage = finiteOrNull(packetLossPercentage) ?: return null
+        val validRtt = finiteOrNull(rtt) ?: return null
 
         return try {
-            val jitterWeightDenominator = rtt + packetsLost
+            val jitterWeightDenominator = validRtt + validPacketLossPercentage
             val jitterImpact = if (jitterWeightDenominator == 0.0) {
                 0.0
             } else {
-                JITTER_IMPACT_FACTOR * (rtt / jitterWeightDenominator) * jitter
+                JITTER_IMPACT_FACTOR * (validRtt / jitterWeightDenominator) * validJitter
             }
             val rFactor =
-                R_FACTOR_BASE - (DELAY_IMPACT_FACTOR * rtt) - jitterImpact
+                R_FACTOR_BASE - (DELAY_IMPACT_FACTOR * validRtt) - jitterImpact
             finiteOrNull(
                 MOS_FACTOR_BASE + (R_FACTOR_IMPACT_IN_MOS) * rFactor +
                     (R_FACTOR_IMPACT_ON_QUALITY) * rFactor * (rFactor - R_FACTOR_LOWER_BOUND) *
