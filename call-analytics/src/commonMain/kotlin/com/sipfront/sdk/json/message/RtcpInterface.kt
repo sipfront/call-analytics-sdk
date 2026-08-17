@@ -104,6 +104,10 @@ internal data class IngressRate(
      */
     @SerialName(JsonKeys.Rtcp.Interface.IngressRate.packetsLost) val packetsLost: Long?,
     /**
+     * Number of locally measured ingress packet-loss samples in the current reporting interval.
+     */
+    @SerialName(JsonKeys.Rtcp.Interface.IngressRate.packetsLostSamples) val packetsLostSamples: Long?,
+    /**
      * Locally measured ingress jitter during the current reporting interval, in milliseconds.
      */
     @SerialName(JsonKeys.Rtcp.Interface.IngressRate.jitterMs) val jitterMs: Double?,

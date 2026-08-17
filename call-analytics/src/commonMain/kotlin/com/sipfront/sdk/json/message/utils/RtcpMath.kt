@@ -122,6 +122,7 @@ internal object RtcpMath {
         val txJitterSamples: Long? = txJitter?.let { 1L }
         val rxJitterSamples: Long? = rxJitter?.let { 1L }
         val rttSamples: Long? = rtt?.let { 1L }
+        val rxPacketLossSamples: Long? = lostRxPerSecond?.let { 1L }
         val txPacketLossSamples: Long? = lostTxPerSecond?.let { 1L }
         val mosSamples: Long? = mos?.let { 1L }
         val ingressPacketsLost = currentMsg.rxLost ?: previousMeasurement?.rxLost?.value
@@ -152,6 +153,7 @@ internal object RtcpMath {
                     packets = packetsRxPerSecond,
                     bytes = bytesRxPerSecond,
                     packetsLost = lostRxPerSecond,
+                    packetsLostSamples = rxPacketLossSamples,
                     jitterMs = rxJitter,
                     jitterSamples = rxJitterSamples
                 ),

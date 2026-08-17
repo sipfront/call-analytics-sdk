@@ -68,6 +68,7 @@ internal object JsonKeys {
                 const val packets: String = "packets"
                 const val bytes: String = "bytes"
                 const val packetsLost: String = "packets_lost"
+                const val packetsLostSamples: String = "packets_lost_samples"
                 const val jitterMs: String = "jitter_ms"
                 const val jitterSamples: String = "jitter_samples"
             }
