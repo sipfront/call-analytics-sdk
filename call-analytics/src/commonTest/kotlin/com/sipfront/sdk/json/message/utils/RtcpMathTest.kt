@@ -62,6 +62,7 @@ class RtcpMathTest {
         assertEquals(20L, ingressRate.packets)
         assertEquals(400L, ingressRate.bytes)
         assertEquals(1L, ingressRate.packetsLost)
+        assertEquals(1L, ingressRate.packetsLostSamples)
         assertEquals(25L, egressRate.packets)
         assertEquals(500L, egressRate.bytes)
         assertEquals(1.0, egressRate.packetsLost)
@@ -134,6 +135,7 @@ class RtcpMathTest {
         assertEquals(1L, secondCallInterface.egress.rttSamples)
         assertEquals(0L, ingressRate.packets)
         assertNull(ingressRate.packetsLost)
+        assertNull(ingressRate.packetsLostSamples)
         assertEquals(0L, egressRate.packets)
         assertNull(egressRate.packetsLost)
         assertNull(egressRate.packetsLostSamples)
@@ -162,6 +164,7 @@ class RtcpMathTest {
         assertNull(iface.egress.jitterAverageMs)
         assertNull(iface.egress.rttAverageMs)
         assertNull(iface.ingressRate?.packetsLost)
+        assertNull(iface.ingressRate?.packetsLostSamples)
         assertNull(iface.ingressRate?.jitterMs)
         assertNull(iface.egressRate?.packetsLost)
         assertNull(iface.egressRate?.jitterMs)
@@ -173,12 +176,14 @@ class RtcpMathTest {
         val interfaceJson = JsonParser.json.parseToJsonElement(JsonParser.toString(message))
             .jsonObject.getValue("interfaces").jsonArray.single().jsonObject
         val ingressJson = interfaceJson.getValue("ingress").jsonObject
+        val ingressRateJson = interfaceJson.getValue("ingress_rate").jsonObject
         val egressRateJson = interfaceJson.getValue("egress_rate").jsonObject
         val voipMetricsJson = interfaceJson.getValue("voip_metrics").jsonObject
         val voipMetricsIntervalJson = interfaceJson.getValue("voip_metrics_interval").jsonObject
 
         assertFalse("packets_lost" in ingressJson)
         assertFalse("jitter_average_ms" in ingressJson)
+        assertFalse("packets_lost_samples" in ingressRateJson)
         assertFalse("packets_lost" in egressRateJson)
         assertFalse("packets_lost_samples" in egressRateJson)
         assertFalse("jitter_ms" in egressRateJson)
@@ -307,19 +312,21 @@ class RtcpMathTest {
         )
         RtcpMath.recordRtcpMessage(unavailableMessage)
 
-        val egressRate = assertNotNull(
-            createMessage(
-                callId = "zero-packet-loss",
-                timestamp = 5_002.0,
-                rxPackets = 0L,
-                txPackets = 0L,
-                rxBytes = 0L,
-                txBytes = 0L,
-                rxLost = 0L,
-                txLost = 0L,
-            ).interfaces.single().egressRate
-        )
+        val iface = createMessage(
+            callId = "zero-packet-loss",
+            timestamp = 5_002.0,
+            rxPackets = 0L,
+            txPackets = 0L,
+            rxBytes = 0L,
+            txBytes = 0L,
+            rxLost = 0L,
+            txLost = 0L,
+        ).interfaces.single()
+        val ingressRate = assertNotNull(iface.ingressRate)
+        val egressRate = assertNotNull(iface.egressRate)
 
+        assertEquals(0L, ingressRate.packetsLost)
+        assertEquals(1L, ingressRate.packetsLostSamples)
         assertEquals(0.0, egressRate.packetsLost)
         assertEquals(1L, egressRate.packetsLostSamples)
     }
