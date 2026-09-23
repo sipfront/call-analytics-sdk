@@ -59,10 +59,11 @@ internal class HttpClient private constructor(
      * @param data The recording bytes.
      * @param mimeType The recording content type.
      * @param fileName The artifact name used for upload and confirmation.
-     * @param onComplete Called once with true only if every upload step succeeds.
+     * @param onComplete Called once on [DispatcherProvider.IO] with true only if every upload step
+     * succeeds. The caller is responsible for dispatching any UI updates to the appropriate UI thread.
      * @return [Unit] after scheduling the background work.
      */
-    internal fun uploadArtifact(
+    internal fun uploadArtifactAndConfirm(
         data: ByteArray, mimeType: String, fileName: String, onComplete: (Boolean) -> Unit
     ) {
         CoroutineScope(DispatcherProvider.IO).launch {
@@ -85,7 +86,7 @@ internal class HttpClient private constructor(
                     Log.release().e("Confirm artifact failed")
                 }
             } catch (e: Exception) {
-                Log.release().e("Sipfront API Request Error, uploadArtifact()", e)
+                Log.release().e("Sipfront API Request Error, uploadArtifactAndConfirm()", e)
             } finally {
                 onComplete(confirmed)
             }

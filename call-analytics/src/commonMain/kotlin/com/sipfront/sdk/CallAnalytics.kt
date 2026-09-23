@@ -358,19 +358,27 @@ object CallAnalytics : ProguardKeep {
      * Uploads a recording and reports whether both upload and artifact confirmation succeeded.
      * Existing HTTP retries finish before a failure is reported.
      *
+     * The callback runs on the upload dispatcher: `Dispatchers.IO` on Android/JVM and Apple,
+     * and `Dispatchers.Default` on JavaScript. Callers updating native UI must dispatch to
+     * the appropriate main/UI thread themselves.
+     *
      * @param mediaStream The recording to upload.
      * @param onComplete Called once with true after confirmation, or false on upload failure.
      * @return [Unit] after starting the background upload; initialization errors throw synchronously.
      */
     @JvmStatic
+    @ObjCName("upload")
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    fun uploadMediaWithCompletion(mediaStream: MediaStream, onComplete: (Boolean) -> Unit) {
+    fun uploadMediaWithCompletion(
+        @ObjCName("mediaStream") mediaStream: MediaStream,
+        @ObjCName("completion") onComplete: (Boolean) -> Unit
+    ) {
         if (!isInitialized()) {
             throw IllegalStateException("${BuildKonfig.PROJECT_NAME} isn't initialised")
         }
         Log.debug()?.i("Uploading ${MediaStream::class.simpleName}: ${JsonParser.toString<MediaStream>(mediaStream)}")
-        // Upload the artifact
-        httpClient?.uploadArtifact(
+        // Upload and confirm the artifact
+        httpClient?.uploadArtifactAndConfirm(
             data = mediaStream.data,
             mimeType = mediaStream.mimeType.raw,
             fileName = mediaStream.fileName,
