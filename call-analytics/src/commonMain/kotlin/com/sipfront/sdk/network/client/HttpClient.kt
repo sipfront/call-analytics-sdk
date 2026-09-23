@@ -53,34 +53,43 @@ internal class HttpClient private constructor(
         host = sessionConfig.sipfrontApi.substringAfter("://") // discard scheme in url
     }
 
-    @Throws(IllegalStateException::class)
-    internal fun uploadArtifact(data: ByteArray, mimeType: String, fileName: String) {
-        try {
-            CoroutineScope(DispatcherProvider.IO).launch {
-                // Request an Amazon S3 upload URL for Sipfront API
-                val urlUpload = getUploadArtifactUrl(fileName = fileName)
-                urlUpload?.let { url ->
-                    // Now do the upload of the file to Amazon S3
-                    val resultUpload = uploadArtifact(url = url, data = data, mimeType = mimeType)
-                    if (resultUpload) {
-                        // The Last step is to confirm with Sipfront API that the file was uploaded.
-                        // Note: without this no database entry will be created on Sipfront, and thus the upload
-                        // will not be shown in the Sipfront app
-                        val resultConfirm = confirmArtifact(fileName)
-                        if (resultConfirm) {
-                            Log.debug()?.i("Confirm artifact success")
-                        } else {
-                            Log.release().e("Confirm artifact failed")
-                        }
-                    } else {
-                        Log.release().e("Upload artifact failed")
-                    }
-                } ?: run {
+    /**
+     * Starts an artifact upload and reports its final outcome, including API confirmation.
+     *
+     * @param data The recording bytes.
+     * @param mimeType The recording content type.
+     * @param fileName The artifact name used for upload and confirmation.
+     * @param onComplete Called once on [DispatcherProvider.IO] with true only if every upload step
+     * succeeds. The caller is responsible for dispatching any UI updates to the appropriate UI thread.
+     * @return [Unit] after scheduling the background work.
+     */
+    internal fun uploadArtifactAndConfirm(
+        data: ByteArray, mimeType: String, fileName: String, onComplete: (Boolean) -> Unit
+    ) {
+        CoroutineScope(DispatcherProvider.IO).launch {
+            var confirmed = false
+            try {
+                val url = getUploadArtifactUrl(fileName)
+                if (url == null) {
                     Log.release().e("No upload artifact url received")
+                    return@launch
                 }
+                if (!uploadArtifact(url, data, mimeType)) {
+                    Log.release().e("Upload artifact failed")
+                    return@launch
+                }
+                // Confirmation creates the database entry that makes the recording visible in Sipfront.
+                confirmed = confirmArtifact(fileName)
+                if (confirmed) {
+                    Log.debug()?.i("Confirm artifact success")
+                } else {
+                    Log.release().e("Confirm artifact failed")
+                }
+            } catch (e: Exception) {
+                Log.release().e("Sipfront API Request Error, uploadArtifactAndConfirm()", e)
+            } finally {
+                onComplete(confirmed)
             }
-        } catch (e: Exception) {
-            Log.release().e("Sipfront API Request Error, uploadArtifact()", e)
         }
     }
 
